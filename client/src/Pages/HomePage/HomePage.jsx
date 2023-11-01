@@ -5,7 +5,7 @@ import Navbar from '../../Components/Navbar/Navbar'
 import Reviews from '../../Components/Reviews/Reviews'
 import Stories from '../../Components/Stories/Stories'
 import VideoFrame from '../../Components/VideoFrame/VideoFrame'
-import CallToAction from '../../Components/callToAction/callToAction'
+import CallToAction from '../../Components/CallToAction/CallToAction'
 import './HomePage.css'
 
 function HomePage() {
