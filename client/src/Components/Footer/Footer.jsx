@@ -1,7 +1,7 @@
 import Logo from '../Logo/Logo'
 import './Footer.css'
 import FbBgImg from '../../assets/fbBg.png'
-import Igimg from '../../assets/ig.png'
+import Igimg from '../../assets/Ig.png'
 import TwImg from '../../assets/tw.png'
 import FbImg from '../../assets/fb.png'
 import { Link } from 'react-router-dom'
