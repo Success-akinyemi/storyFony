@@ -1,0 +1,199 @@
+.login{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background: url(../../assets/bg-1.png.png);
+    background-position: center;
+    object-fit: cover;
+    background-size: cover;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.login .header{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    line-height: 19px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color-1);
+    gap: 10px;
+}
+
+.login .header img{
+    height: 32px;
+    width: 32px;
+}
+
+.login p{
+    font-weight: 500;
+    line-height: 32px;
+    text-align: center;
+    font-size: 24px;
+    color: var(--text-color-1);
+}
+
+.login .loginCard{
+    width: 634px;
+    background: var(--bg-4);
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+    border-radius: 4px;
+    gap: 32px;
+}
+
+.login .loginCard p{
+    width: 100%;
+    text-align: left;
+}
+
+.login .loginCard .inputGroup{
+    width: 100%;
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+}
+
+.login .loginCard .inputGroup .inputField{
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login .loginCard .inputGroup .inputField label{
+    width: 100%;
+    color: var(--text-color-1);
+}
+
+.login .loginCard .inputGroup .inputField input{
+    width: 100%;
+    outline: none;
+    border: 1px solid var(--text-color-1);
+    border-radius: 4px;
+    padding: var(--padding);
+    background: transparent;
+    color: var(--text-color-1);
+    transition: all 0.3s ease-in-out;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    color: var(--text-color-2);
+}
+
+.login .loginCard .inputGroup .inputField input:focus{
+    border: 1px solid var(--border-1);
+}
+
+.login .loginCard .forgotPassword{
+    width: 100%;
+    text-align: right;
+    margin-top: -30px;
+}
+
+.login .errorText{
+    color: var(--bg-5);
+    font-size: 15px;
+}
+
+.login .loginCard .inputGroup .inputField input.errorInput{
+    border: 1px solid var(--bg-5);
+}
+
+.login .loginCard .button{
+    width: 100%;
+}
+
+.login .loginCard button{
+    width: 100%;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--padding-2);
+    color: var(--text-color-2);
+    background: var(--bg-5);
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    list-style: 24px;
+    font-weight: 500;
+    transition: all 0.3s ease-in;
+}
+
+.login .loginCard button:hover{
+    background: var(--bg-5-opacity);
+}
+
+.login .footNote,
+.login .loginCard .forgotPassword{
+    width: 100%;
+    color: var(--text-color-2);
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 400;
+}
+
+.login .footNote .link,
+.login .loginCard .forgotPassword .link{
+    color: var(--bg-5);
+}
+
+@media screen and (max-width: 650px) {
+    .login{
+        height: auto;
+
+    }
+    .login .header{
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .login .loginCard{
+        margin-top: 30px;
+        width: 80%;
+    }
+
+    .login .loginCard .inputGroup{
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .login .header{
+        position: relative;
+    }
+
+    .login p{
+        width: 80%;
+        position: relative;
+    }
+    
+    .login .loginCard{
+      width: 90%;
+      position: relative;
+    }
+
+    .login .loginCard{
+        margin-bottom: 300px;
+    }
+
+    .login::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(0deg, rgba(20, 23, 24, 0), #141718);
+      }
+}

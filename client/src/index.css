@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap');
+:root {
+  --main-bg: #201822;
+  --bg-1: #FD2CE833;
+  --bg-2: #141718;
+  --bg-3: #00000085;
+  --bg-4: #232627;
+  --bg-5: #FD2CE8;
+  --bg-5-opacity: #e409ce;
+
+
+  --text-color-1: #E7DEFE;
+  --text-color-2: #FFFFFF;
+  --text-color-3: #9CA3AF;
+
+
+  --padding: 14px 16px 14px 16px;
+  --padding-2: 16px 80px 16px 80px;
+  --padding-3: 16px 30px 16px 30px;
+
+
+  --border-1: #008080;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.link{
+  text-decoration: none;
+  color: inherit;
+}
+
+.bot,
+.f1,
+.f2,
+.f3{
+    position: absolute;
+}
+
+.bot{
+    bottom: 250px;
+    right: 300px;
+}
+
+.f1{
+    left: 100px;
+    top: 150px;
+}
+
+.f2{
+    left: 350px;
+    top: 300px;
+    width: 12px;
+}
+
+.f3{
+    right: 150px;
+    top: 300px;
+}
+
+@media screen and (max-width: 1450px) {
+  .bot{
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 1060px) {
+  .bot{
+    right: 50px;
+  }
+}
+
+@media screen and (max-width: 930px) {
+  .bot{
+    right: 20px;
+    bottom: 3px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .f1,
+  .f2,
+  .f3{
+    display: none;
+  }
+
+  .bot{
+    right: 50%;
+    left: 50%;
+  }
+}

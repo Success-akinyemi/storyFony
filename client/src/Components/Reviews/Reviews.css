@@ -1,0 +1,12 @@
+.reviews{
+    width: 100%;
+}
+
+.reviews .reviewCard{
+    width: 997.41px;
+    height: 451px;
+    left: 400px;
+    top: 1302px;
+    background: green;
+    position: absolute;
+}

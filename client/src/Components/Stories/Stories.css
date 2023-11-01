@@ -1,0 +1,77 @@
+.stories{
+    width: 100%;
+    height: 1264px;
+    margin-top: 100px;
+    border-radius: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 70px 64px 70px;
+    gap: 40px;
+    background: var(--bg-5);
+    display: flex;
+    align-items: center;
+}
+
+.stories .top{
+    width: 528px;
+    height: 174px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.stories .top .title{
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 59.4px;
+    text-align: center;
+    color: var(--text-color-2);
+}
+
+.stories .top .footNote{
+    font-size: 18px;
+    line-height: 24.3px;
+    text-align: center;
+    font-weight: 500;
+    color: var(--text-color-2);
+}
+
+.stories .body{
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    width: 1285px;
+    height: 818px;
+}
+
+.stories .body .card{
+    width: 297.25px;
+    height: 393px;
+    position: relative;
+    padding: 5px;
+    border-radius: 4px;
+    background: linear-gradient(179.49deg, rgba(0, 0, 0, 0) -7.39%, rgba(0, 0, 0, 0.882) 66.97%),
+    linear-gradient(0deg, #FFFFFF, #FFFFFF);
+}
+
+.stories .moreBtn{
+    width: 276px;
+    height: 64px;
+    border-radius: 22px;
+    padding: var(--padding-3);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    background: var(--main-bg);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24.3px;
+    color: var(--text-color-1);
+}
+
+.stories .moreBtn .icon{
+    width: 32px;
+    height: 32px;
+}
+

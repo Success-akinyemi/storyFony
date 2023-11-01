@@ -1,0 +1,45 @@
+.callToAction{
+    height: 771px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.callToAction .head{
+    width: 900px;
+    height: 174px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.callToAction .head .title{
+    font-weight: 500;
+    height: 118px;
+    width: 100%;
+    font-size: 44px;
+    line-height: 59.4px;
+    text-align: center;
+    color: var(--text-color-2);
+}
+
+.callToAction .head .action{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24.3px;
+    text-align: center;
+    width: 521px;
+    height: 24px;
+    color: var(--text-color-2);
+}
+
+.callToAction .ctaSlider{
+    height: 533px;
+    background: green;
+    width: 100%;
+}

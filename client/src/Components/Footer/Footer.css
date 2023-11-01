@@ -1,0 +1,223 @@
+.footer{
+    width: 100%;
+    height: 680px;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer .top{
+    height: 625px;
+    padding: 64px 70px 64px 70px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer .top .card{
+    display: flex;
+    grid-area: 112px;
+    height: 497px;
+}
+
+.footer .top .card .left{
+    width: 673px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.footer .top .card .left .head{
+    width: 100%;
+    height: 152px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.footer .top .card .left .head .title{
+    width: 100%;
+    height: 118px;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 40px;
+    color: var(--text-color-2);
+}
+
+.footer .top .card .left .head .text{
+    font-weight: 500;
+    width: 100%;
+    height: 22px;
+    font-size: 16px;
+    line-height: 21.6px;
+    color: var(--text-color-1);
+}
+
+.footer .top .card .left .body{
+    width: 100%;
+    height: 265px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer .top .card .left .body .start{
+    width: 214.33px;
+    height: 214px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.footer .top .card .left .body .start .statText{
+    width: 162px;
+    height: 22px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21.6px;
+    color: var(--text-color-1);
+    margin-bottom: 24px;
+}
+
+.footer .top .card .left .body .start .startBody{
+    width: 214.33px;
+    height: 112px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.footer .top .card .left .body .start .startBody .startIcons{
+    width: 96px;
+    height: 24px;
+    display: flex;
+    gap: 12px;
+}
+
+.footer .top .card .left .body .start .startBody .startIcons .startIcon{
+    width: 24px;
+    height: 24px;
+}
+
+.footer .top .card .left .body .start .startBody .startConnect{
+    padding: 10px 20px 10px 20px;
+    width: 214.33px;
+    height: 64px;
+    border-radius: 22px;
+    display: flex;
+    gap: 12px;
+    background: var(--bg-5);
+}
+
+.footer .top .card .left .body .start .startBody .startConnect .startConnectLink{
+    color: var(--main-bg);
+    width: 146.33px;
+    height: 44px;
+    font-weight: 500;
+    font-size: 16px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    line-height: 21.6px;
+}
+
+.footer .top .card .left .body .start .startBody .startConnect .startConnectLink .startConnectIcon{
+    width: 16px;
+    height: 16px;
+}
+
+.footer .top .card .left .body .middle{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 200px;
+    height: 265px;
+}
+
+.footer .top .card .left .body .middle .head{
+    width: 100%;
+    height: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24.3px;
+    color: var(--text-color-2);
+}
+
+.footer .top .card .left .body .middle .body{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 226px;
+    width: 100%;
+}
+
+.footer .top .card .left .body .middle .body .bodyItem{
+    width: 100%;
+    height: 22px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21.6px;
+    color: var(--text-color-1);
+}
+
+.footer .top .card .left .body .end{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 200px;
+    height: 231px;
+}
+
+.footer .top .card .left .body .end .title{
+    width: 100%;
+    height: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24.3px;
+    color: var(--text-color-2);
+}
+
+.footer .top .card .left .body .end .body{
+    width: 100%;
+    height: 192px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer .top .card .left .body .end .body .bodyItem{
+    width: 100%;
+    height: 22px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21.6px;
+    color: var(--text-color-1);
+}
+
+.footer .top .card .right{
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    height: 497px;
+}
+
+.footer .top .card .right .cards{
+    display: flex;
+    height: 303px;
+    width: 515px;
+}
+
+.footer .top .card .right .card{
+    display: flex;
+    height: 303px;
+    width: 5223px;
+}
+
+.footer .top .card .right .card-1
+
+.footer .bottom{
+    padding: 0px 70px 0px 70px;
+    display: flex;
+    gap: 12px;
+}
