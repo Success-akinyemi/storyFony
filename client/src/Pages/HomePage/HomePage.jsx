@@ -7,6 +7,7 @@ import Stories from '../../Components/Stories/Stories'
 import VideoFrame from '../../Components/VideoFrame/VideoFrame'
 import CallToAction from '../../Components/CallToAction/CallToAction'
 import './HomePage.css'
+import { homePageStoriesData } from '../../data/homePageStories'
 
 function HomePage() {
   return (
@@ -20,7 +21,7 @@ function HomePage() {
             <Reviews />
         </div>
         <Banner />
-        <Stories />
+        <Stories data={homePageStoriesData} />
         <CallToAction />
         <Footer />
     </div>

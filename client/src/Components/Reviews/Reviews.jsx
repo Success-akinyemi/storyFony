@@ -1,9 +1,9 @@
 import './Reviews.css'
 
-function Reviews() {
+function Reviews({ name }) {
   return (
     <div className='reviews'>
-        <div className="reviewCard">
+        <div className={` ${ name === 'useCaseReview' ? 'useCaseReview' : 'reviewCard'}`}>
             Re
         </div>
     </div>

@@ -1,0 +1,155 @@
+.useCase{
+    position: relative;
+    width: 100%;
+    background: var(--main-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.useCase .useCaseHero{
+    position: relative;
+    width: 100%;
+    height: 494px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url(../../assets/bg-1.png.png);
+    background-position: center;
+    object-fit: cover;
+    background-size: cover;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.useCase .useCaseHero .content{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 846px;
+}
+
+.useCase .useCaseHero .content h1{
+    width: 100%;
+    height: 98px;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 48.6px;
+    text-align: center;
+    color: var(--text-color-2);
+}
+
+.useCase .useCaseHero .content p{
+    width: 100%;
+    height: 24px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21.6px;
+    text-align: center;
+    color: var(--text-color-1);
+}
+
+.useCase .useCaseHero .content .card{
+    width: 100%;
+    height: 90px;
+    padding: 30px 0px 0px 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.useCase .useCaseHero .content .card p{
+    width: 100%;
+    height: 24px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    color: var(--text-color-1);
+}
+
+.useCase .useCaseHero .content .card .image{
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.useCase .useCaseHero .content .card .image img{
+    width: 100%;
+    height: 100%;
+}
+
+.useCase .videoFrame{
+    position: absolute;
+    top: 200px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 22px;
+    width: 1098px;
+    height: 600px;
+}
+
+.useCase .actionCard{
+    width: 912px;
+    height: 278px;
+    border-radius: 10px;
+    padding: 30px;
+    border: 1px solid var(--bg-5);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #FD2CE833;
+    flex-direction: column;
+    margin-top: 600px;
+    margin-bottom: 70px;
+}
+
+.useCase .actionCard h2{
+    width: 600px;
+    height: 92px;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 45.9px;
+    text-align: center;
+    color: var(--text-color-2);
+}
+
+.useCase .actionCard p{
+    width: 852px;
+    height: 22px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21.6px;
+    text-align: center;
+    color: var(--text-color-1);
+}
+
+.useCase .actionCard .btn{
+    width: 334px;
+    height: 56px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-2);
+    background: var(--bg-5);
+    color: var(--text-color-2);
+    text-align: center;
+}
+
+.useCase .actionCard .btn .btnLink{
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.useCase .useCaseStoriesCard{
+    width: 100%;
+    margin-top: 500px;
+    margin-bottom: 100px;
+}

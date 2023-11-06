@@ -1,0 +1,82 @@
+.useCasesBanner{
+    position: absolute;
+    width: 1340px;
+    height: 1256px;
+    top: 400px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    background: var(--main-bg);
+}
+
+.useCasesBanner .conatiner{
+    width: 400px;
+    height: 372px;
+    border-radius: 10px;
+    border: 1px solid var(--bg-5);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: #FD2CE80D;
+}
+
+.useCasesBanner .conatiner .title{
+    width: 100%;
+    height: 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.useCasesBanner .conatiner .title .pack{
+    width: 42.29px;
+    height: 24px;
+    border-radius: 114.29px;
+    padding: 0 9.14px 0px 9.14px;
+    background: var(--bg-5);
+}
+
+.useCasesBanner .conatiner .title .pack .packIcon{
+    color: var(--main-bg);
+    width: 24px;
+    height: 24px;
+}
+
+.useCasesBanner .conatiner .title .head{
+    font-weight: 500;
+    line-height: 32.4px;
+    font-size: 20px;
+    height: 32px;
+    color: var(--text-color-2);
+}
+
+.useCasesBanner .conatiner .text{
+    width: 100%;
+    height: 56px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 25px;
+    color: var(--text-color-2);
+}
+
+.useCasesBanner .conatiner image{
+    width: 100%;
+    height: 208px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.useCasesBanner .conatiner .image img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: center;
+}

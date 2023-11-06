@@ -1,0 +1,182 @@
+.faq{
+    width: 100%;
+    margin-top: 1170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 64px;
+    padding: 96px 0px 96px 0px;
+}
+
+.faq .top{
+    padding: 0px 32px 0px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    height: 103px;
+    width: 1280px;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq .top .content{
+    height: 100%;
+    width: 1216px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq .top .content h1{
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 59.4px;
+    text-align: center;
+    color: var(--text-color-2);
+}
+
+.faq .top .content p{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24.3px;
+    text-align: center;
+    color: var(--text-color-1);
+}
+
+.faq .middle{
+    width: 1280px;
+    padding: 0px 32px 0px 32px;
+    display: flex;
+    gap: 64px;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq .middle .container{
+    height: 100%;
+    width: 768px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.faq .middle .container .card{
+    border-bottom: 1px solid var(--text-color-1);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    transition:  all 0.3s ease;
+}
+
+.faq .middle .container .card:last-child{
+    border-bottom: none;
+}
+
+.faq .middle .container .card .title{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.faq .middle .container .card .title h1{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 27px;
+    color: var(--text-color-2);
+}
+
+.faq .middle .container .card .title span{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--bg-5);
+    color: var(--bg-5);
+}
+
+.faq .middle .container .card .dropDown{
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21.6px;
+    color: var(--text-color-1);
+    transition: all 0.3s ease;
+}
+
+.faq .bottom{
+    width: 1280px;
+    height: 304px;
+    padding: 0px 32px 0px 32px ;
+}
+
+.faq .bottom .card{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 32px;
+    border-radius: 16px;
+    background: var(--text-color-1);
+}
+
+.faq .bottom .card .image{
+    width: 120px;
+    height: 56px;
+}
+
+.faq .bottom .card .image img{
+    width: 100%;
+    height: 100%;
+}
+
+.faq .bottom .card .text{
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.faq .bottom .card .text h3{
+    height: 32px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32.4px;
+    text-align: center;
+    color: var(--main-bg);
+}
+
+.faq .bottom .card .text p{
+    height: 24px;
+    font-weight: 500px;
+    font-size: 18px;
+    line-height: 24.3px;
+    text-align: center;
+    color: var(--main-bg);
+}
+
+.faq .bottom .card .btn{
+    height: 56px;
+    width: 257px;
+    border-radius: 22px;
+    padding: 16px 80px 16px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-5);
+}
+
+.faq .bottom .card .btn a{
+    font-weight: 500;
+    height: 24px;
+    font-size: 15px;
+    line-height: 24.3px;
+    color: var(--text-color-2);
+    text-align: center;
+}

@@ -10,7 +10,8 @@ function Navbar({ enableScrollEffect }) {
         useEffect(() => {
             if(enableScrollEffect){
                 window.onscroll = () => {
-                    setIsScroll(window.pageYOffset === 0 ? false : true)
+                    console.log('Scrolling')
+                    setIsScroll(window.scrollY === 0 ? false : true)
                 }
             }
         }, [])

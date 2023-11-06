@@ -9,6 +9,11 @@ import { Toaster } from 'react-hot-toast'
 import VerifyUser from './Pages/VerifyUser/VerifyUser'
 import ResetEmailSent from './Pages/ResetEmailSent/ResetEmailSent'
 import HomePage from './Pages/HomePage/HomePage'
+import UseCases from './Pages/UseCases/UseCases'
+import UseCase from './Pages/UseCase/UseCase'
+import Pricing from './Pages/Pricing/Pricing'
+import UserDashboard from './Pages/UserDashboard/UserDashboard'
+import { AuthorizeUser, ValidToken } from './auth/PrivateRoute'
 
 function App() {
 
@@ -26,6 +31,11 @@ function App() {
           <Route path='/resetEmailSent' element={<ResetEmailSent />} />
 
           <Route path='/' element={<HomePage />} />
+          <Route path='/use-cases' element={<UseCases />} />
+          <Route path='/use-case' element={<UseCase />} />
+          <Route path='/pricing' element={<Pricing />} />
+
+          <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
         </Routes>
       </BrowserRouter>
     </div>

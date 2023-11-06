@@ -4,6 +4,7 @@ import FbBgImg from '../../assets/fbBg.png'
 import Igimg from '../../assets/Ig.png'
 import TwImg from '../../assets/tw.png'
 import FbImg from '../../assets/fb.png'
+import CheckIcon from '@mui/icons-material/Check';
 import { Link } from 'react-router-dom'
 
 function Footer() {
@@ -77,16 +78,46 @@ function Footer() {
                 <div className="right">
                     <div className="cards">
                         <div className="card">
-                            <div className="card-1"></div>
-                            <div className="card-2"></div>
+                            <div className="card-1">
+                                <div className="card-1Content">
+                                    <div className="box">
+                                        <span className="mark">
+                                            <CheckIcon className='markIcon' />
+                                        </span>
+
+                                        <span className="text">
+                                            <h3>Half full fony ink plan</h3>
+                                            <p>For just $25 per monthly</p>
+                                        </span>
+                                    </div>
+
+                                    <span className="btn">Best Value</span>
+                                </div>
+                            </div>
+                            <div className="card-2">
+                                <div className='card-2Content'>
+                                    <div className="mark">
+                                        <CheckIcon className='markIcon' />
+                                    </div>
+
+                                    <div className="text">
+                                        <h1>Quarter full fony ink plan</h1>
+                                        <p>For just $15 per monthly</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="card-3"></div>
+                        <div className="card-3">
+                            <p>Kickstart with $1 Free Trial</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div className="bottom"></div>
+        <div className="bottom">
+            <div className="text">&copy; Copyright 2023 StoryFony AI. All Rights Reserved.</div>
+        </div>
     </div>
   )
 }

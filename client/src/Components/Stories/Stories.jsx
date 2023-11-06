@@ -1,11 +1,10 @@
-import { homePageStoriesData } from '../../data/homePageStories'
 import BannerImg from '../Helpers/BannerImg/BannerImg'
 import './Stories.css'
 import IconImg from '../../assets/icon.png'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Link } from 'react-router-dom';
 
-function Stories() {
+function Stories({ data }) {
   return (
     <div className='stories'>
         <div className="top">
@@ -15,7 +14,7 @@ function Stories() {
 
         <div className="body">
             {
-                homePageStoriesData.map((item, idx) => (
+                data.map((item, idx) => (
                     <div className="card" key={idx}>
                         <BannerImg 
                             title={item.title}
