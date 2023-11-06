@@ -99,7 +99,7 @@ function PricingBanner() {
                 <div className="card card-3">
                     <div className="content">
                         <div className="head">
-                            <img src={Beaker2} alt='quater ink' />
+                            <img src={Beaker3} alt='quater ink' />
 
                             <h3>Fully Full Fony Ink</h3>
 

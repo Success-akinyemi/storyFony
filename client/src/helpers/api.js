@@ -2,8 +2,8 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import toast from 'react-hot-toast'
 
-//axios.defaults.baseURL = 'http://localhost:9000'
-axios.defaults.baseURL = 'https://storyfony-api.onrender.com'
+//axios.defaults.baseURL = import.meta.env.VITE_LOCALHOST_SERVER_API
+axios.defaults.baseURL = import.meta.env.VITE_LIVE_SERVER_API
 
 
 

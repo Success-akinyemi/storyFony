@@ -1,0 +1,88 @@
+.uploadProfilePhoto{
+    width: 100%;   
+}
+
+.uploadProfilePhoto h2{
+    color: var(--text-color-2);
+    font-size: 18px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.uploadProfilePhoto .body{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.uploadProfilePhoto .body .left{
+    flex: 7;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadProfilePhoto .body .left .image{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadProfilePhoto .body .left .image .avatar{
+    width: 100%;
+    height: 100%;
+    color: var(--bg-5);
+}
+
+.uploadProfilePhoto .body .left .image img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-position: center;
+    object-fit: cover;
+}
+
+.uploadProfilePhoto .body .right{
+    flex: 3;
+}
+
+.uploadProfilePhoto .body .right label{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 15px;
+    background: var(--text-color-2);
+    font-weight: 700;
+}
+
+.uploadProfilePhoto .btn{
+    margin-top: 20px;
+    width: 100%;
+    padding: 16px 20px 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--bg-5);
+    color: var(--text-color-2);
+    font-weight: 700;
+    border-radius: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.uploadProfilePhoto .btn:hover{
+    background: var(--bg-5-opacity);
+}

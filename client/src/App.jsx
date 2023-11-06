@@ -34,7 +34,13 @@ function App() {
           <Route path='/use-cases' element={<UseCases />} />
           <Route path='/use-case' element={<UseCase />} />
           <Route path='/pricing' element={<Pricing />} />
+          {
+            /**
+                      <Route path='/dashboard' element={<UserDashboard />} />
 
+             * 
+             */
+          }
           <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
         </Routes>
       </BrowserRouter>

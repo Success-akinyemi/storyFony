@@ -28,6 +28,9 @@ export const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please Provide a Password']
     },
+    profileImg: {
+        type: String
+    },
     isAdmin: {
         type: Boolean,
         default: false
@@ -35,6 +38,18 @@ export const UserSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         default: false
+    },
+    totalCredit: {
+        type: Number,
+        default: 4000
+    },
+    totalCreditUsed:{
+        type: Number,
+        default: 0
+    },
+    totalCreditEveryUsed: {
+        type: Number,
+        default: 0
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date

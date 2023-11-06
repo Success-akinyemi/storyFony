@@ -34,6 +34,11 @@
     font-weight: 500;
     line-height: 21.6px;
     color: var(--text-color-1);
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar .linkItem .navLink:hover{
+    color: var(--text-color-2);
 }
 
 .navbar .cta{

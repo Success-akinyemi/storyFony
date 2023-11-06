@@ -1,0 +1,12 @@
+.myBookMarked{
+    padding-left: 70px;
+    padding-right: 70px;
+}
+
+.myBookMarked h3{
+    width: 100%;
+    font-weight: 500;
+    height: 32px;
+    font-size: 24px;
+    color: var(--text-color-1);
+}

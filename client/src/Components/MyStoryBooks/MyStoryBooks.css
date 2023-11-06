@@ -1,0 +1,56 @@
+.myStoryBooks{
+    padding-left: 70px;
+    padding-right: 70px;
+}
+
+.myStoryBooks h3{
+    width: 100%;
+    font-weight: 500;
+    height: 32px;
+    font-size: 24px;
+    color: var(--text-color-1);
+}
+
+.myStoryBooks .container{
+    width: 100%;
+    display: flex;
+    gap: 32px;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+.myStoryBooks .container .card-1{
+    height: 384px;
+    width: 297.25px;
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--text-color-3);
+    background: var(--bg-4);
+    border-radius: 4px;
+    flex-direction: column;
+}
+
+.myStoryBooks .container .card-1 .newStoryLink{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.myStoryBooks .container .card-1 .newStoryLink img{
+    width: 100px;
+    height: 100px;
+}
+
+.myStoryBooks .container .card-1 .newStoryLink p{
+    height: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-color-3);
+}
+
+.myStoryBooks .container .card-2{
+    height: 393px;
+}
