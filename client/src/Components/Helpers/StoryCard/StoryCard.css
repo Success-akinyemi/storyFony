@@ -1,0 +1,170 @@
+.storyCard{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.storyCard .background{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.storyCard .tag{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px 4px 10px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 22px;
+    background: var(--bg-5);
+    color:  var(--main-bg);
+}
+
+.storyCard .content{
+    width: 267px;
+    height: 139px;
+    position: absolute;
+    top: 226px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.storyCard .content .top{
+    width: 100%;
+    height: 95px;
+    display: flex;
+    flex-direction: column;
+    grid-area: 13px;
+}
+
+.storyCard .content .top h1{
+    width: 100%;
+    height: 48px;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-color-2);
+    line-height: 24px;
+}
+
+.storyCard .content .top .btn{
+    background: var(--text-color-1);
+    padding: 6px 10px 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--main-bg);
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 22px;
+    width: 134px;
+}
+
+.storyCard .content .bottom{
+    display: flex;
+    height: 20px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.storyCard .content .bottom .left{
+    display: flex;
+    height: 16px;
+    gap: 4px;
+}
+
+.storyCard .content .bottom .left .authorImg{
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: var(--text-color-2);
+    display: flex;
+    object-fit: cover;
+    object-position: center;
+}
+
+.storyCard .content .bottom .left .authorImg img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.storyCard .content .bottom .left p{
+    height: 16px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--text-color-3);
+}
+
+.storyCard .content .bottom .right{
+    height: 100%;
+    display: flex;
+    gap: 4px;
+}
+
+.storyCard .content .bottom .right .heart{
+    width: 16.87px;
+    height: 15.12px;
+}
+
+.storyCard .content .bottom .right p{
+    height: 19px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--text-color-3);
+}
+
+.storyCard .content .bottom .moreImg{
+    position: relative;
+}
+
+.storyCard .content .bottom .more{
+    height: 100%;
+    width: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    position: relative;
+}
+
+.storyCard .content .bottom .moreImg:hover .moreCard {
+    right: 0;
+    bottom: 20px;
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.storyCard .content .bottom .moreCard{
+    width: 119px;
+    height: 164px;
+    border-radius: 4px;
+    padding: 20px;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--bg-4);
+    box-shadow: 0px 16px 64px 0px #0000001A;
+    position: absolute;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+.storyCard .content .bottom .moreCard .moreCardLink{
+    height: 22px;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--text-color-3);
+    line-height: 21.6px;
+}

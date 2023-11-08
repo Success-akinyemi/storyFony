@@ -47,7 +47,7 @@ export const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    totalCreditEveryUsed: {
+    totalCreditEverUsed: {
         type: Number,
         default: 0
     },

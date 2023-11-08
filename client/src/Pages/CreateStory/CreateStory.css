@@ -1,0 +1,145 @@
+.createStory{
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: var(--main-bg);
+}
+
+.createStory .conatiner{
+    width: 900px;
+    height: 575px;
+    border-radius: 10px;
+    padding: 50px 30px 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.createStory .conatiner .slide{
+    margin-bottom: 20px;
+}
+
+.createStory .conatiner .content1,
+.createStory .conatiner .content2{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: center;
+}
+
+.createStory .conatiner .content1 h3,
+.createStory .conatiner .content2 h3{
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    font-size: 24px;
+    color: var(--text-color-2);
+    line-height: 24px;
+}
+
+.createStory .conatiner .content1 h3 .icon,
+.createStory .conatiner .content2 h3 .icon{
+    width: 32px;
+    height: 32px;
+}
+
+.createStory .conatiner .content1 .cards,
+.createStory .conatiner .content2 .cards{
+    width: 100%;
+    height: 261px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.createStory .conatiner .content1 .cards p,
+.createStory .conatiner .content2 .cards p{
+    height: 24px;
+    width: 100%;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-color-3);
+}
+
+.createStory .conatiner .content1 .cards .cardContainer{
+    width: 100%;
+    height: 213px;
+    display: flex;
+    gap: 32px;
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card{
+    height: 100%;
+    width: 258.67px;
+    border-radius: 10px;
+    border: 1px solid var(--text-color-3);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transition: all 0.3s ease;
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card:hover{
+    background: #FD2CE80D;
+    border: 1px solid var(--bg-5);
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card span{
+    height: 24px;
+    width: 42.29px;
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card .text{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card .text h4{
+    height: 27px;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--text-color-2);
+}
+
+.createStory .conatiner .content1 .cards .cardContainer .card .text p{
+    width: 500px;
+    font-size: 15px;
+    width: 100%;
+    color: var(--text-color-3);
+}
+
+.createStory .conatiner .content1 .btn,
+.createStory .conatiner .content2 .btn{
+    width: 100%;
+    height: 56px;
+    background: var(--bg-5);
+    padding: var(--padding-2);
+    border-radius: 22px;
+    color: var(--text-color-2);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+    transition:  all 0.3s ease;
+}
+
+.createStory .conatiner .content1 .btn:hover,
+.createStory .conatiner .content2 .btn:hover{
+    background: var(--bg-5-opacity);
+}
+
+.createStory .conatiner .content2 .cards .cardContainer{
+    width: 100%;
+}

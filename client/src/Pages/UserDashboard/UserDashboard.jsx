@@ -7,6 +7,7 @@ import MyStoryBooks from '../../Components/MyStoryBooks/MyStoryBooks';
 import MyBookMarked from '../../Components/MyBookMarked/MyBookMarked';
 import LikedStories from '../../Components/LikedStories/LikedStories';
 import UploadProfilePhoto from '../../Components/UploadProfilePhoto/UploadProfilePhoto';
+import AuthUserNavbar from '../../Components/AuthUserNavbar/AuthUserNavbar';
 
 function UserDashboard() {
   const [selectedCard, setSelectedCard] = useState(null)
@@ -62,7 +63,7 @@ function UserDashboard() {
           </div>
         </>
       )}
-
+        <AuthUserNavbar enableScrollEffect={true} miniNav={false} />
         <div className="userDashboardHero">
           <div className="content">
               <div className="top">
