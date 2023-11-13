@@ -1,14 +1,45 @@
 .createStory{
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     align-items: center;
     justify-content: center;
     background: var(--main-bg);
+    position: relative;
+}
+
+.createStory .errorOverlay{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createStory .errorOverlay .errorCard{
+    width: 400px;
+    height: 266px;
+    background: var(--bg-4);
+    position: relative;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.createStory .errorOverlay .errorCard .closeIcon{
+    position: absolute;
+    right: 0;
+    top: -10px;
+    font-size: 40px;
+    color: var(--text-color-2);
+    cursor: pointer;
 }
 
 .createStory .conatiner{
     width: 900px;
-    height: 575px;
+    min-height: 575px;
     border-radius: 10px;
     padding: 50px 30px 50px 30px;
     display: flex;
@@ -18,6 +49,27 @@
 
 .createStory .conatiner .slide{
     margin-bottom: 20px;
+    display: flex;
+    gap: 3px;
+    width: 100%;
+}
+
+.createStory .conatiner .slide .indicator{
+    height: 4px;
+    width: 12px;
+    border-radius: 5px;
+    background: var(--text-color-1);
+}
+
+.createStory .conatiner .slide .indicator.active{
+    width: 24px;
+    height: 5px;
+    background: var(--bg-5);
+    transition: 0.3s ease-in;
+}
+
+.createStory .conatiner .content{
+    display: flex;
 }
 
 .createStory .conatiner .content1,
@@ -30,8 +82,17 @@
     justify-content: center;
 }
 
+.createStory .conatiner .content1,
+.createStory .conatiner .content2,
+.createStory .conatiner .content3,
+.createStory .conatiner .content4{
+    transition: 0.3s ease-in;
+}
+
 .createStory .conatiner .content1 h3,
-.createStory .conatiner .content2 h3{
+.createStory .conatiner .content2 h3,
+.createStory .conatiner .content3 h3,
+.createStory .conatiner .content4 h3{
     width: 100%;
     height: 32px;
     display: flex;
@@ -44,7 +105,9 @@
 }
 
 .createStory .conatiner .content1 h3 .icon,
-.createStory .conatiner .content2 h3 .icon{
+.createStory .conatiner .content2 h3 .icon,
+.createStory .conatiner .content3 h3 .icon,
+.createStory .conatiner .content4 h3 .icon{
     width: 32px;
     height: 32px;
 }
@@ -52,7 +115,7 @@
 .createStory .conatiner .content1 .cards,
 .createStory .conatiner .content2 .cards{
     width: 100%;
-    height: 261px;
+    height: 271px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -118,7 +181,9 @@
 }
 
 .createStory .conatiner .content1 .btn,
-.createStory .conatiner .content2 .btn{
+.createStory .conatiner .content2 .btn,
+.createStory .conatiner .content3 .btn,
+.createStory .conatiner .content4 .btn{
     width: 100%;
     height: 56px;
     background: var(--bg-5);
@@ -132,6 +197,8 @@
     justify-content: center;
     text-align: center;
     font-weight: 500;
+    outline: none;
+    border: none;
     transition:  all 0.3s ease;
 }
 
@@ -142,4 +209,264 @@
 
 .createStory .conatiner .content2 .cards .cardContainer{
     width: 100%;
+    height: 223px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    
+    overflow: hidden;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card{
+    height: 100%;
+    min-width: 186px;
+    border-radius: 4px;
+    border: 3px solid var(--text-color-3);
+    position: relative;
+    transition:  all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card.selectedCard{
+    border: 3px solid var(--bg-5);
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card .notSelectedItem{
+    display: none;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card .selectedItem{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #00000080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card .selectedItem .checkImg{
+    width: 38px;
+    height: 38px;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card:hover{
+    border: 3px solid var(--bg-5);
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card img{
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    object-position: center;
+    object-fit: cover;
+}
+
+.createStory .conatiner .content2 .cards .cardContainer .card span{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: var(--bg-4);
+    height: 36px;
+    z-index: 1;
+    padding: 6px 10px 6px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    color: var(--text-color-1);
+}
+
+.createStory .conatiner .content3{
+    width: 900px;
+    height: 848px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 30px 50px 30px;
+    gap: 40px;
+    border-radius: 10px;
+}
+
+.createStory .conatiner .content3 .storyContent{
+    width: 100%;
+    height: 534px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1 .text,
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text,
+.createStory .conatiner .content4 .body .text{
+    width: 100%;
+    display: flex;
+    height: 24px;
+    gap: 4px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1 .text p,
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text p,
+.createStory .conatiner .content4 .body .text p{
+    width: 797px;
+    height: 24px;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--text-color-1);
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1 .text small,
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text small,
+.createStory .conatiner .content4 .body .text small{
+    width: 39px;
+    height: 16px;
+    font-size: 11px;
+    color: var(--text-color-3);
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1 input{
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--text-color-3);
+    border-radius: 4px;
+    padding: 20px 16px 20px 16px;
+    height: 64px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-color-2);
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup1 input::placeholder{
+    color: #9CA3AF40;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 190px;
+    gap: 12px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 textarea{
+    border-radius: 4px;
+    border: 1px solid var(--text-color-3);
+    padding: 14px 16px 14px 16px;
+    width: 100%;
+    height: 154px;
+    color: var(--text-color-2);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 32px;
+    resize: none;
+    background: transparent;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 textarea::placeholder{
+    color: #9CA3AF40;
+}
+
+/* overflow scroll */
+.createStory .conatiner .content3 .storyContent .inputGroup2 textarea::-webkit-scrollbar{
+    width: 0.4vw;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 textarea::-webkit-scrollbar-thumb{
+    background: var(--text-color-1);
+    border-radius: 20px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 textarea::-webkit-scrollbar-track{
+    background: transparent;
+    border-radius: 20px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup3{
+    width: 100%;
+    display: flex;
+    height: 86px;
+    gap: 24px;
+    align-items: center;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup3 .left,
+.createStory .conatiner .content3 .storyContent .inputGroup3 .right{
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup3 .left p,
+.createStory .conatiner .content3 .storyContent .inputGroup3 .right p{
+    width: 100%;
+    color: var(--text-color-2);
+    height: 24px;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--text-color-1);
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup3 .left select,
+.createStory .conatiner .content3 .storyContent .inputGroup3 .right select,
+.createStory .conatiner .content3 .storyContent .inputGroup3 .left input{
+    width: 100%;
+    height: 52px;
+    border-radius: 4px;
+    border: 1px solid var(--text-color-3);
+    padding: 14px 16px 14px 16px;
+    color: var(--text-color-2);
+    background: transparent;
+    font-size: 18px;
+    outline: none;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup3 .left select option,
+.createStory .conatiner .content3 .storyContent .inputGroup3 .right select option{
+    background: var(--bg-4);
+    padding: 10px;
+}
+
+.createStory .conatiner .content4{
+    padding: 50px 30px 50px 30px;
+    display: flex;
+    flex-direction: column;
+    width: 900px;
+    height: 576px;
+    border-radius: 10px;
+    gap: 40px;
+}
+
+.createStory .conatiner .content4 .body{
+    width: 100%;
+    height: 262px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.createStory .conatiner .content4 .body textarea{
+    width: 100%;
+    height: 226px;
+    border-radius: 4px;
+    border: 1px solid var(--text-color-3);
+    padding: 14px 16px 14px 16px;
+    color: var(--text-color-2);
+    font-size: 18px;   
+    background: transparent;
+}
+
+.createStory .conatiner .content4 .body textarea::placeholder{
+    color: #9CA3AF40;
 }

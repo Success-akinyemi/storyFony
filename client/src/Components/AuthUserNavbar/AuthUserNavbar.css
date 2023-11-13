@@ -40,6 +40,11 @@
     padding: 10px;
     cursor: pointer;
     background: #FFFFFF1A;
+    transition: 0.3s ease;
+}
+
+.authUserNavbar .miniLogo .backArrow:hover{
+    background: #ffffff46;
 }
 
 .authUserNavbar .miniLogo .backArrow .backArrowIcon{

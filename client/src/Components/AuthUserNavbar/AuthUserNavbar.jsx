@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../Logo/Logo'
 import './AuthUserNavbar.css'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,7 +8,8 @@ import { Avatar } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconImg from '../../assets/icon.png'
 
-function AuthUserNavbar({ enableScrollEffect, miniNav }) {
+function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
+    const navigate = useNavigate()
     const [isScroll, setIsScroll] = useState(false)
     const { apiData } = useFetch()
 
@@ -20,6 +21,11 @@ function AuthUserNavbar({ enableScrollEffect, miniNav }) {
             }
         }
     }, [])
+
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken')
+        navigate('/')
+    }
   return (
     <div className={`authUserNavbar ${isScroll ? 'scroll' : 'none'} ${!enableScrollEffect ? 'show' : ''}`}>
         {
@@ -31,9 +37,13 @@ function AuthUserNavbar({ enableScrollEffect, miniNav }) {
             ) : (
 
                 <span className='miniLogo'>
-                    <span className="backArrow">
-                        <ArrowBackIcon className='backArrowIcon' />
-                    </span>
+                    {
+                        onBackClick ? (
+                            <span className="backArrow" onClick={onBackClick}>
+                                <ArrowBackIcon className='backArrowIcon' />
+                            </span>
+                        ) : null
+                    }
                     <img src={IconImg} alt='logo' />
                 </span>
             )
@@ -73,7 +83,7 @@ function AuthUserNavbar({ enableScrollEffect, miniNav }) {
 
             <div className="profileCard">
                 <Link className='link'>My profile</Link>
-                <span className='link'>Logout</span>
+                <span onClick={handleLogout} className='link'>Logout</span>
             </div>
         </div>
     </div>
