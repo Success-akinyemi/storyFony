@@ -7,8 +7,21 @@
     padding: 20px 70px 20px 70px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     z-index: 9999;
+}
+
+.navbar .logo{
+    flex: 1;
+    width: 100%;
+    margin-right: 150px;
+}
+
+.navbar .menuCard{
+    display: flex;
+    flex: 15;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar.scroll{
@@ -67,4 +80,110 @@
     line-height: 21.6px;
     font-weight: 700;
     font-size: 16px;
+}
+
+.navbar .menu{
+    display: none;
+}
+
+.navbar .menuCard .closeMenu{
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar{
+        justify-content: space-between;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .navbar .logo{
+        flex: none;
+        width: 0%;
+        margin-right: 0;
+        margin-left: 55px;
+    }
+    .navbar .menuCard{
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 97vw;
+        height: 100vh;
+        background: var(--bg-4);
+        align-items: center;
+        justify-content: space-evenly;
+        display: none;
+    }
+
+    .navbar .menuCard.show{
+        display: flex;
+        animation: slide 0.4s ease forwards;
+    }
+
+    @keyframes slide {
+        0%{
+            left: -200px;
+        }
+        100%{
+            left: 0;
+        }
+    }
+
+    .navbar .menuCard.hide{
+        display: none;
+        animation: slideOut 0.4s ease;
+    }
+
+    @keyframes slideOut {
+        0%{
+            left: 0;
+        }
+        100%{
+            left: -200px;
+        }
+    }
+
+    .navbar .menu{
+        display: block;
+    }
+
+    .navbar .menu .menuIcon{
+        font-size: 55px;
+        cursor: pointer;
+        color: var(--text-color-2);
+    }
+
+    .navbar .menuCard .closeMenu{
+        display: block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .navbar .menuCard .closeMenu .closeIcon{
+        font-size: 55px;
+        color: var(--text-color-2);
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .navbar .menuCard .closeMenu .closeIcon:hover{
+        color: var(--text-color-1);
+    }
+
+    .navbar .linkItem{
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar .linkItem .navLink,
+    .navbar .cta .span-1{
+        font-size: 20px;
+    }
+
+    .navbar .cta{
+        flex-direction: column;
+        text-align: center;
+    }
 }

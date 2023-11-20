@@ -19,3 +19,19 @@
     background: green;
     position: absolute;
 }
+
+@media screen and (max-width: 768px) {
+    .reviews .reviewCard{
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 95%;
+    }
+
+    .reviews .useCaseReview{
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 95%;
+    }
+}

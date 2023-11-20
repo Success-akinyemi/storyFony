@@ -43,3 +43,14 @@
     background: green;
     width: 100%;
 }
+
+@media screen and (max-width: 768px) {
+    .callToAction{
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .callToAction .head{
+        width: 100%;
+    }
+}

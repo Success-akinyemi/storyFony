@@ -395,3 +395,55 @@
     font-size: 16px;
     line-height: 21.6px;
 }
+
+@media screen and (max-width: 768px) {
+    .footer{
+        height: 1600px;
+    }
+
+    .footer .top{
+        height: 1220px;
+    }
+
+    .footer .top .card{
+        flex-direction: column;
+    }
+
+    .footer .top .card .left{
+        flex-direction: column;
+    }
+
+    .footer .top .card .left .body{
+        flex-direction: column;
+        width: 100%;
+        gap: 50px;
+    }
+
+    .footer .top .card{
+        height: 1000px;
+    }
+
+    .footer .top .card .left .body .start,
+    .footer .top .card .left .body .middle,
+    .footer .top .card .left .body .end{
+        width: 100%;
+    }
+
+    .footer .top .card .left .body .start{
+        justify-content: center;
+    }
+
+    .footer .top .card .right{
+        width: 100%;
+    }
+    .footer .top .card .right .cards{
+        bottom: -800px;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+
+    .footer .bottom{
+        margin-top: auto;
+    }
+}

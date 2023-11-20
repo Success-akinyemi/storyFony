@@ -41,14 +41,14 @@ function App() {
                       <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
                       <Route path='/create-story' element={<AuthorizeUser><ValidToken><CreateStory /></ValidToken></AuthorizeUser>} />
                                 <Route path='/dashboard' element={<UserDashboard />} />
-          <Route path='/create-story' element={<CreateStory />} />
+                                <Route path='/create-story' element={<CreateStory />} />
 
              * 
              */
           }
 
-          <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
-          <Route path='/create-story' element={<AuthorizeUser><ValidToken><CreateStory /></ValidToken></AuthorizeUser>} />
+          <Route path='/dashboard' element={<UserDashboard />} />
+          <Route path='/create-story' element={<CreateStory />} />
         </Routes>
       </BrowserRouter>
     </div>

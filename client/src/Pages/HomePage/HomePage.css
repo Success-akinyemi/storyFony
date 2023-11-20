@@ -22,3 +22,14 @@
         border-radius: 22px;
     */
 }
+
+@media screen and (max-width: 768px) {
+    .homePage .layer-1{
+        width: 96%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 850px;
+        height: 400px;
+    }
+}
