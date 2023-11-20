@@ -1,0 +1,27 @@
+.spinner-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner{
+    width: 120px;
+    height: 120px;
+    border: 6px solid var(--second-color);
+    border-radius: 50%;
+    border-color: var(--second-color) transparent transparent transparent;
+    animation: spin 1.3s ease infinite;
+}
+
+@keyframes spin {
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 450px) {
+ .spinner{
+    width: 80px;
+    height: 80px;
+ }   
+}
