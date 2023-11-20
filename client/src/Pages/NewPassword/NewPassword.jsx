@@ -7,6 +7,7 @@ import f3Img from '../../assets/f3.png'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { newPassword } from '../../helpers/api'
+import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 function NewPassword() {
     const navigate = useNavigate();
@@ -121,7 +122,7 @@ function NewPassword() {
 
 
             <div className="button">
-                <button>Set new password</button>
+                <button>{ isLoadingData ? <Spinner /> : 'Set new password' }</button>
             </div>
 
         </form>

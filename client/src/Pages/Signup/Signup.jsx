@@ -179,7 +179,7 @@ function Signup() {
             </div>
 
             <div className="button">
-                <button onClick={handleRegister}>Create Account</button>
+                <button onClick={handleRegister}>{ isLoadingData ? <Spinner /> : 'Create Account' }</button>
             </div>
         
             <span className="footNote">

@@ -7,6 +7,7 @@ import f3Img from '../../assets/f3.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../../helpers/api'
+import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 function Login() {
     const navigate = useNavigate()
@@ -95,7 +96,7 @@ function Login() {
 
 
             <div className="button">
-                <button>Login</button>
+                <button>{ isLoadingData ? <Spinner /> : 'Login' }</button>
             </div>
         
             <span className="footNote">

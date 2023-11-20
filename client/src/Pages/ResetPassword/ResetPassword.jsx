@@ -82,7 +82,7 @@ function ResetPassword() {
             </div>
         
             <span className="footNote">
-                Don't have an account? <Link className='link' to='/signup'>Signup here</Link>
+                Don't have an account? <Link className='link' to='/signup'>{ isLoadingData ? <Spinner /> : 'Reset Password' } </Link>
             </span>
         </form>
 
