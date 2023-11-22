@@ -130,3 +130,9 @@
     border: none;
     outline: none;
 }
+
+@media screen and (max-width: 768px) {
+    .myStoryBooks .container{
+        flex-direction: column;
+    }
+}

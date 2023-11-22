@@ -41,7 +41,7 @@ function Login() {
             setIsLoadingData(true)
             const res = await loginUser({ email, password })
             console.log('RES>>',res)
-            if( res?.data.isVerified && !res?.data.isVerified){
+            if( res?.data?.isVerified && !res?.data?.isVerified){
                 navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
             } else{
                 localStorage.setItem('accessToken', res?.data.token)

@@ -7,10 +7,13 @@ import { useEffect, useState } from 'react';
 import { Avatar } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconImg from '../../assets/icon.png'
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
     const navigate = useNavigate()
     const [isScroll, setIsScroll] = useState(false)
+    const [menuOpen, setMenuOpen ] = useState(false)
     const { apiData } = useFetch()
 
     useEffect(() => {
@@ -25,6 +28,11 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
     const handleLogout = () => {
         localStorage.removeItem('accessToken')
         navigate('/')
+    }
+
+    const toggle = () => {
+        setMenuOpen((prev) => !prev)
+        console.log(menuOpen)
     }
   return (
     <div className={`authUserNavbar ${isScroll ? 'scroll' : 'none'} ${!enableScrollEffect ? 'show' : ''}`}>
@@ -48,7 +56,15 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
                 </span>
             )
         }
+
+        <div className="menuBtn" onClick={toggle}>
+            <MenuIcon className='menuIcon' />
+        </div>
         
+        <div className={`right ${menuOpen ? 'show' : 'hide'}`}>
+            <div className="closeBtn" onClick={toggle}>
+                <CloseIcon className='closeIcon' />
+            </div>
 
         {!miniNav ? 
             (
@@ -86,6 +102,8 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
                 <span onClick={handleLogout} className='link'>Logout</span>
             </div>
         </div>
+        </div>
+
     </div>
   )
 }

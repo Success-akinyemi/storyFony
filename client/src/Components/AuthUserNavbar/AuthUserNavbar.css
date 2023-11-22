@@ -2,13 +2,20 @@
     width: 100%;
     height: 72px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding: 20px 70px 20px 70px;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 9999;
+}
+
+.authUserNavbar .right{
+    display: flex;
+    margin-left: auto;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .authUserNavbar.scroll{
@@ -190,4 +197,54 @@
 .authUserNavbar .userProfile:hover .profileCard{
     top: 22px;
     transition: 0.4s ease;
+}
+
+.authUserNavbar .closeBtn,
+.authUserNavbar .menuBtn{
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .authUserNavbar .right{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 80vw;
+        height: 100vh;
+        background: var(--main-bg);
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .authUserNavbar .right .links{
+        flex-direction: column;
+    }
+
+    .authUserNavbar .closeBtn{
+        display: block;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    .authUserNavbar .right.hide{
+        display: none;
+    }
+
+    .authUserNavbar .closeBtn .closeIcon{
+        color: var(--text-color-2);
+        font-size: 50px;
+    }
+
+    .authUserNavbar .menuBtn{
+        display: block;
+        cursor: pointer;
+        margin-left: auto;
+    }
+
+    .authUserNavbar .menuBtn .menuIcon{
+        font-size: 50px;
+        color: var(--text-color-2);
+    }
 }
