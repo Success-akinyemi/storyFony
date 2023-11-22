@@ -44,7 +44,7 @@ function Login() {
             if( res?.data?.isVerified && !res?.data?.isVerified){
                 navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
             } else{
-                localStorage.setItem('accessToken', res?.data.token)
+                await localStorage.setItem('accessToken', res?.data.token)
                 navigate('/dashboard')
             } 
 
