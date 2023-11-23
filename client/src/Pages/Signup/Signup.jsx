@@ -7,6 +7,7 @@ import f3Img from '../../assets/f3.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { resgisterUser } from '../../helpers/api'
+import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 
 function Signup() {
