@@ -17,10 +17,6 @@ export const UserSchema = new mongoose.Schema({
         required: [true, 'Please Provide an Email' ],
         unique: [true, 'Email Already Exist Please use another']
     },
-    phoneNumber: {
-        type: String,
-        unique: [true, 'Phone Number already exist Please Provide another']
-    },
     penName: {
         type: String
     },
