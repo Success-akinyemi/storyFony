@@ -108,7 +108,7 @@ function Signup() {
                 const res = await resgisterUser({ fisrtName, lastName, email, penName ,password })
 
                 if(res.data.success){
-                    navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
+                    navigate('/VerificationEmailSent', { state: {resMsg: res?.data?.data}})
                 } else if(!res.data.success){
                     setError(res.data.data)
                     setTimeout(() => {
