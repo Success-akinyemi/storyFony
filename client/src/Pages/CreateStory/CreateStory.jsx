@@ -8,10 +8,12 @@ import { genreData } from '../../data/genreData'
 import CheckImg from '../../assets/checkImg.png'
 import { useFetch } from '../../hooks/fetch.hooks'
 import InsufficientInk from '../../Components/Helpers/InsufficientInk/InsufficientInk'
+import { createStory } from '../../helpers/api'
+import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 function CreateStory() {
     const { apiData } = useFetch()
-    const [ card, setCard ] = useState('content1')
+    const [ card, setCard ] = useState(1)
     const [ numberOfWords, setNumberOfWords] = useState(0)
     const [ numberOfLetters, setNumberOfLetters] = useState(0)
     const [ numberOfMotiveWords, setNumberOfMotiveWords] = useState(0)
@@ -35,21 +37,12 @@ function CreateStory() {
     const [ loadingState, setLoadingState ] = useState(false)
     const { placeholder, reason } = createStoryPlaceHolder
 
-    const [cardStack, setCardStack ] = useState(['content1'])
-    const currentCard = cardStack[cardStack.length - 1]
 
-    const pushCard = (newCard) => {
-        setCardStack([...cardStack, newCard])
-    };
-
-    const popCard = () => {
-        if(cardStack.length > 1){
-            const newStack = [...cardStack];
-            newStack.pop();
-            setCardStack(newStack);
+    const onBackClick = () => {
+        if(card !== 1){
+            setCard(card -1)
         }
     }
-
 
     const handleWordInputChange = (e) => {
         const words = e.target.value.trim().split(/\s+/).filter((word) => word !== '')
@@ -105,11 +98,11 @@ function CreateStory() {
     }
 
     useEffect(() => {
-        const areFieldsEmpty = title === '' || desc === '' || motive === '' || genreValue === '' || ending === '' || mimicAuthor === '' || numberOfSeries === '' || language
+        const areFieldsEmpty = title === '' || desc === '' || motive === '' || genreValue === '' || ending === '' || numberOfSeries === '' || language === ''
         setIsButtonDisabled(areFieldsEmpty)
-    }, [title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language])
+    }, [title, desc, motive, genreValue, ending, numberOfSeries, language])
     
-    const handleCreateStory = () => {
+    const handleCreateStory = async () => {
         const availabeInk = apiData?.totalCredit
         const costOfSeries = 40
 
@@ -117,12 +110,14 @@ function CreateStory() {
 
         if(totalInkNeeded > availabeInk){
             setErrorMessage('insufficienBalance')
-            showError(true)
+            setShowError(true)
             return;
         }
         try {
             setLoadingState(true)
-            console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language)
+            const userEmail = apiData?.email
+            console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
+            const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
         } catch (error) {
             console.log('ERROR CREATING STORY', error)
         } finally {
@@ -152,7 +147,7 @@ function CreateStory() {
 
   return (
     <div className='createStory'>
-        <AuthUserNavbar enableScrollEffect={true} miniNav={true} onBackClick={popCard} />
+        <AuthUserNavbar enableScrollEffect={true} miniNav={true} onBackClick={onBackClick} />
         {showError && (
             <div className="errorOverlay">
                 <div className="errorCard">
@@ -168,16 +163,16 @@ function CreateStory() {
 
         <div className="conatiner">
             <div className="slide">
-                <span className={`indicator ${ card === 'content1' ? 'active' : ''}`}></span>
-                <span className={`indicator ${ card === 'content2' ? 'active' : ''}`}></span>
-                <span className={`indicator ${ card === 'content3' ? 'active' : ''}`}></span>
-                <span className={`indicator ${ card === 'content4' ? 'active' : ''}`}></span>
+                <span className={`indicator ${ card === 1 ? 'active' : ''}`}></span>
+                <span className={`indicator ${ card === 2 ? 'active' : ''}`}></span>
+                <span className={`indicator ${ card === 3 ? 'active' : ''}`}></span>
+                <span className={`indicator ${ card === 4 ? 'active' : ''}`}></span>
             </div>
 
             <div className="content">
 
                 {
-                    card === 'content1' && (
+                    card === 1 && (
                         <div className='content1'>
                             <h3><img src={LogoImg} alt='logo'/> Hey Famous Writer, what will you like  to write today</h3>
                             
@@ -223,13 +218,13 @@ function CreateStory() {
                                 </div>
                             </div>
 
-                            <button className="btn" onClick={() => setCard('content2')}>Proceed</button>
+                            <button className="btn" onClick={() => setCard(card + 1)}>Proceed</button>
                         </div>
                     )
                 }
 
                 {
-                    card === 'content2' && (
+                    card === 2 && (
                         <div className='content2'>
                             <h3><img src={LogoImg} alt='logo'/> Hey, Famous writer, you’re writing a story series</h3>
                             
@@ -251,15 +246,15 @@ function CreateStory() {
                                 </div>
                             </div>
 
-                            <button disabled={!genreValue} className="btn" onClick={() => setCard('content3')}>Proceed</button>
+                            <button disabled={!genreValue} className="btn" onClick={() => setCard(card + 1)}>Proceed</button>
                         </div>
                     )
                 }
 
                 {
-                    card === 'content3' && (
+                    card === 3 && (
                         <div className="content3">
-                            <h3><img src={LogoImg} alt='logo'/> Ok, is time to start writing your story</h3>
+                            <h3><img src={LogoImg} alt='logo' className='icon'/> Ok, is time to start writing your story</h3>
 
                             <div className='storyContent'>
                                 <div className='inputGroup1'>
@@ -303,7 +298,7 @@ function CreateStory() {
                                     <div className="right">
                                         <p>Mimic famous author</p>
                                         <select value={mimicAuthor} onChange={(e) => setMimicAuthor(e.target.value)} >
-                                            <option value="">None</option>
+                                            <option value="none">None</option>
                                             {
                                                 authors.map((item, idx) => (
                                                     <option value={item.text} key={idx}>{item.text}</option>
@@ -332,14 +327,14 @@ function CreateStory() {
                                     </div>
                                 </div>
 
-                                <button disabled={!title || !desc || !ending || !mimicAuthor || numberOfSeries || !language} className="btn" onClick={() => setCard('content4')}>Proceed</button>
+                                <button disabled={!title || !desc || !ending || !numberOfSeries || !language} className="btn" onClick={() => setCard(card + 1)}>Proceed</button>
                             </div>
                         </div>
                     )
                 }
 
                 {
-                    card === 'content4' && (
+                    card === 4 && (
                         <div className="content4">
                             <h3><img src={LogoImg} alt='logo'/> Ok, Famous writer,</h3>
                             <div className="body">
@@ -356,7 +351,7 @@ function CreateStory() {
                                 </textarea>
                             </div>
 
-                            <button onClick={handleCreateStory} disabled={isButtonDisabled} className="btn">Proceed</button>
+                            <button onClick={handleCreateStory} disabled={isButtonDisabled || loadingState} className="btn">{loadingState ? <Spinner /> : 'Proceed'}</button>
                         </div>
                     )
                 }

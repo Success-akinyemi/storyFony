@@ -194,3 +194,11 @@
   }
 
 /**  END POPUP COMPONENT */
+
+@media screen and (max-width: 450px) {
+    .userDashboard .userDashboardHero .content{
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

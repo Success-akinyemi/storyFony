@@ -10,6 +10,7 @@ export default async function Protect(req, res, next){
     }
 
     if(!token){
+        console.log('Not Authorized to access this route 1')
         return next(new ErrorResponse('Not Authorized to access this route', 401))
     }
 
@@ -25,6 +26,7 @@ export default async function Protect(req, res, next){
         req.user = user
         next()
     } catch (error) {
+        console.log('Not Authorized to access this route 2', error)
         return next(new ErrorResponse('Not Authorized to access this routes', 401))
     }
 }

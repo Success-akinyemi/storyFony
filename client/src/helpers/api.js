@@ -119,3 +119,20 @@ export async function newPassword({ resetToken, password }){
           }
     }
 }
+
+export async function createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}){
+    try {
+        const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, {headers: {Authorization: `Bearer ${token}`}})
+        console.log('CREATE STORY RES', res)
+    } catch (error) {
+        console.log('ERROR VERIFYING USER API', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}

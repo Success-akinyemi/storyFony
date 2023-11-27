@@ -5,6 +5,7 @@
     justify-content: center;
     background: var(--main-bg);
     position: relative;
+    width: 100%;
 }
 
 .createStory .errorOverlay{
@@ -26,12 +27,13 @@
     position: relative;
     padding: 20px;
     border-radius: 4px;
+    z-index: 10;
 }
 
 .createStory .errorOverlay .errorCard .closeIcon{
     position: absolute;
-    right: 0;
-    top: -10px;
+    right: 10px;
+    top: -5px;
     font-size: 40px;
     color: var(--text-color-2);
     cursor: pointer;
@@ -45,6 +47,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
 
 .createStory .conatiner .slide{
@@ -134,12 +137,13 @@
     width: 100%;
     height: 213px;
     display: flex;
+    justify-content: center;
     gap: 32px;
 }
 
 .createStory .conatiner .content1 .cards .cardContainer .card{
     height: 100%;
-    width: 258.67px;
+    max-width: 258.67px;
     border-radius: 10px;
     border: 1px solid var(--text-color-3);
     padding: 30px;
@@ -343,6 +347,7 @@
     font-size: 18px;
     font-weight: 500;
     color: var(--text-color-2);
+    outline: none;
 }
 
 .createStory .conatiner .content3 .storyContent .inputGroup1 input::placeholder{
@@ -369,6 +374,7 @@
     line-height: 32px;
     resize: none;
     background: transparent;
+    outline: none;
 }
 
 .createStory .conatiner .content3 .storyContent .inputGroup2 textarea::placeholder{
@@ -469,4 +475,90 @@
 
 .createStory .conatiner .content4 .body textarea::placeholder{
     color: #9CA3AF40;
+}
+
+@media screen and (max-width: 768px) {
+    .createStory{
+        padding-left: 20px;
+        padding-right: 20px;
+        height: auto;
+    }
+
+    .createStory .conatiner{
+        width: 100%;
+    }
+
+    .createStory .conatiner .content1{
+        flex-wrap: wrap;
+        height: 100%;
+    }
+
+    .createStory .conatiner .content1 .btn{
+        position: absolute;
+        bottom: -220px;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+
+    .createStory .conatiner .content1 .cards .cardContainer{
+        flex-wrap: wrap;
+    }
+
+    .createStory .conatiner .content3{
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .createStory .conatiner{
+        margin-top: 70px;
+        padding: 0px 0px 0px 0px;
+        justify-content: start;
+    }
+
+    .createStory .errorOverlay .errorCard{
+        width: 80%;
+    }
+
+    .createStory .conatiner .content1 h3,
+    .createStory .conatiner .content2 h3,
+    .createStory .conatiner .content3 h3,
+    .createStory .conatiner .content4 h3{
+        font-size: 16px;
+    }
+
+    .createStory .conatiner .content{
+        padding: 0;
+    }
+
+    .createStory .conatiner .content1{
+        height: 950px;
+    }
+
+    .createStory .conatiner .content1 .btn{
+        position: relative;
+    }
+
+    .createStory .conatiner .content3{
+        width: 100%;
+        padding-left: 0;
+        padding-top: 0;
+        padding-right: 0;
+        height: 1000px;
+        justify-content: start;
+    }
+
+    .createStory .conatiner .content3 .storyContent .inputGroup3{
+        flex-direction: column;
+        height: auto;
+    }
+
+    .createStory .conatiner .content4{
+        width: 100%;
+        padding-left: 0;
+        padding-top: 0;
+        padding-right: 0;
+    }
 }

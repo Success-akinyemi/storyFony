@@ -131,8 +131,41 @@
     outline: none;
 }
 
+@media screen and (max-width: 950px) {
+    .myStoryBooks .container{
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .myStoryBooks .container .storyCard .cards{
+        justify-content: center;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .myStoryBooks .container{
         flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .myStoryBooks{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .myStoryBooks .container .storyCard .paginationBtn{
+        justify-content: center;
+        width: 100%;
+    }
+
+    .myStoryBooks .container .storyCard .paginationBtn .btn{
+        justify-content: center;
+    }
+
+    .myStoryBooks .container .storyCard .paginationBtn .btn .btn1,
+    .myStoryBooks .container .storyCard .paginationBtn .btn .btn2{
+        height: 100%;
+        width: 167px;
     }
 }
