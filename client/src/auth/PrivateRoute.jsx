@@ -29,7 +29,7 @@ export const ValidToken = ({ children }) => {
         const tokenData = JSON.parse(atob(authToken.split('.')[1]));
         const currentTime = Date.now() / 1000;
         const tokenExpiration = tokenData.exp
-        console.log('TOKEN DATA>>', tokenExpiration)
+
         
         if( currentTime > tokenExpiration ){
             console.log('TOKEN EXPIRED')

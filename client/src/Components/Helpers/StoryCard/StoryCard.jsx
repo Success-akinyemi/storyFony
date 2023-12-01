@@ -6,14 +6,15 @@ import heartImg from '../../../assets/heart.png'
 function StoryCard({ data }) {
   return (
     <div className='storyCard'>
-        <img src={data?.coverImg} alt='background' className='background' />
+        <img src={`data:image/*;base64, ${data?.storyImage}`} alt='background' className='background' />
+
         <span className="tag">{data?.genre}</span>
 
         <div className="content">
             <div className="top">
-                <h1>{data?.title}</h1>
+                <h1>{data?.storyTitle}</h1>
 
-                <Link className='link btn'>
+                <Link to={`/story-book/${data?._id}`} className='link btn'>
                     Read story book
                 </Link>
             </div>

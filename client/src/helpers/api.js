@@ -13,7 +13,7 @@ export async function getUser(){
     if(!token) return Promise.reject('Cannot get Token')
     try {
         const decoded = jwt_decode(token);
-        console.log('decoded>>', decoded);
+        //console.log('decoded>>', decoded);
         
         return decoded;
       } catch (error) {
@@ -124,6 +124,10 @@ export async function createStory({title, desc, motive, genreValue, ending, mimi
     try {
         const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, {headers: {Authorization: `Bearer ${token}`}})
         console.log('CREATE STORY RES', res)
+        if(res.data.success){
+            toast.success('Story Generated')
+            return res
+        }
     } catch (error) {
         console.log('ERROR VERIFYING USER API', error)
         if (error.response && error.response.data) {

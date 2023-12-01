@@ -36,7 +36,7 @@ app.use('/api/subscription', subscriptionRouter)
 //Error Handler Last piece of middleware
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 9001
 
 const server =  app.listen(PORT, () => console.log (`server runing on port http://localhost:${PORT}`))
 

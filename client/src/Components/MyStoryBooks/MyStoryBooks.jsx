@@ -5,11 +5,13 @@ import { userStoryBook } from '../../hooks/fetch.hooks';
 import StoryCard from '../Helpers/StoryCard/StoryCard';
 import { myStoryData } from '../../data/myStoryData';
 import { useState } from 'react';
+import Spinner from '../Helpers/Spinner/Spinner';
 
 function MyStoryBooks() {
     const { apiUserStoryData, isLoadingStory } = userStoryBook();
-    //const data = apiUserStoryData
-    const data = myStoryData
+    const dataa = apiUserStoryData?.data
+
+    const data = dataa
 
     //pagination
     const itemsPerPage = 12
@@ -17,10 +19,11 @@ function MyStoryBooks() {
     
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem)
 
-    const totalNumberOfPages = Math.ceil(data.length / itemsPerPage)
+    const totalNumberOfPages = Math.ceil(data?.length / itemsPerPage)
 
+    if(isLoadingStory) return <Spinner />
   return (
     <div className='myStoryBooks'>
         <h3>My story books</h3>

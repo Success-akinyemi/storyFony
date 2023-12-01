@@ -15,6 +15,7 @@ import Pricing from './Pages/Pricing/Pricing'
 import UserDashboard from './Pages/UserDashboard/UserDashboard'
 import { AuthorizeUser, ValidToken } from './auth/PrivateRoute'
 import CreateStory from './Pages/CreateStory/CreateStory'
+import StoryBook from './Pages/StoryBook/StoryBook'
 
 function App() {
 
@@ -46,9 +47,9 @@ function App() {
              * 
              */
           }
-
           <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
           <Route path='/create-story' element={<AuthorizeUser><ValidToken><CreateStory /></ValidToken></AuthorizeUser>} />
+          <Route path='/story-book/:id' element={<StoryBook />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -35,6 +35,8 @@ function CreateStory() {
     const [errorMessage, setErrorMessage] = useState('');
     
     const [ loadingState, setLoadingState ] = useState(false)
+
+    const [ story, setStory ] = useState('')
     const { placeholder, reason } = createStoryPlaceHolder
 
 
@@ -118,6 +120,9 @@ function CreateStory() {
             const userEmail = apiData?.email
             console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
             const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
+            if(res?.data.success){
+                setStory(res?.data.data)
+            }
         } catch (error) {
             console.log('ERROR CREATING STORY', error)
         } finally {

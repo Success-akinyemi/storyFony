@@ -69,7 +69,7 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
         {!miniNav ? 
             (
                 <div className="links">
-                    <Link className='link authNavLink'>My story books</Link>
+                    <Link to='/dashboard' className='link authNavLink'>My story books</Link>
                     <Link to='/create-story' className='link authNavLink'>Write new story</Link>
                     <Link className='link authNavLink'>My Subscription</Link>
                     <Link className='link authNavLink guide'>Guide <KeyboardArrowDownIcon className='icon' /> 

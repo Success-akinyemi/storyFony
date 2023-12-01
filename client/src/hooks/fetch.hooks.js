@@ -5,7 +5,7 @@ import { getUser } from '../helpers/api'
 //axios.defaults.baseURL = import.meta.env.VITE_LOCALHOST_SERVER_API
 axios.defaults.baseURL = import.meta.env.VITE_LIVE_SERVER_API
 
-
+const token = localStorage.getItem('accessToken')
 /**Get User Details Hooks */
 export function useFetch(query){
     const [data, setData] = useState({ isLoading: true, apiData: null, status: null, serverError: null})
@@ -47,15 +47,15 @@ export function userStoryBook(query){
         const fetchData =  async () => {
             try {
                 const { id } = !query ? await getUser() : await getUser();
-                
+                console.log('ID', id, 'QUERY', query)
                 const config = {
                     headers: {
-                      Authorization: `Bearer ${id}`,
+                      Authorization: `Bearer ${token}`,
                     },
                   };            
 
-                const { data, status} = !query ? await axios.get(`/api/user/story/${id}`, config) : await axios.get(`/api/getUsers/story/${id}`, config)
-                console.log('Data from Hooks>>>', data)
+                const { data, status} = !query ? await axios.get(`/api/user/stories/${id}`, config) : await axios.get(`/api/user/story/${id}/${query}`, config)
+                console.log('Story Data from Hooks>>>', data)
 
                 if(status === 200){
                     setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null})
