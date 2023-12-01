@@ -49,7 +49,7 @@ function App() {
           }
           <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
           <Route path='/create-story' element={<AuthorizeUser><ValidToken><CreateStory /></ValidToken></AuthorizeUser>} />
-          <Route path='/story-book/:id' element={<StoryBook />} />
+          <Route path='/story-book/:id' element={<AuthorizeUser><ValidToken><StoryBook /></ValidToken></AuthorizeUser>} />
         </Routes>
       </BrowserRouter>
     </div>
