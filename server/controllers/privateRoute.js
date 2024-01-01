@@ -76,9 +76,10 @@ export async function createStory(req, res){
       const newStory = new UserStory({
           story: storyArray,
           email: userEmail,
-          author: `${user.fisrtName} ${user.lastName}`,
+          author: `${user.name}`,
           motive: motive,
           authorPenName: user.penName,
+          authorImg: user.profileImg,
           genre: genreValue,
           userTitle: title,
           storyTitle: extractedTitle,
@@ -112,7 +113,7 @@ export async function getUserStories(req, res){
 
     const storiesData = await UserStory.find({ email: user.email })
 
-
+    console.log(storiesData)
     res.status(200).json({ success: true, data: storiesData })
     
   } catch (error) {
@@ -139,6 +140,23 @@ export async function getUserStory(req, res){
     
   } catch (error) {
     console.log('ERROR GETTING USER STORY', error)
+    res.status(500).json({ success: false, data: 'failed to get stories'})
+  }
+}
+
+export async function handlePrivateStory(req, res){
+  const { id } = req.params
+  try {
+    const story = await UserStory.findById({ id })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+    story.privateStory = false
+    await story.save()
+
+    res.status(200).json({ success: true, data: 'Story Updated'})
+  } catch (error) {
+    console.log('ERROR HANDLING PRIVATE STORY', error)
     res.status(500).json({ success: false, data: 'failed to get stories'})
   }
 }

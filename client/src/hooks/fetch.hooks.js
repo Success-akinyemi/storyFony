@@ -13,15 +13,9 @@ export function useFetch(query){
     useEffect(() => {
         const fetchData =  async () => {
             try {
-                const { id } = !query ? await getUser() : await getUser();
-                
-                const config = {
-                    headers: {
-                      Authorization: `Bearer ${id}`,
-                    },
-                  };            
+                const { id } = !query ? await getUser() : await getUser();        
 
-                const { data, status} = !query ? await axios.get(`/api/user/${id}`, config) : await axios.get(`/api/getUsers/${id}`, config)
+                const { data, status} = !query ? await axios.get(`/api/user/${id}`, { withCredentials: true }) : await axios.get(`/api/getUsers/${id}`, { withCredentials: true })
                 console.log('Data from Hooks>>>', data)
 
                 if(status === 200){
@@ -47,14 +41,9 @@ export function userStoryBook(query){
         const fetchData =  async () => {
             try {
                 const { id } = !query ? await getUser() : await getUser();
-                console.log('ID', id, 'QUERY', query)
-                const config = {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  };            
+                console.log('ID', id, 'QUERY', query)          
 
-                const { data, status} = !query ? await axios.get(`/api/user/stories/${id}`, config) : await axios.get(`/api/user/story/${id}/${query}`, config)
+                const { data, status} = !query ? await axios.get(`/api/user/stories/${id}`, { withCredentials: true }) : await axios.get(`/api/user/story/${id}/${query}`, { withCredentials: true })
                 console.log('Story Data from Hooks>>>', data)
 
                 if(status === 200){
@@ -63,7 +52,9 @@ export function userStoryBook(query){
                     setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: status, storyServerError: null})
                 }
             } catch (error) {
-                setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: null, storyServerError: error})
+                setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error })
+                console.log(data)
+                console.log(error)
             }
         };
         fetchData()

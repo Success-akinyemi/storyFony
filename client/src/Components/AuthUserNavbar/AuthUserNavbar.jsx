@@ -9,12 +9,17 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconImg from '../../assets/icon.png'
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { apiUrl } from '../../Utils/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from '../../redux/user/userslice';
 
 function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
     const navigate = useNavigate()
     const [isScroll, setIsScroll] = useState(false)
     const [menuOpen, setMenuOpen ] = useState(false)
-    const { apiData } = useFetch()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if(enableScrollEffect){
@@ -25,9 +30,13 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
         }
     }, [])
 
-    const handleLogout = () => {
-        localStorage.removeItem('accessToken')
-        navigate('/')
+    const handleLogout = async () => {
+        try {
+            await fetch(apiUrl('/api/auth/signout'))
+            dispatch(signOut())
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const toggle = () => {
@@ -75,7 +84,7 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
                     <Link className='link authNavLink guide'>Guide <KeyboardArrowDownIcon className='icon' /> 
                     <div className="guideCard">
                         <Link className='link'>Use case studies</Link>
-                        <Link className='link'>Public story shelf</Link>
+                        <Link className='link' to='/public-shelf'>Public story shelf</Link>
                         <Link className='link'>Learn centre</Link>
                         <Link className='link'>Support</Link>
                     </div>
@@ -87,18 +96,18 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
         }
 
         <div className="creditBal">
-            <span className='credit'>{apiData?.totalCreditUsed}/{apiData?.totalCredit}</span> fony ink used
+            <span className='credit'>{user?.totalCreditUsed}/{user?.totalCredit}</span> fony ink used
         </div>
 
         <div className="userProfile">
             <div className="image">
-            { apiData?.profileImg ? (<img src={apiData?.profileImg} alt='profile'/>) : (<Avatar className='avatar' />)}
+            { user?.profileImg ? (<img src={user?.profileImg} alt='profile'/>) : (<Avatar className='avatar' />)}
             </div> 
-            {apiData?.penName} 
+            {user?.penName} 
             <KeyboardArrowDownIcon className='icon' />
 
             <div className="profileCard">
-                <Link className='link'>My profile</Link>
+                <Link to='/profile-page' className='link'>My profile</Link>
                 <span onClick={handleLogout} className='link'>Logout</span>
             </div>
         </div>

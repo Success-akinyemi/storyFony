@@ -1,32 +1,50 @@
-import jsonwebtoken from 'jsonwebtoken'
-import UserModel from '../models/User.js'
-import ErrorResponse from '../utils/errorResponse.js';
+import jwt from "jsonwebtoken"
 
-export default async function Protect(req, res, next){
-    let token;
+export const verifyToken = (req, res, next) => {
+    const token = req.cookies.accessToken
+    console.log('TOKEN>>', token)
 
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-        token = req.headers.authorization.split(' ')[1]
-    }
+    if(!token) return res.status(401).json({ success: false, data: 'Not Allowed Please Login'})
 
-    if(!token){
-        console.log('Not Authorized to access this route 1')
-        return next(new ErrorResponse('Not Authorized to access this route', 401))
-    }
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if(err) return res.status(403).json({ success: false, data: 'User Forbidden Please Login'})
+    
+        req.user = user;
+        next();
+    });
+}
 
-    try {
-        const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+export const verifyAdminToken = (req, res, next) => {
+    const token = req.cookies.adminAccessToken
+    console.log('ADMIN TOK',token)
 
-        const user = await UserModel.findById(decoded.id)
+    if(!token) return res.status(401).json({ success: false, data: 'Not Allowed Please Login'})
 
-        if(!user){
-            return next(new ErrorResponse('No User Found with this ID', 404))
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if(err) return res.status(403).json({ success: false, data: 'User Forbidden Please Login'})
+    
+        req.user = user;
+        next();
+    });
+}
+
+
+export const verifyTokenAndAdmin = (req, res, next) => {
+    verifyAdminToken(req, res, () => {
+        if(req.user.isAdmin){
+            next()
+        } else {
+            return res.status(403).json({ success: false, data: 'You are Forbidden'})
         }
+    })
+}
 
-        req.user = user
-        next()
-    } catch (error) {
-        console.log('Not Authorized to access this route 2', error)
-        return next(new ErrorResponse('Not Authorized to access this routes', 401))
-    }
+export const verifyTokenAndGrandAdmin = (req, res, next) => {
+    verifyAdminToken(req, res, () => {
+        if(req.user.grandAdmin){
+            next()
+        } else {
+            return res.status(403).json({ success: false, data: 'You are Forbidden'})
+        }
+    })
 }

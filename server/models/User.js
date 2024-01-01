@@ -4,13 +4,9 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
 
 export const UserSchema = new mongoose.Schema({
-    fisrtName: {
+    name: {
         type: String,
-        required: [true, 'Please Provide a Fisrt Name']
-    },
-    lastName: {
-        type: String,
-        required: [true, 'Please Provide a Last Name']
+        required: [true, 'Please Provide a Name']
     },
     email: {
         type: String,
@@ -20,12 +16,25 @@ export const UserSchema = new mongoose.Schema({
     penName: {
         type: String
     },
+    country: {
+        type: String
+    },
+    state: {
+        type: String
+    },
+    occupation: {
+        type: String
+    },
     password: {
         type: String,
         required: [true, 'Please Provide a Password']
     },
-    profileImg: {
+    adminPassword: {
         type: String
+    },
+    profileImg: {
+        type: String,
+        default: 'https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg',
     },
     isAdmin: {
         type: Boolean,

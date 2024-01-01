@@ -111,7 +111,7 @@
     width: 100%;
 }
 
-.login .loginCard button{
+.login .loginCard .button .loginBtn{
     width: 100%;
     border-radius: 22px;
     display: flex;
@@ -130,7 +130,7 @@
     transition: all 0.3s ease-in;
 }
 
-.login .loginCard button:hover{
+.login .loginCard .button .loginBtn:hover{
     background: var(--bg-5-opacity);
 }
 

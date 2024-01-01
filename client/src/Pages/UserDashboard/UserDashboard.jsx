@@ -8,12 +8,14 @@ import MyBookMarked from '../../Components/MyBookMarked/MyBookMarked';
 import LikedStories from '../../Components/LikedStories/LikedStories';
 import UploadProfilePhoto from '../../Components/UploadProfilePhoto/UploadProfilePhoto';
 import AuthUserNavbar from '../../Components/AuthUserNavbar/AuthUserNavbar';
+import { useSelector } from 'react-redux';
 
 function UserDashboard() {
+  const  {currentUser}  = useSelector(state => state.user)
+  const user = currentUser?.data
   const [selectedCard, setSelectedCard] = useState(null)
   const [ select, setSelect ] = useState('myStoryBook')
 
-  const { apiData, isLoading, serverError } = useFetch()
 
   const renderPopupComponent = () => {
     switch(selectedCard) {
@@ -68,11 +70,10 @@ function UserDashboard() {
           <div className="content">
               <div className="top">
                 <div className="image">
-                  <div className="img" onClick={() => setSelectedCard('uploadProfile')}>
-                    <AddIcon className='addIcon' />
+                  <div className="img">
                     {
-                      apiData?.profileImg ? (
-                        <img src={apiData?.profileImg} alt='profile' />
+                      user?.profileImg ? (
+                        <img src={user?.profileImg} alt='profile' className='profileImg' />
                       ) : (
                         <Avatar className='avatar' />
                       )
@@ -81,8 +82,8 @@ function UserDashboard() {
                 </div>
 
                 <div className="name">
-                  <h2 className="userName">{apiData?.fisrtName} {apiData?.lastName}</h2>
-                  <p className='penName'>@{apiData?.penName}</p>
+                  <h2 className="userName">{user?.name}</h2>
+                  <p className='penName'>@{user?.penName}</p>
                 </div>
               </div>
               

@@ -23,7 +23,7 @@ function StoryBook() {
     if (isLoadingStory || !storyData) return <Spinner />;
     //const storyData = apiUserStoryData?.data
     console.log('storyData',storyData)
-    const { storyTitle, authorPenName, privateStory, motive, coverImage, storyImage, story, likes, createdAt } = storyData
+    const { storyTitle, authorPenName, privateStory, motive, coverImage, storyImage, story, likes, createdAt, authorImg } = storyData
 
         //pagination
         const itemsPerPage = 2
@@ -57,7 +57,15 @@ function StoryBook() {
                     <span className='s-1'>Created on: {formattedDate}</span>
                     <span className="s-2">{privateStory ? 'Private story' : 'Public story'}</span>
                     <span className="s-3">
-                        <div className="authorImg"></div>
+                        <div className="authorImg">
+                            {
+                                authorImg ? (
+                                    <img src={authorImg} />
+                                ) : (
+                                    ''
+                                )
+                            }
+                        </div>
                         <p>@{authorPenName}</p>
                     </span>
                 </div>

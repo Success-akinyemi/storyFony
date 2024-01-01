@@ -1,0 +1,176 @@
+.profilePage{
+    position: relative;
+    width: 100%;
+    background: var(--main-bg);
+    min-height: 200vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profilePage .profileHero{
+    position: relative;
+    width: 100%;
+    height: 494px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url(../../assets/bg-1.png.png);
+    background-position: center;
+    object-fit: cover;
+    background-size: cover;
+    overflow: hidden;
+    flex-direction: column;
+    margin-bottom: 32px;
+}
+
+.profilePage .profileHero .content{
+    height: 102px;
+    width: 521px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.profilePage .profileHero .content h1{
+    height: 46px;
+    font-size: 34px;
+    text-align: center;
+    color:  var(--text-color-2);
+    font-weight: 500;
+}
+
+.profilePage .profileHero .content p{
+    line-height: 21px;
+    text-align: center;
+    color: var(--text-color-2);
+    font-weight: 400;
+}
+
+.profilePage .card{
+    background: var(--bg-4);
+    height: 1000px;
+    width: 751px;
+    position: absolute;
+    top: 360px;
+    display: flex;
+    gap: 32px;
+    border-radius: 4px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: var(--text-color-2);
+    flex-direction: column;
+}
+
+.profilePage .card p{
+    width: 100%;
+    height: 24px;
+    font-size: 18px;
+}
+
+.profilePage .card .profileImgCard{
+    width: 115px;
+    height: 143px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profilePage .card .profileImgCard .profileImg{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.profilePage .card .profileImgCard button{
+    width: 100%;
+    height: 71px;
+    background: var(--bg-5);
+    padding: 6px 12px 6px 12px;
+    text-align: center;
+    color: var(--main-bg);
+    height: 19px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.profilePage .card .textGreen{
+    color: var(--border-1);
+}
+
+.profilePage .card .textGray{
+    color: var(--text-color-3);
+}
+
+.profilePage .card .textRed{
+    color: var(--bg-5);
+}
+
+.profilePage .card .formInputs{
+    width: 691px;
+    height: 606px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profilePage .card .formInputs .formInput{
+    width: 100%;
+    height: 81px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profilePage .card .formInputs .formInput label{
+    width: 500px;
+    font-size: 14px;
+    color: var(--text-color-2);
+}
+
+.profilePage .card .formInputs .formInput input{
+    width: 100%;
+    height: 52px;
+    padding: var(--padding);
+    border: 1px solid var(--text-color-1);
+    border-radius: 4px;
+    background: transparent;
+    outline: none;
+    color: var(--text-color-2);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+.profilePage .card .formInputs .formInput input:focus{
+    border: 1px solid var(--border-1);
+}
+
+.profilePage .card button{
+    width: 100%;
+    height: 56px;
+    border: none;
+    outline: none;
+    padding: var(--padding-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--bg-5);
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--text-color-2);
+    border-radius: 22px;
+    cursor: pointer;
+}

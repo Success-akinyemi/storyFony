@@ -30,6 +30,9 @@ export const StorySchema = new mongoose.Schema({
     authorPenName: {
         type: String
     },
+    authorImg: {
+        type: String
+    },
     genre: {
         type: String
     },

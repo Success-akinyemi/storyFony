@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom'
 
 function VerificationEmailSent() {
   const location = useLocation();
-  const msg = location.state ? location.state.resMsg : 'Please Check your Email to verify Email';
+  const msg = location.state ? location.state.resMsg : 'Please Check your Email to verify Email Address';
 
   return (
     <div className='vEmail'>

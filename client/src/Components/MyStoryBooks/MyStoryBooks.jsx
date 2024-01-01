@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './MyStoryBooks.css'
 import LogoImg from '../../assets/icon.png'
 import { userStoryBook } from '../../hooks/fetch.hooks';
@@ -6,12 +6,20 @@ import StoryCard from '../Helpers/StoryCard/StoryCard';
 import { myStoryData } from '../../data/myStoryData';
 import { useState } from 'react';
 import Spinner from '../Helpers/Spinner/Spinner';
+import toast from 'react-hot-toast';
 
 function MyStoryBooks() {
-    const { apiUserStoryData, isLoadingStory } = userStoryBook();
+    const { apiUserStoryData, isLoadingStory, storyStatus, storyServerError } = userStoryBook();
     const dataa = apiUserStoryData?.data
+    const navigate = useNavigate()
 
     const data = dataa
+    console.log('DTAA', storyServerError)
+
+    if(storyStatus === 401 || storyStatus === 403){
+        toast.error(storyServerError)
+        navigate('/login')
+    }
 
     //pagination
     const itemsPerPage = 12
@@ -58,7 +66,7 @@ function MyStoryBooks() {
                     </button>
                     <button 
                         onClick={() => setCurrentPage(currentPage + 1)}
-                        disabled={indexOfLastItem >= data.length}
+                        disabled={indexOfLastItem >= data?.length}
                         className='btn2'
                     >
                         Next

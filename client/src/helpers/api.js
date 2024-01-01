@@ -1,6 +1,7 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 //axios.defaults.baseURL = import.meta.env.VITE_LOCALHOST_SERVER_API
 axios.defaults.baseURL = import.meta.env.VITE_LIVE_SERVER_API
@@ -39,16 +40,16 @@ export async function resgisterUser({ fisrtName, lastName, email, penName ,passw
 
 export async function loginUser({ email, password }){
     try {
-        const res = await axios.post('/api/login', { email, password })
+        const res = await axios.post('/api/login', { email, password }, {withCredentials: true} )
         console.log('respones', res)
         if(res.data){
             return res        
         }
     } catch (error) {
         console.log('ERROR REGISTERING USER API', error)
-        if (error.response && error.response.data) {
+        if (error.response) {
             const errorMsg = error.response.data.data;
-            console.log('MSG', errorMsg)
+            console.log('MSGS', errorMsg)
             toast.error(errorMsg)
             return errorMsg;
           } else {
@@ -124,12 +125,37 @@ export async function createStory({title, desc, motive, genreValue, ending, mimi
     try {
         const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, {headers: {Authorization: `Bearer ${token}`}})
         console.log('CREATE STORY RES', res)
-        if(res.data.success){
+        if(res?.data.success){
             toast.success('Story Generated')
             return res
         }
     } catch (error) {
-        console.log('ERROR VERIFYING USER API', error)
+        console.log('ERROR CREATING USER STORY', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            const errorStatus = error.response.status;
+            console.log('MSG', errorMsg)
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function handlePrivateStory({id}){
+    try {
+        const res = await axios.post(`/api/user/story/handlePrivateStory/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+        console.log('HANDLE PRIVATE STORY', res)
+        if(res?.data.success){
+            toast.success('Story Updated')
+            return res
+        }
+    } catch (error) {
+        console.log('ERROR HANDLING USER PRIVATE STORY', error)
         if (error.response && error.response.data) {
             const errorMsg = error.response.data.data;
             console.log('MSG', errorMsg)

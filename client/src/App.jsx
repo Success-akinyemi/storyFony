@@ -13,9 +13,11 @@ import UseCases from './Pages/UseCases/UseCases'
 import UseCase from './Pages/UseCase/UseCase'
 import Pricing from './Pages/Pricing/Pricing'
 import UserDashboard from './Pages/UserDashboard/UserDashboard'
-import { AuthorizeUser, ValidToken } from './auth/PrivateRoute'
+import { AuthorizeUser } from './auth/PrivateRoute'
 import CreateStory from './Pages/CreateStory/CreateStory'
 import StoryBook from './Pages/StoryBook/StoryBook'
+import PublicShelf from './Pages/PublicShelf/PublicShelf'
+import ProfilePage from './Pages/ProfilePage/ProfilePage'
 
 function App() {
 
@@ -47,9 +49,19 @@ function App() {
              * 
              */
           }
-          <Route path='/dashboard' element={<AuthorizeUser><ValidToken><UserDashboard /></ValidToken></AuthorizeUser>} />
-          <Route path='/create-story' element={<AuthorizeUser><ValidToken><CreateStory /></ValidToken></AuthorizeUser>} />
-          <Route path='/story-book/:id' element={<AuthorizeUser><ValidToken><StoryBook /></ValidToken></AuthorizeUser>} />
+          <Route element={<AuthorizeUser />}>
+            <Route path='/dashboard' element={<UserDashboard />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/create-story' element={<CreateStory />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/story-book/:id' element={<StoryBook />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/profile-page' element={<ProfilePage />} />
+          </Route>
+          <Route path='/public-shelf' element={<PublicShelf />} />
         </Routes>
       </BrowserRouter>
     </div>

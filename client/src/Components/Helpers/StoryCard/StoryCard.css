@@ -167,4 +167,5 @@
     font-size: 13px;
     color: var(--text-color-3);
     line-height: 21.6px;
+    cursor: pointer;
 }

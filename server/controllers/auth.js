@@ -4,6 +4,7 @@ import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto'
 import TokenModel from "../models/Tokens.js";
 import SubscribersModel from "../models/NewsletterSubscribers.js.js";
+import jwt from 'jsonwebtoken'
 
 const mailGenerator = new Mailgen({
     theme: 'default',
@@ -29,7 +30,7 @@ export async function register (req, res, next){
         }
 
         const user = await UserModel.create({
-            fisrtName, lastName, penName, email, password
+            name: `${fisrtName} ${lastName}`, penName, email, password
         })
         console.log('USER CREATED')
 
@@ -111,7 +112,9 @@ export async function verifyNewUser(req, res, next){
         
         await TokenModel.deleteOne({ _id: token._id })
 
-        sendToken(user, 200, res)
+        const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
+        const expiryDate = new Date(Date.now() + 360000)
+        res.cookie('accessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: user })
     } catch (error) {
         console.log('COULD NOT VERIFY USER', error)
         res.status(500).json({ success: false, data: error.message})        
@@ -190,11 +193,46 @@ export async function login (req, res, next){
             }
         }
 
-
-        sendToken(user, 200, res)
+        console.log('USER', user)
+        const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
+        const expiryDate = new Date(Date.now() + 360000)
+        const { password: userPassword, adminPassword, ...userData} = user._doc
+        res.cookie('accessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
     } catch (error) {
         console.log('ERROR LOGGING USER', error)
         res.status(500).json({ success: false, data: error.message})
+    }
+}
+
+export async function google(req, res){
+    const { name, email, photo } = req.body
+    console.log('O Auth ', req.body)
+    try {
+        const user = await UserModel.findOne({ email: email })
+        if(user){
+            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
+            const { password: hashedPassword, ...userData } = user._doc
+            const expiryDate = new Date(Date.now() + 360000)
+            res.cookie('accessToken', token, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+        } else {
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
+            //const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            const newUser = await UserModel.create({
+                name: name,
+                email: email,
+                password: generatedPassword,
+                profileImg: photo,
+                penName: 'Awesome Writter'
+            })
+            
+            const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
+            const { password: hashedPassword2, adminPassword, ...userData } = newUser._doc
+            const expiryDate = new Date(Date.now() + 360000)
+            res.cookie('accessToken', token, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+        }
+    } catch (error) {
+        console.log('ERROR SINGIN USER WITH GOOGLE', error)
+        res.status(500).json({ success: false, data: 'Could not signin user'})
     }
 }
 
@@ -338,6 +376,47 @@ export async function getAllSubscriber(req, res){
     }
 }
 
+export async function signout(req, res){
+    res.clearCookie('accessToken').status(200).json({success: true, data: 'Signout success'})
+}
+
+
+//User
+export async function updateUser(req, res){
+    console.log('updateUser', req.params.id)
+    if(req.user.id !== req.params.id){
+        return res.status(401).json({ success: false, data: 'You can only update you Account'})
+    }
+    try {
+        if(req.body.password){
+            req.body.password = bcryptjs.hashSync(req.body.password, 10)
+        }
+
+
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: {
+                    name: req.body.name,
+                    email: req.body.email,
+                    penName: req.body.penName,
+                    profileImg: req.body.profileImg,
+                    country: req.body.country,
+                    state: req.body.state,
+                    occupation: req.body.occupation,
+                }
+            },
+            { new: true }
+        );
+
+        const { password, adminPassword, ...userData} = updatedUser._doc
+
+        res.status(200).json({ success: true, data: userData })
+    } catch (error) {
+        console.log('ERROR UPDATING USER', error)
+        res.status(500).json({ success: false, data: 'Failed to upload user'})
+    }
+} 
 
 const sendToken = (user, statusCode, res) => {
     const token = user.getSignedToken();

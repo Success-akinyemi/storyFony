@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { resgisterUser } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
+import OAuth from '../../Components/OAuth/OAuth'
 
 
 function Signup() {
@@ -141,6 +142,10 @@ function Signup() {
             {error && <p className='errorText'>{error}</p>}
             <p>Create an account</p>
 
+            <div className="oauthGroup">
+                <OAuth />
+            </div>
+
             <div className="inputGroup">
                 <div className="inputField">
                     <label htmlFor="">First Name</label>
@@ -180,7 +185,7 @@ function Signup() {
             </div>
 
             <div className="button">
-                <button onClick={handleRegister}>{ isLoadingData ? <Spinner /> : 'Create Account' }</button>
+                <button className='signinBtn' onClick={handleRegister}>{ isLoadingData ? <Spinner /> : 'Create Account' }</button>
             </div>
         
             <span className="footNote">

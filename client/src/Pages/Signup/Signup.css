@@ -116,7 +116,7 @@
     width: 100%;
 }
 
-.signup .signupCard button{
+.signup .signupCard .button .signinBtn{
     width: 100%;
     border-radius: 22px;
     display: flex;
@@ -135,7 +135,7 @@
     transition: all 0.3s ease-in;
 }
 
-.signup .signupCard button:hover{
+.signup .signupCard .button .signinBtn:hover{
     background: var(--bg-5-opacity);
 }
 

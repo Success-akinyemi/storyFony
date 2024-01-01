@@ -10,8 +10,15 @@ import { useFetch } from '../../hooks/fetch.hooks'
 import InsufficientInk from '../../Components/Helpers/InsufficientInk/InsufficientInk'
 import { createStory } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function CreateStory() {
+    const {currentUser} = useSelector(state => state.user)
+    const user = currentUser?.data
     const { apiData } = useFetch()
     const [ card, setCard ] = useState(1)
     const [ numberOfWords, setNumberOfWords] = useState(0)
@@ -105,7 +112,7 @@ function CreateStory() {
     }, [title, desc, motive, genreValue, ending, numberOfSeries, language])
     
     const handleCreateStory = async () => {
-        const availabeInk = apiData?.totalCredit
+        const availabeInk = user?.totalCredit
         const costOfSeries = 40
 
         const totalInkNeeded = numberOfSeries * costOfSeries
@@ -117,9 +124,10 @@ function CreateStory() {
         }
         try {
             setLoadingState(true)
-            const userEmail = apiData?.email
+            const userEmail = user?.email
             console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
             const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
+            console.log('RES', res)
             if(res?.data.success){
                 setStory(res?.data.data)
             }
@@ -149,7 +157,33 @@ function CreateStory() {
         };
       }, []);
       
-
+      var settings = {
+        speed: 500,
+        dots: true,
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+          {      
+            breakpoint: 950,
+            settings: {
+              dots: true,
+              infinite: true,
+              slidesToShow: 2,
+              slidesToScroll: 1,
+            } 
+          },
+          {      
+            breakpoint: 450,
+            settings: {
+              dots: true,
+              infinite: true,
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            } 
+          },
+        ]
+      }
   return (
     <div className='createStory'>
         <AuthUserNavbar enableScrollEffect={true} miniNav={true} onBackClick={onBackClick} />
@@ -237,17 +271,19 @@ function CreateStory() {
                                 <p>Select the story genre you want. You can select upto 3 genres.</p>
                                 
                                 <div className="cardContainer">
-                                    {
-                                        genreData.map((item, idx) => (
-                                            <div className={`card ${genreValue === item.genre ? 'selectedCard' : ''}`} key={idx} onClick={() => handleGenre(item.genre)}>
-                                                <div className={`notSelectedItem ${genreValue === item.genre ? 'selectedItem' : ''}`}>
-                                                    <img src={CheckImg} className='checkImg' alt='check'/>
+                                    <Slider {...settings}>
+                                        {
+                                            genreData.map((item, idx) => (
+                                                <div className={`card ${genreValue === item.genre ? 'selectedCard' : ''}`} key={idx} onClick={() => handleGenre(item.genre)}>
+                                                    <div className={`notSelectedItem ${genreValue === item.genre ? 'selectedItem' : ''}`}>
+                                                        <img src={CheckImg} className='checkImg' alt='check'/>
+                                                    </div>
+                                                    <img src={item.img} alt={item.genre} />
+                                                    <span>{item.genre}</span>
                                                 </div>
-                                                <img src={item.img} alt={item.genre} />
-                                                <span>{item.genre}</span>
-                                            </div>
-                                        ))
-                                    }
+                                            ))
+                                        }
+                                    </Slider>
                                 </div>
                             </div>
 
@@ -356,7 +392,16 @@ function CreateStory() {
                                 </textarea>
                             </div>
 
-                            <button onClick={handleCreateStory} disabled={isButtonDisabled || loadingState} className="btn">{loadingState ? <Spinner /> : 'Proceed'}</button>
+                            {
+                                story ? (
+                                    <button className="btn">
+                                        <Link to={`/story-book/${story?._id}`} className='link'>View Story</Link>
+                                    </button>
+
+                                ) : (
+                                    <button onClick={handleCreateStory} disabled={isButtonDisabled || loadingState} className="btn">{loadingState ? <Spinner /> : 'Proceed'}</button>
+                                )
+                            }
                         </div>
                     )
                 }

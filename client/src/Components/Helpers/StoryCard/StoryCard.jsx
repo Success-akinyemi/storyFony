@@ -2,8 +2,23 @@ import { Link } from 'react-router-dom'
 import './StoryCard.css'
 import MoreImg from '../../../assets/more.png'
 import heartImg from '../../../assets/heart.png'
+import { useState } from 'react'
+import { handlePrivateStory } from '../../../helpers/api'
+
 
 function StoryCard({ data }) {
+    const { isLoading, setIsLoading } = useState(false)
+
+    const handletogglePrivateStory = async (id) => {
+        try {
+            setIsLoading(true)
+            const res = await handlePrivateStory({id})
+        } catch (error) {
+            console.log('ERROR CREATING STORY', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
   return (
     <div className='storyCard'>
         <img src={`data:image/*;base64, ${data?.storyImage}`} alt='background' className='background' />
@@ -37,7 +52,7 @@ function StoryCard({ data }) {
                         <div className="moreCard">
                             <Link className='link moreCardLink'>Edit story</Link>
                             <Link className='link moreCardLink'>Share story</Link>
-                            <Link className='link moreCardLink'>Draft book</Link>
+                            <span onClick={handletogglePrivateStory(data?._id)} className='link moreCardLink'>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private story' : 'Public story'} `}</span>
                             <Link className='link moreCardLink'>Publish</Link>
                         </div>
                     </div>

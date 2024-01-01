@@ -8,14 +8,19 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { loginUser } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
+import { signInFailure, signInStart, signInSuccess } from '../../redux/user/userslice'
+import { useDispatch, useSelector } from 'react-redux'
+import OAuth from '../../Components/OAuth/OAuth'
 
 function Login() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { loading, error } = useSelector((state) => state.user)
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ emailError, setEmailError ] = useState('')
     const [ passwordError, setPasswordError ] = useState('')
-    const [ error, setError ] = useState('')
+    const [ errorMs, setError ] = useState('')
     const [ isLoadingData, setIsLoadingData ] = useState(false)
 
     const handleLogin = async (e) => {
@@ -39,12 +44,12 @@ function Login() {
 
         try {
             setIsLoadingData(true)
+            dispatch(signInStart())
             const res = await loginUser({ email, password })
-            console.log('RES>>',res)
-            if(  !res?.data?.isVerified){
+            if(res?.data.verified === false){
                 navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
             } else{
-                await localStorage.setItem('accessToken', res?.data.token)
+                dispatch(signInSuccess(res?.data))
                 navigate('/dashboard')
             } 
 
@@ -53,6 +58,7 @@ function Login() {
             console.log('ERROR REGISTEREING USER:', errorMsg)
             const errorM = errorMsg.response?.data?.data || 'An error occurred during the request.';
             console.log('ER', errorM)
+            dispatch(signInFailure(errorM))
             setError(errorM)
             setTimeout(() => {
               setError('')
@@ -74,8 +80,12 @@ function Login() {
 
         <p>Your favorite story book writing studio</p>
         <form className='loginCard' onSubmit={handleLogin}>
-            {error && <p className='errorText'>{error}</p>}
+            {errorMs && <p className='errorText'>{errorMs}</p>}
             <p>Log into your account</p>
+
+            <div className="oauthGroup">
+                <OAuth />
+            </div>
 
             <div className="inputGroup">
                 <div className="inputField">
@@ -96,7 +106,7 @@ function Login() {
 
 
             <div className="button">
-                <button>{ isLoadingData ? <Spinner /> : 'Login' }</button>
+                <button className='loginBtn'>{ isLoadingData ? <Spinner /> : 'Login' }</button>
             </div>
         
             <span className="footNote">
