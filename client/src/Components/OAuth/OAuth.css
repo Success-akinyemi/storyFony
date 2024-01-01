@@ -31,3 +31,14 @@
     font-weight: 500;
     text-align: center;
 }
+
+@media screen and (max-width: 450px) {
+    .oAuthBtn img{
+        width: 16px;
+        height: 16px
+    }
+
+    .oAuthBtn p{
+        font-size: 13px;
+    }
+}
