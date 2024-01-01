@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { getUser } from '../helpers/api'
+import { useSelector } from 'react-redux'
 
 //axios.defaults.baseURL = import.meta.env.VITE_LOCALHOST_SERVER_API
 axios.defaults.baseURL = import.meta.env.VITE_LIVE_SERVER_API
@@ -36,11 +37,12 @@ export function useFetch(query){
 /**Get User Story Hooks */
 export function userStoryBook(query){
     const [data, setData] = useState({ isLoadingStory: true, apiUserStoryData: null, storyStatus: null, storyServerError: null})
-
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
+    const id = user?._id
     useEffect(() => {
         const fetchData =  async () => {
             try {
-                const { id } = !query ? await getUser() : await getUser();
                 console.log('ID', id, 'QUERY', query)          
 
                 const { data, status} = !query ? await axios.get(`/api/user/stories/${id}`, { withCredentials: true }) : await axios.get(`/api/user/story/${id}/${query}`, { withCredentials: true })
