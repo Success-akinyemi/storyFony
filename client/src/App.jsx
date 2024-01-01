@@ -18,6 +18,7 @@ import CreateStory from './Pages/CreateStory/CreateStory'
 import StoryBook from './Pages/StoryBook/StoryBook'
 import PublicShelf from './Pages/PublicShelf/PublicShelf'
 import ProfilePage from './Pages/ProfilePage/ProfilePage'
+import StoryEditor from './Pages/StoryEditor/StoryEditor'
 
 function App() {
 
@@ -57,6 +58,9 @@ function App() {
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/story-book/:id' element={<StoryBook />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/story-editor/:id' element={<StoryEditor />} />
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/profile-page' element={<ProfilePage />} />

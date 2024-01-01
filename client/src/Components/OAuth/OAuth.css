@@ -13,7 +13,7 @@
     cursor: pointer;
 }
 
-.oAuthBtn .content{
+.oAuthBtn .authContent{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,12 +21,12 @@
     width: 100%;
 }
 
-.oAuthBtn img{
+.oAuthBtn .auhImg{
     width: 24px;
     height: 24px;
 }
 
-.oAuthBtn p{
+.oAuthBtn .authText{
     height: 22px;
     font-size: 16px;
     font-weight: 500;
@@ -37,7 +37,7 @@
     .oAuthBtn{
         padding: var(--padding);
     }
-    .oAuthBtn .content{
+    .oAuthBtn .authContent{
         gap: 5px;
         width: 100%;
         display: flex;
@@ -46,12 +46,12 @@
         margin: auto;
     }
 
-    .oAuthBtn img{
+    .oAuthBtn .auhImg{
         width: 16px;
         height: 16px
     }
 
-    .oAuthBtn p{
+    .oAuthBtn .authText{
         font-size: 14px;
     }
 }
