@@ -18,6 +18,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
+    width: 100%;
 }
 
 .oAuthBtn img{
@@ -33,12 +34,24 @@
 }
 
 @media screen and (max-width: 450px) {
+    .oAuthBtn{
+        padding: var(--padding);
+    }
+    .oAuthBtn .content{
+        gap: 5px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+    }
+
     .oAuthBtn img{
         width: 16px;
         height: 16px
     }
 
     .oAuthBtn p{
-        font-size: 13px;
+        font-size: 14px;
     }
 }
