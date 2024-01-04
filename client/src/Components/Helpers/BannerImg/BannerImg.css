@@ -150,3 +150,10 @@
     font-weight: 500;
     color: var(--text-color-3);
 }
+
+@media screen and (max-width: 450px) {
+  .bannerImg .bannerImgInfo .bottom{
+    margin-top: 0;
+
+  }
+}

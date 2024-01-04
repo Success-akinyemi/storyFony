@@ -54,3 +54,17 @@
         width: 100%;
     }
 }
+
+@media screen and (max-width: 450px) {
+    .callToAction .head{
+        height: 310px;
+    }
+
+    .callToAction .head .action{
+        font-size: 16px;
+    }
+
+    .callToAction .ctaSlider{
+        margin-top: 40px;
+    }
+}

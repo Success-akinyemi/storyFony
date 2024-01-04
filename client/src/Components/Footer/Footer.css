@@ -447,3 +447,52 @@
         margin-top: auto;
     }
 }
+
+@media screen and (max-width: 450px) {
+    .footer{
+        height: 1750px;
+        padding-bottom: 30px;
+}
+    .footer .top{
+        width: 100%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .footer .top .card .left{
+        width: 100%;
+    }
+
+    .footer .top .card .left .head{
+        height: 230px;
+    }
+
+    .footer .top .card .left .head .text{
+        text-align: center;
+    }
+
+    .footer .top .card .left .head .title{
+        height: 200px;
+    }
+
+    .footer .top .card .right{
+        margin-top: 600px;
+    }
+
+    .footer .top .card .right .cards{
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .footer .top .card .right .cards .card{
+        width: 98%;
+    }
+
+    .card-1 .card-1Content .box .text h3{
+        font-size: 16px;
+    }
+
+    .card-1 .card-1Content .box .text p{
+        font-size: 14px;
+    }
+}

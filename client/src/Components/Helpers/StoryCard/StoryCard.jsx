@@ -4,9 +4,12 @@ import MoreImg from '../../../assets/more.png'
 import heartImg from '../../../assets/heart.png'
 import { useState } from 'react'
 import { handlePrivateStory } from '../../../helpers/api'
+import { useSelector } from 'react-redux'
 
 
 function StoryCard({ data }) {
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
     const { isLoading, setIsLoading } = useState(false)
 
     const handletogglePrivateStory = async (id) => {
@@ -29,7 +32,7 @@ function StoryCard({ data }) {
             <div className="top">
                 <h1>{data?.storyTitle}</h1>
 
-                <Link to={`/story-book/${data?._id}`} className='link btn'>
+                <Link to={`/story-book/${user?._id}/${data?._id}`} className='link btn'>
                     Read story book
                 </Link>
             </div>

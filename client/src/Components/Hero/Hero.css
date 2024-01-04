@@ -69,3 +69,19 @@
         text-align: center;
     }
 }
+
+@media screen and (max-width: 450px) {
+    .hero .herocard{
+        gap: 40px;
+    }
+
+    .hero .herocard .heroTitle{
+        font-size: 30px;
+        line-height: 40px;
+        width: 90%;
+    }
+
+    .hero .herocard .heroPara{
+        width: 100%;
+    }
+}

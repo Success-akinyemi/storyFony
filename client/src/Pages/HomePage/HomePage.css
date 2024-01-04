@@ -33,3 +33,9 @@
         height: 400px;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .homePage .layer-1{
+        height: 200px;
+    }
+}

@@ -150,3 +150,22 @@
       color: var(--text-color-3);
       font-size: 12px;
   }
+
+
+@media screen and (max-width: 450px) {
+  .bannerImgSmall{
+    height: 250px;
+  }
+
+  .bannerImgSmall .bannerImgInfo{
+    height: 80px;
+    gap: 5px;
+  }
+
+  .bannerImgSmall .bannerImgInfo .bottom{
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

@@ -214,3 +214,90 @@
         margin: auto;   
     }
 }
+
+@media screen and (max-width: 450px) {
+    .banner{
+        height: 3000px;
+    }
+    .banner .top{
+        height: 800px;
+    }
+    .banner .top .left,
+    .banner .bottom .left{
+        width: 100%;
+    }
+
+    .banner .bottom .left{
+        gap: 15px;
+    }
+
+    .banner .top .left .hTitle,
+    .banner .bottom .left .hTitle{
+        font-size: 30px;
+    }   
+
+    .banner .top .left .card,
+    .banner .bottom .left .card{
+        width: 96%;
+    }
+
+    .banner .top .left .card .text,
+    .banner .bottom .left .card .text{
+        font-size: 19px;
+        line-height: 30px;
+    }
+
+    .banner .top .right{
+        height: 800px;
+    }
+
+    .banner .top .right .content{
+        width: 80%;
+        flex-direction: column;
+        left: 0;
+        height: 750px;
+    }
+
+    .banner .top .right .content .card{
+        width: 100%;
+        height: 370px;
+    }
+
+    .banner .bottom{
+        margin-top: 500px;
+    }
+
+    .banner .bottom .right{
+        width: 70%;
+        height: 1000px;
+    }
+
+    .banner .bottom .right .content{
+        width: 90%;
+        gap: 15px;
+        flex-direction: column;
+        height: 750px;
+        align-items: center;
+    }
+
+    .banner .bottom .right .content .up,
+    .banner .top .right .content .down,
+    .banner .bottom .right .content .down{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .banner .bottom .right .content .up{
+        height: 525px;
+        align-items: center;
+    }
+
+    .banner .bottom .right .content .down{
+        margin-top: 250px;
+        align-items: center;
+    }
+
+    .banner .bottom .right .content .up .card{
+        height: 250px;
+    }
+}
