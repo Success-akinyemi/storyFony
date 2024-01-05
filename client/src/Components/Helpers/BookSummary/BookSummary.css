@@ -1,0 +1,75 @@
+.bookSummary{
+    width: 100%;
+    background: var(--bg-4);
+    padding: 8px 10px 8px 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bookSummary .text{
+    font-size: 16px;
+    color: var(--text-color-3);
+}
+
+.bookSummary .inputfield{
+    padding: 4px 10px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--text-color-3);
+    height: 285px;
+}
+
+.bookSummary .inputfield textarea{
+    width: 100%;
+    height: 224px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    overflow-y: scroll;
+    color: var(--text-color-2);
+    background: transparent;
+}
+
+.bookSummary .inputfield .motive{
+    width: 193px;
+    height: 31px;
+    padding: 6px 10px 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 22px;
+    border: 1pxc solid var(--text-color-3);
+    outline: none;
+    background: var(--text-color-1);
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--main-bg);
+}
+
+.bookSummary .rewrite{
+    padding: var(--padding-3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 22px;
+    background: var(--bg-5);
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    color: var(--main-bg);
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bookSummary .rewrite .pen{
+    width: 23px;
+    height: 23px;
+}

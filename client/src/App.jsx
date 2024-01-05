@@ -60,8 +60,8 @@ function App() {
             <Route path='/story-book/:id' element={<StoryBook />} />
           </Route>
           <Route element={<AuthorizeUser />}>
-            <Route path='/story-editor/:userId/:id' element={<StoryEditor />} />
           </Route>
+            <Route path='/story-editor/:userId/:id' element={<StoryEditor />} />
           <Route element={<AuthorizeUser />}>
             <Route path='/profile-page' element={<ProfilePage />} />
           </Route>
