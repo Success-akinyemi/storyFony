@@ -11,6 +11,7 @@
 .bookSummary .text{
     font-size: 16px;
     color: var(--text-color-3);
+    margin-bottom: 10px;
 }
 
 .bookSummary .inputfield{
@@ -32,6 +33,20 @@
     overflow-y: scroll;
     color: var(--text-color-2);
     background: transparent;
+}
+
+.bookSummary .inputfield textarea::-webkit-scrollbar{
+    width: 0.5vw;
+}
+
+.bookSummary .inputfield textarea::-webkit-scrollbar-thumb{
+    background: var(--text-color-3);
+    border-radius: 20px;
+}
+
+.bookSummary .inputfield textarea::-webkit-scrollbar-track{
+    background: transparent;
+    border-radius: 20px;
 }
 
 .bookSummary .inputfield .motive{
@@ -67,6 +82,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
 
 .bookSummary .rewrite .pen{

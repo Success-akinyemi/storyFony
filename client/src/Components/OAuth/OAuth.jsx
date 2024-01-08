@@ -44,7 +44,7 @@ function OAuth() {
         }
     }
   return (
-    <button type='button' onClick={handleOAuth} className='oAuthBtn'>
+    <button type='button' onClick={handleOAuth} className='oAuthBtn' style={{display: 'flex', alignItems: 'center ', justifyContent: 'center' }}>
       <div className="authContent">
         <img className='auhImg' src={GoogleIcon} alt='google icon' />
         <p className='authText'>Sign up with Google</p>
