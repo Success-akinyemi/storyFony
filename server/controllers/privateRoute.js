@@ -2,6 +2,42 @@ import OpenAI from 'openai'
 import UserStory from '../models/UsersStory.js'
 import UserModel from '../models/User.js'
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+import { v4 as uuidv4 } from 'uuid';
+//import { firebaseConfig } from '../utils/serviceAccountKey.js'
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+const firebaseConfig = {
+  "apiKey": process.env.FIREBASE_API_KEY,
+  "authDomain": "success-clone.firebaseapp.com",
+  "databaseURL": process.env.FIREBASE_BD_URI,
+  "projectId": "success-clone",
+  "storageBucket": "success-clone.appspot.com",
+  "messagingSenderId": "189431815177",
+  "appId": "1:189431815177:web:15ed22c60195f1d3982cd8",
+  "measurementId": "G-0SY60YP3G9"
+};
+ 
+ const app = initializeApp(firebaseConfig);
+ const storage = getStorage(app)
+
+const createFirebaseStorageUrl = async (imageData, imageName) => {
+  try {
+    const storageRef = ref(storage, imageName);
+    const uniqueName = `${imageName}-${uuidv4()}.jpg`
+    const imageBlob = await fetch(`data:image/jpeg;base64,${imageData}`).then((response) => response.blob());
+
+    await uploadBytes(storageRef, imageBlob)
+    const url = await getDownloadURL(storageRef);
+    console.log('URL FOM', url)
+
+    return url
+  } catch (error) {
+    console.error('Error uploading to Firebase Storage:', error)
+    throw error
+  }
+}
+
 
 export async function createStory(req, res){
     const {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded} = req.body
@@ -23,7 +59,7 @@ export async function createStory(req, res){
         return res.status(401).json({ success: false, data: 'Insufficient Ink credit'})
       }
       const response = await openai.completions.create({
-          model: 'text-davinci-003',
+          model: 'gpt-3.5-turbo-instruct',
           prompt: `Write a Story based on this title: ${title} and description; ${desc} in ${language} langauage the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writting style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and this ending style ${ending}. Also from the story give it a good story title`,
           temperature: 0.9,
           max_tokens: 700
@@ -47,29 +83,61 @@ export async function createStory(req, res){
         chapterNumber: `Chapter ${index + 1}`,
       }));
 
+      //FOR DALL_E_3
+      /**
+       * 
       const imageRes = await openai.images.generate({
         model: "dall-e-3",
         prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
         n: 1,
-        size: "1024x1792",
-        response_format: 'b64_json'
+        size: "1792x1024",
+        response_format: 'b64_json',
+        style: 'vivid'
+      })
+       */
+
+      //FOR DALL_E-2
+      const imageRes = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
+        n: 1,
+        size: "1024x1024",
+        response_format: 'b64_json',
       })
       let storyImage = '';
 
       if (imageRes.data.length > 0) {
-        storyImage = imageRes.data[0].b64_json;
+        console.log('base_64 of image', imageRes.data[0].b64_json)
+        storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, 'story-img')
+        console.log('storyImage>>',storyImage)
       }
 
+      //FOR DALL_E_3
+      /**
+       * 
       const coverImageRes = await openai.images.generate({
         model: "dall-e-3",
         prompt: `based on this title: ${extractedTitle} generate a cover image for it that can be used in the background`,
         n: 1,
         size: "1792x1024",
-        response_format: 'b64_json'
+        response_format: 'b64_json',
+        style: 'vivid'
+      })
+       */
+
+      //FOR DALL_E_2
+      const coverImageRes = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: `based on this title: ${extractedTitle} generate a cover image for it that can be used in the background`,
+        n: 1,
+        size: "1024x1024",
+        response_format: 'b64_json',
       })
       let coverImage = '';
       if (coverImageRes.data.length > 0) {
-        coverImage = coverImageRes.data[0].b64_json;
+        console.log('base_64 of cover image', coverImageRes.data[0].b64_json)
+        coverImage = await createFirebaseStorageUrl(coverImageRes.data[0].b64_json, 'cover-img');
+        console.log('coverImage>>', coverImage)
       }
 
 
@@ -84,7 +152,9 @@ export async function createStory(req, res){
           userTitle: title,
           storyTitle: extractedTitle,
           storyImage: storyImage,
-          coverImage: coverImage
+          coverImage: coverImage,
+          storyDesc: desc,
+          storyLangauage: language
       })
   
       await newStory.save()
@@ -104,7 +174,7 @@ export async function createStory(req, res){
 export async function getUserStories(req, res){
   const { id } = req.params
   console.log(id)
-  console.log('working')
+  console.log('working userStories')
   try {
     const user = await UserModel.findOne({ _id: id })
     if(!user){
@@ -124,6 +194,7 @@ export async function getUserStories(req, res){
 
 export async function getUserStory(req, res){
   const { id, storyId } = req.params
+  console.log('IDs',id, storyId)
   try {
     const user = await UserModel.findOne({ _id: id })
     if(!user){

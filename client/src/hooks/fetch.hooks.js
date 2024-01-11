@@ -35,32 +35,45 @@ export function useFetch(query){
 }
 
 /**Get User Story Hooks */
-export function userStoryBook(query){
-    const [data, setData] = useState({ isLoadingStory: true, apiUserStoryData: null, storyStatus: null, storyServerError: null})
-    const  {currentUser}  = useSelector(state => state.user)
-    const user = currentUser?.data
-    const id = user?._id
+export function userStoryBook(query) {
+    const [data, setData] = useState({ isLoadingStory: true, apiUserStoryData: null, storyStatus: null, storyServerError: null });
+    const { currentUser } = useSelector(state => state.user);
+    const user = currentUser?.data;
+    const id = user?._id;
+
     useEffect(() => {
-        const fetchData =  async () => {
+        const fetchData = async () => {
             try {
-                console.log('ID', id, 'QUERY', query)          
+                let url;
+                if (!query) {
+                    // If there is no query, fetch all stories for the user
+                    url = `/api/user/stories/${id}`;
+                } else {
+                    // If there is a query, fetch a specific story
+                    const { userId, storyId } = query;
+                    url = `/api/user/story/${userId}/${storyId}`;
+                }
 
-                const { data, status} = !query ? await axios.get(`/api/user/stories/${id}`, { withCredentials: true }) : await axios.get(`/api/user/story/${id}/${query}`, { withCredentials: true })
-                console.log('Story Data from Hooks>>>', data)
+                console.log('ID', id, 'QUERY', query);
+                const { data, status } = await axios.get(url, { withCredentials: true });
+                console.log('Story Data from Hooks>>>', data);
 
-                if(status === 200){
-                    setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null})
-                } else{
-                    setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: status, storyServerError: null})
+                if (status === 200) {
+                    setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null });
+                } else {
+                    setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: status, storyServerError: null });
                 }
             } catch (error) {
-                setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error })
-                console.log(data)
-                console.log(error)
+                setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error });
+                console.log(data);
+                console.log(error);
             }
         };
-        fetchData()
-    }, [query])
 
-    return data
+        fetchData();
+    }, [query]);
+
+    return data;
 }
+
+

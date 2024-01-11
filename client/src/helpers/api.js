@@ -60,8 +60,8 @@ export async function loginUser({ email, password }){
 
 export async function verifyUser({ id, token}){
     try {
-        const res = await axios.post(`/api/${id}/verify/${token}`)
-        console.log(res)
+        const res = await axios.post(`/api/${id}/verify/${token}`, { withCredentials: true })
+        
         if(res.data.success){
             localStorage.setItem('accessToken', res.data.token)
             toast.success('Email Verified')
@@ -123,7 +123,7 @@ export async function newPassword({ resetToken, password }){
 
 export async function createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}){
     try {
-        const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, {headers: {Authorization: `Bearer ${token}`}})
+        const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, { withCredentials: true })
         console.log('CREATE STORY RES', res)
         if(res?.data.success){
             toast.success('Story Generated')

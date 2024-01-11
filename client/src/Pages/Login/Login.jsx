@@ -46,7 +46,8 @@ function Login() {
             setIsLoadingData(true)
             dispatch(signInStart())
             const res = await loginUser({ email, password })
-            if(res?.data?.data.verified === false){
+            
+            if(res?.data.isVerified === false){
                 navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
             } else{
                 dispatch(signInSuccess(res?.data))

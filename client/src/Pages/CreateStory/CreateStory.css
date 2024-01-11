@@ -512,8 +512,21 @@
         justify-content: center;
         width: 100%;
     }
+
+    .createStory .conatiner .content4{
+        width: 100%;
+    }
 }
 
+@media screen and (max-width: 650px) {
+    .createStory{
+        height: 150vh;
+    }
+
+    .createStory .conatiner .content1 .cards{
+        height: 80vh;
+    }
+}
 @media screen and (max-width: 450px) {
     .createStory .conatiner{
         margin-top: 70px;
@@ -544,6 +557,14 @@
         position: relative;
     }
 
+    .createStory .conatiner .content2 .cardContainer{
+        margin-top: 20px;
+    }
+
+    .createStory .conatiner .content2 .cards{
+        margin-bottom: 20px;
+    }
+
     .createStory .conatiner .content3{
         width: 100%;
         padding-left: 0;
@@ -563,5 +584,9 @@
         padding-left: 0;
         padding-top: 0;
         padding-right: 0;
+    }
+
+    .slick-slide{
+        width: 260px;
     }
 }

@@ -92,9 +92,8 @@ export async function verifyNewUser(req, res, next){
     console.log('TOKEN', token)
     try {
         const user = await UserModel.findById({ _id: id})
-        console.log('ID', user._id)
         if(!user){
-            return res.status(400).json({ success: false, data: 'Invalid Link'})
+            return res.status(400).json({ success: false, data: 'Invalid User'})
         }
 
         const token = await TokenModel.findOne({

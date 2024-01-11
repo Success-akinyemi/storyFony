@@ -26,7 +26,7 @@ export const genreData = [
         img: Image
     },
     {
-        genre: 'Comdey',
+        genre: 'Comedy',
         img: Image
     },
 ]

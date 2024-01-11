@@ -36,10 +36,16 @@ export const StorySchema = new mongoose.Schema({
     genre: {
         type: String
     },
+    storyDesc: {
+        type: String
+    },
     userTitle:{
         type: String
     },
     storyTitle: {
+        type: String
+    },
+    storyLangauage: {
         type: String
     },
     storyImage: {

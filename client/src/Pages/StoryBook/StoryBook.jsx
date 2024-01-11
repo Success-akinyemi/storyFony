@@ -9,10 +9,16 @@ import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 function StoryBook() {
     const loc = useLocation()
-    const path = loc.pathname.split('/')[2]
-    const { isLoadingStory, apiUserStoryData } = userStoryBook(path)
+    const [ query, setQuery ] = useState({})
     const [storyData, setStoryData] = useState(null);
     const [ currentPage, setCurrentPage ] = useState(1)
+    useEffect(() => {
+        const userId = loc.pathname.split('/')[2]
+        const storyId = loc.pathname.split('/')[3]
+        setQuery({ userId, storyId });
+      }, []);
+    console.log(query)
+    const { isLoadingStory, apiUserStoryData } = userStoryBook(query)
 
     useEffect(() => {
       if (!isLoadingStory && apiUserStoryData?.data) {
@@ -23,7 +29,7 @@ function StoryBook() {
     if (isLoadingStory || !storyData) return <Spinner />;
     //const storyData = apiUserStoryData?.data
     console.log('storyData',storyData)
-    const { storyTitle, authorPenName, privateStory, motive, coverImage, storyImage, story, likes, createdAt, authorImg } = storyData
+    const { storyTitle, authorPenName, privateStory, motive, coverImage, storyImage, story, likes, createdAt, authorImg, userTitle } = storyData
 
         //pagination
         const itemsPerPage = 2
@@ -46,13 +52,13 @@ function StoryBook() {
         <AuthUserNavbar enableScrollEffect={true} miniNav={false} />
         <div className="coverImage">
             <div className="layer"></div>
-            <img className='coverImg' src={`data:image/*;base64, ${coverImage}`} alt={`the story: ${storyTitle}`} />
+            <img className='coverImg' src={coverImage} alt={`the story: ${storyTitle}`} />
         </div>
 
         <div className="topHeader">
             <div className="up">
                 <div></div>
-                <h1>{storyTitle}</h1>
+                <h1>{storyTitle ? storyTitle : userTitle}</h1>
                 <div className='footNote'>
                     <span className='s-1'>Created on: {formattedDate}</span>
                     <span className="s-2">{privateStory ? 'Private story' : 'Public story'}</span>
@@ -78,8 +84,8 @@ function StoryBook() {
 
         <div className='storyImage'>
             <div className="card">
-                <h2>{storyTitle}</h2>
-                <img className='storyImg' src={`data:image/*;base64, ${storyImage}`} alt={`the story: ${storyTitle}`} />
+                <h2>{storyTitle ? storyTitle : userTitle}</h2>
+                <img className='storyImg' src={storyImage} alt={`the story: ${storyTitle}`} />
             </div>
         </div>
 
@@ -100,7 +106,7 @@ function StoryBook() {
                                     </div>
                                 </div>
                                 <div className="right">
-                                <img className='storyPicture' src={`data:image/*;base64, ${item?.chapterImage}`} alt={`story ${item.chapterNumber}`} />
+                                <img className='storyPicture' src={item?.chapterImage} alt={`story ${item.chapterNumber}`} />
                                 </div>
                             </div>
                         ) : (
@@ -113,7 +119,7 @@ function StoryBook() {
                                     </div>
                                 </div>
                                 <div className="right">
-                                    <img className='storyPicture' src={`data:image/*;base64, ${coverImage}`} alt={`story ${item.chapterNumber}`} />
+                                    <img className='storyPicture' src={coverImage} alt={`story ${item.chapterNumber}`} />
                                 </div>
                             </div>
                         )}
@@ -122,38 +128,44 @@ function StoryBook() {
             }
             <span className='pageNumber'>Story page {currentPage} of {totalNumberOfPages} </span>
             <footer>
-                <div className="btn">
-                    {
-                        currentPage === 1 ? (
-                            <div className="btn1">
-                                <button 
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                    disabled={indexOfLastItem >= story.length}
-                                    className='btn3'
-                                >
-                                    {currentPage === 1 ? 'End of Story' : 'Continue to next part'}
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="btn4">
-                                <button 
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className='btn5'
-                                >
-                                    previous page
-                                </button>
-                                <button 
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                    disabled={indexOfLastItem >= story.length}
-                                    className='btn2'
-                                >
-                                    {currentPage === 1 ? 'End of Story' : 'Continue to next part'}
-                                </button>
-                            </div>
-                        )
-                    }
-                </div>
+            <div className="btn">
+    {currentPage === totalNumberOfPages ? (
+        <div className="btn1">
+            <button
+                onClick={() => setCurrentPage(prevPage => prevPage - 1)}
+                disabled={currentPage === 1}
+                className='btn5'
+            >
+                Previous page
+            </button>
+            <button
+                className='btn3'
+                disabled={indexOfLastItem >= story.length}
+                onClick={() => setCurrentPage(currentPage + 1)}
+            >
+                End of Story
+            </button>
+        </div>
+    ) : (
+        <div className="btn4">
+            <button
+                onClick={() => setCurrentPage(prevPage => prevPage - 1)}
+                disabled={currentPage === 1}
+                className='btn5'
+            >
+                Previous page
+            </button>
+            <button
+                onClick={() => setCurrentPage(prevPage => prevPage + 1)}
+                disabled={indexOfLastItem >= story.length}
+                className='btn2'
+            >
+                Continue to next part
+            </button>
+        </div>
+    )}
+</div>
+
                 
                 <div className="likeCard">
                     <div className="likeBox"><FavoriteBorderIcon className='icon' /></div>

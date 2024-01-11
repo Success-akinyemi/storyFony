@@ -24,7 +24,7 @@ function StoryCard({ data }) {
     }
   return (
     <div className='storyCard'>
-        <img src={`data:image/*;base64, ${data?.storyImage}`} alt='background' className='background' />
+        <img src={data?.storyImage} alt='background' className='background' />
 
         <span className="tag">{data?.genre}</span>
 

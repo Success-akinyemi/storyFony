@@ -57,7 +57,7 @@ function App() {
             <Route path='/create-story' element={<CreateStory />} />
           </Route>
           <Route element={<AuthorizeUser />}>
-            <Route path='/story-book/:id' element={<StoryBook />} />
+            <Route path='/story-book/:id/:storyId' element={<StoryBook />} />
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/story-editor/:userId/:id' element={<StoryEditor />} />

@@ -90,6 +90,91 @@
     display: none;
 }
 
+@media screen and (max-width: 1421px) {
+    .navbar{
+        padding: 20px 40px 20px 40px;
+    }
+}
+
+@media screen and (max-width: 1360px) {
+
+    .navbar .menuCard{
+        width: 100%;
+    }
+
+    .navbar .linkItem{
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .navbar .linkItem{
+        gap: 15px;
+    }
+
+    .navbar .linkItem .navLink{
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .navbar .logo{
+        width: 100%;
+    }
+    .navbar .menuCard{
+        width: 100%;
+    }
+
+    .navbar .cta .span-2{
+        padding: 7px 10px 7px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar .cta .span-2 .newAccountLink{
+        font-size: 14px;
+        line-height: 19px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .navbar{
+        padding: 20px 10px 20px 10px;
+        gap: 0;
+        justify-content: flex-start;
+    }
+    .navbar .logo{
+        flex: 1;
+
+    }
+
+    .navbar .menuCard{
+        flex: 10;
+
+        width: 100%;
+    }
+    
+    .navbar .cta .span-2{
+        border-radius: 10px;
+    }
+    
+    .navbar .cta .span-2 .newAccountLink{
+        font-size: 14px;
+
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .navbar{
+        justify-content: space-evenly;
+    }
+    .navbar .menuCard{
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .navbar{
         justify-content: space-between;

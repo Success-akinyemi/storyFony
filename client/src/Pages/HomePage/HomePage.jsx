@@ -18,7 +18,9 @@ function HomePage() {
                 <VideoFrame />
             </div>
             <Hero />
-            <Reviews />
+            <div className="layer-2">
+              <Reviews />
+            </div>
         </div>
         <Banner />
         <Stories data={homePageStoriesData} />

@@ -16,17 +16,29 @@
     width: 1098px;
     height: 600px;
     z-index: 10;
-    top: 552px;
-    left: 171px;
+    top: 752px;
+    left: 50%;
+    transform: translateX(-50%);
     /*
         border-radius: 22px;
     */
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
     .homePage .layer-1{
-        width: 96%;
-        left: 0;
+        width: 70%;
+        left: 50%;
+        right: 0;
+        margin: auto;
+        top: 850px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .homePage .layer-1{
+        width: 70%;
+        left: 50%;
         right: 0;
         margin: auto;
         top: 850px;
@@ -35,6 +47,17 @@
 }
 
 @media screen and (max-width: 768px) {
+    .homePage .layer-1{
+        width: 85%;
+        left: 50%;
+        right: 0;
+        margin: auto;
+        top: 850px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 450px) {
     .homePage .layer-1{
         height: 200px;
     }

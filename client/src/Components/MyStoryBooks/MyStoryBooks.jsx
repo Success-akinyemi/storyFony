@@ -14,7 +14,7 @@ function MyStoryBooks() {
     const navigate = useNavigate()
 
     const data = dataa
-    console.log('DTAA', storyServerError)
+    //console.log('DTAA', storyServerError)
 
     if(storyStatus === 401 || storyStatus === 403){
         toast.error(storyServerError)
@@ -55,7 +55,11 @@ function MyStoryBooks() {
                     }
                 </div>
             <div className="paginationBtn">
-                <span>page {currentPage} of {totalNumberOfPages} </span>
+                {
+                    data?.length > 0 ? (
+                        <span>page {currentPage} of {totalNumberOfPages} </span>
+                    ) : ('')
+                }
                 <div className="btn">
                     <button 
                         onClick={() => setCurrentPage(currentPage - 1)}

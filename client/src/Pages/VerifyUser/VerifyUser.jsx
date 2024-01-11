@@ -9,7 +9,6 @@ function VerifyUser() {
     const { id, token } = useParams();
     
     useEffect(() => {
-        console.log('ID', id, 'TOKEN', token)
         const verify = async () => {
             try {
                 const res = await verifyUser({ id, token})

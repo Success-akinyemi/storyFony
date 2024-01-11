@@ -11,12 +11,13 @@ import InsufficientInk from '../../Components/Helpers/InsufficientInk/Insufficie
 import { createStory } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function CreateStory() {
+    const navigate = useNavigate()
     const {currentUser} = useSelector(state => state.user)
     const user = currentUser?.data
     const { apiData } = useFetch()
@@ -130,6 +131,7 @@ function CreateStory() {
             console.log('RES', res)
             if(res?.data.success){
                 setStory(res?.data.data)
+                navigate('/dashboard')
             }
         } catch (error) {
             console.log('ERROR CREATING STORY', error)
@@ -392,10 +394,11 @@ function CreateStory() {
                                 </textarea>
                             </div>
 
+                            {console.log(story)}
                             {
                                 story ? (
                                     <button className="btn">
-                                        <Link to={`/story-book/${story?._id}`} className='link'>View Story</Link>
+                                        <Link to={''} className='link'>Story Generated</Link>
                                     </button>
 
                                 ) : (
