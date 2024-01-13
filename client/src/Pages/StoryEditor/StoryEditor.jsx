@@ -8,25 +8,50 @@ import TableOfContent from '../../Components/Helpers/TableOfContent/TableOfConte
 import AiVoiceReader from '../../Components/Helpers/AiVoiceReader/AiVoiceReader';
 import Logo from '../../Components/Logo/Logo';
 import BackIconImg from '../../assets/backIcon.png'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Beaker2Img from '../../assets/beaker2.png'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import StoryCover from '../../Components/Helpers/StoryCover/StoryCover';
+import { userStoryBookEditor } from '../../hooks/fetch.hooks';
 
 function StoryEditor() {
+  const loc = useLocation()
+  const [ query, setQuery ] = useState({})
   const [selectedCard, setSelectedCard] = useState(null)
   const  {currentUser}  = useSelector(state => state.user)
   const user = currentUser?.data
   const [ menuActive, setMenuActive ] = useState(1)
   const [ menuTitle, setMenuTitle ] = useState('Book summary')
   const [ menuImg, setMenuImg ] = useState()
+  useEffect(() => {
+    const userId = loc.pathname.split('/')[2]
+    const storyId = loc.pathname.split('/')[3]
+    setQuery({ userId, storyId });
+  }, []);
+  const { isLoadingStory, apiUserStoryData } = userStoryBookEditor(query)
+  const data = apiUserStoryData?.data
+  console.log('Story editor', data)
+
+
+  //Total number of words
+  const words = data?.story.reduce((totalWords, chapter) => {
+    const chapterContent = chapter.chapterContent || '';
+    const chapterWords = chapterContent.split(/\s+/).filter(word => word.length > 0);
+    return totalWords + chapterWords.length;
+  }, 0)
+
 
   //POPUP
   const renderPopupComponent = () => {
     switch(selectedCard) {
       case 'uploadProfile' :
         return (
-            <p>Hello</p>
+            <div className='imporCoverPage'>
+              <p className='title'>Import story book cover</p>
+              <div className="up"></div>
+              <div className="bar"></div>
+              <div className="uploadBtn"></div>
+            </div>
         );
       case 'funding':
         return(
@@ -75,13 +100,13 @@ function StoryEditor() {
   const renderContentComponet = () => {
     switch(menuActive) {
       case 1:
-        return <BookSummary />
+        return <BookSummary motive={data?.storyDesc} />
       case 2: 
-        return <TableOfContent />
+        return <TableOfContent storyChapter={data?.story} />
       case 3:
         return <AiVoiceReader />
         case 4:
-          return <StoryCover setSelectedCard={setSelectedCard} />
+          return <StoryCover image={data?.storyImage} desc={data?.storyDesc} setSelectedCard={setSelectedCard} />
       default: 
         return null
     }
@@ -91,11 +116,11 @@ function StoryEditor() {
     <div className='storyEditor'>
       {selectedCard && (
             <>
-            <div className='popup-overlay' onClick={closePopup}></div>
-            <div className={`popup active`}>
+            <div className='popup-overlay' ></div>
                 <span className='popup-close' onClick={closePopup}>
-                    Close
+                    X
                 </span>
+            <div className={`popup active`}>
                 <div className='popup-content'>
                     {renderPopupComponent()}
                 </div>
@@ -105,21 +130,21 @@ function StoryEditor() {
         <div className="hero">
             <div className="nav">
               <div className="left">
-                <Link>
+                <Link to={'/dashboard'}>
                   <img src={BackIconImg} alt="" className='backIcon' />
                 </Link>
                 <Logo />
               </div>
 
               <div className="middle">
-                Total story word | 2670
+                Total story word | {words}
               </div>
 
               <div className="right">
                 <div className="top">
                   <div className="up">
                     <img src={Beaker2Img} className='beakerImg' />
-                    <span>316 / </span>4000 <small>Fony ink used</small>
+                    <span>{user?.totalCreditUsed} / </span>{user?.totalCredit} <small>Fony ink used</small>
                   </div>
                   <div className="down"></div>
                 </div>

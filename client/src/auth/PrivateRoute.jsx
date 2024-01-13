@@ -1,9 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 function AuthorizeUser () {
     const  {currentUser}  = useSelector(state => state.user)
-      return currentUser ? <Outlet /> : <Navigate to='/' />
+    const cookieExists = (name) => {
+      return document.cookie.split(';').some((cookie) => {
+        return cookie.trim().startsWith(`${name}=`);
+      });
+    };
+
+    const fonyAccessTokenExists = cookieExists('fonyAccessToken')
+    
+    if(fonyAccessTokenExists){
+      return <Outlet />;
+    } else {
+      toast.error('PLEASE LOGIN')
+      return <Navigate to={'/login'} />;
+    }
 }
 
 function UserExist () {

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 
 export const verifyToken = (req, res, next) => {
-    const token = req.cookies.accessToken
+    const token = req.cookies.fonyAccessToken
     console.log('TOKEN>>', token)
 
     if(!token) return res.status(401).json({ success: false, data: 'Not Allowed Please Login'})
@@ -15,7 +15,7 @@ export const verifyToken = (req, res, next) => {
 }
 
 export const verifyAdminToken = (req, res, next) => {
-    const token = req.cookies.adminAccessToken
+    const token = req.cookies.adminfonyAccessToken
     console.log('ADMIN TOK',token)
 
     if(!token) return res.status(401).json({ success: false, data: 'Not Allowed Please Login'})

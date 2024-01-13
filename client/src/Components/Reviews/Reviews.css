@@ -7,7 +7,6 @@
     height: 451px;
     left: 400px;
     top: 1402px;
-    background: green;
     position: absolute;
 }
 
@@ -16,8 +15,129 @@
     width: 997.41px;
     height: 451px;
     left: 400px;
-    background: green;
     position: absolute;
+}
+
+.reviews .reviewCard,
+.reviews .useCaseReview{
+    display: flex;
+    gap: 154px;
+    align-items: center;
+}
+
+.reviews .imageCard{
+    height: 400px;
+    width: 256.41px;
+    border-radius: 10px;
+    border: 0px 8px 0px 0px solid var(--text-color-1);
+}
+
+.reviews .imageCard .reviewImg{
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.reviews .reviewBody{
+    width: 587px;
+    height: 444px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.reviews .reviewBody .reviewText{
+    font-size: 16px;
+    height: 176px;
+    width: 587px;
+    color: var(--text-color-1);
+}
+
+.reviews .reviewBody .sliders{
+    width: 587px;
+    height: 36px;
+    gap: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.reviews .reviewBody .sliders .bar{
+    width: 451px;
+    height: 1px;
+    background: var(--text-color-3);
+}
+
+.reviews .sliders .btns{
+    display: flex;
+    gap: 32px;
+    width: 104px;
+    height: 36px;
+}
+
+.reviews .sliders .btns .s1,
+.reviews .sliders .btns .s2{
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-weight: 800;
+}
+
+.reviews .sliders .btns .s1{
+    background: var(--bg-4);
+    color: var(--text-color-1);
+}
+
+.reviews .sliders .btns .s2{
+    background: var(--bg-5);
+    color: var(--main-bg);
+}
+
+.reviews .reviewBody .person{
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    width: 587px;
+    height: 130px;
+}
+
+.reviews .person .personImg{
+    width: 90px;
+    height: 130px;
+    border-radius: 28.6px;
+    background: var(--text-color-2);
+}
+
+.reviews .person .personInfo{
+    display: flex;
+    flex-direction: column;
+    width: 465px;
+    height: 88px;
+    gap: 4px;
+}
+
+.reviews .person .personInfo .personName{
+    font-size: 18px;
+    height: 24px;
+    color: var(--text-color-2);
+}
+
+.reviews .person .personInfo .personRole{
+    color: var(--text-color-3);
+    font-size: 18px;
+    height: 24px;
+}
+
+.reviews .person .personInfo .personCompany{
+    height: 32px;
+    color: var(--text-color-2);
+    font-size: 18px;
 }
 
 @media screen and (max-width: 768px) {

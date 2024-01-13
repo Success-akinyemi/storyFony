@@ -44,7 +44,7 @@ export async function createStory(req, res){
     
     try {
       console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
-
+      const inkNeeded = numberOfSeries * 40
       if(!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending ){
         return res.status(400).json({ success: false, data: 'Please fill all neccessary fields'})
       }
@@ -55,7 +55,7 @@ export async function createStory(req, res){
         return res.status(404).json({ success: false, data: 'Invalid User'})
       }
 
-      if(totalInkNeeded > user.totalCredit){
+      if(inkNeeded > user.totalCredit){
         return res.status(401).json({ success: false, data: 'Insufficient Ink credit'})
       }
       const response = await openai.completions.create({
@@ -160,9 +160,10 @@ export async function createStory(req, res){
       await newStory.save()
       console.log('STORY SAVED>>',newStory)
 
-      user.totalCredit -= totalInkNeeded
+      //calculate user total ink need
+      user.totalCreditUsed += inkNeeded
       await user.save()
-      console.log('USER INK DEDUCTED>>', user.totalCredit)
+      console.log('USER INK DEDUCTED>>', user.totalCreditUsed)
   
       res.status(201).json({ success: true, data: genertedStory})
   }  catch (error) {
@@ -215,6 +216,34 @@ export async function getUserStory(req, res){
   }
 }
 
+export async function getUserStoryEdit(req, res){
+  const { id, storyId } = req.params
+  console.log('IDs',id, storyId)
+  try {
+    const user = await UserModel.findOne({ _id: id })
+    if(!user){
+      return res.status(404).json({ success: false, data: 'Invalid user'})
+    }
+
+    if(req.user.id !== id){
+      return res.status(401).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const storyData = await UserStory.findOne({ _id: storyId})
+    if(!storyData){
+      return res.status(404).json({ success: false, data: 'Story not found'})
+    }
+
+
+    res.status(200).json({ success: true, data: storyData })
+    
+  } catch (error) {
+    console.log('ERROR GETTING USER STORY', error)
+    res.status(500).json({ success: false, data: 'failed to get stories'})
+  }
+}
+
+
 export async function handlePrivateStory(req, res){
   const { id } = req.params
   try {
@@ -229,5 +258,21 @@ export async function handlePrivateStory(req, res){
   } catch (error) {
     console.log('ERROR HANDLING PRIVATE STORY', error)
     res.status(500).json({ success: false, data: 'failed to get stories'})
+  }
+}
+
+//handle new story desc
+export async function generateNewStoryDesc(req, res){
+  const {desc, storyId, userId} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(401).json({ success: false, data: 'You can only edit your story'})
+    }
+    const storyDesc = await UserStory.findById({ _id: storyId })
+    console.log(desc)
+
+    res.status(200).json({ success: true, data: storyDesc})
+  } catch (error) {
+    res.status(500).json({ success: false, data: 'failed to generate story description'})
   }
 }

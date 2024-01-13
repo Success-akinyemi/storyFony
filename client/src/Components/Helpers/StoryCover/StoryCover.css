@@ -17,7 +17,7 @@
     position: relative;
 }
 
-.storyCover .imgCard img{
+.storyCover .imgCard .cardImg{
     width: 100%;
 }
 

@@ -148,7 +148,7 @@ export async function createStory({title, desc, motive, genreValue, ending, mimi
 
 export async function handlePrivateStory({id}){
     try {
-        const res = await axios.post(`/api/user/story/handlePrivateStory/${id}`, {headers: {Authorization: `Bearer ${token}`}})
+        const res = await axios.post(`/api/user/story/handlePrivateStory/${id}`, { withCredentials: true })
         console.log('HANDLE PRIVATE STORY', res)
         if(res?.data.success){
             toast.success('Story Updated')
@@ -156,6 +156,27 @@ export async function handlePrivateStory({id}){
         }
     } catch (error) {
         console.log('ERROR HANDLING USER PRIVATE STORY', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function generateNewStoryDesc({desc, storyId, userId}){
+    try {
+        const res = await axios.post('/api/user/handleNewStoryDesc', {desc, storyId, userId}, {withCredentials: true})
+        console.log('HANDLE NEW STORY DESC', res)
+        if(res?.data.success){
+            toast.success('Story Description Updated')
+            return res
+        }
+    } catch (error) {
+        console.log('ERROR HANDLING USER NEW STORY DESC', error)
         if (error.response && error.response.data) {
             const errorMsg = error.response.data.data;
             console.log('MSG', errorMsg)

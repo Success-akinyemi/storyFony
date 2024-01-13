@@ -3,21 +3,27 @@ import PenImg from '../../../assets/pen3.png'
 import DotsImg from '../../../assets/dragDot.png'
 import AddImg from '../../../assets/add.png'
 
-function TableOfContent() {
+function TableOfContent({storyChapter}) {
   return (
     <div className='tableOfContent'>
         <div className='t-card'>
-            <div className="left">
-                <img src={DotsImg} />
-            </div>
+            {
+                storyChapter.map((item) => (
+                    <div className='t-cardList'>
+                        <div className="left">
+                            <img src={DotsImg} />
+                        </div>
 
-            <div className="right">
-                <h3>Chapter 1</h3>
-                <span>
-                    <p>Title</p>
-                    <img src={PenImg} />
-                </span>
-            </div>
+                        <div className="right">
+                            <h3>{item?.chapterNumber}</h3>
+                            <span>
+                                <p>{item?.chapterTitle}</p>
+                                <img src={PenImg} />
+                            </span>
+                        </div>
+                    </div>
+                ))
+            }
         </div>
 
         <div className="newCapter">

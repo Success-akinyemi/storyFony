@@ -53,7 +53,7 @@ function StoryCard({ data }) {
 
                         <img src={MoreImg} alt='more' className='more' />
                         <div className="moreCard">
-                            <Link to={`/story-editor/${data?._id}`} className='link moreCardLink'>Edit story</Link>
+                            <Link to={`/story-editor/${user?._id}/${data?._id}`} className='link moreCardLink'>Edit story</Link>
                             <Link className='link moreCardLink'>Share story</Link>
                             <span onClick={handletogglePrivateStory(data?._id)} className='link moreCardLink'>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private story' : 'Public story'} `}</span>
                             <Link className='link moreCardLink'>Publish</Link>
