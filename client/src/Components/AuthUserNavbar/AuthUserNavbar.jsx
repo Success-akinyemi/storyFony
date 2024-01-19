@@ -12,6 +12,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { apiUrl } from '../../Utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../redux/user/userslice';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
     const  {currentUser}  = useSelector(state => state.user)
@@ -32,6 +35,8 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
 
     const handleLogout = async () => {
         try {
+            cookies.remove('fonyAccessToken', {path: '/'})
+            navigate('/')
             await fetch(apiUrl('/api/auth/signout'))
             dispatch(signOut())
         } catch (error) {

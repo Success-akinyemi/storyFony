@@ -12,7 +12,13 @@ import { signInFailure, signInStart, signInSuccess } from '../../redux/user/user
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../../Components/OAuth/OAuth'
 
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 function Login() {
+    const allCookies = cookies.getAll();
+
+    console.log('All Cookies:', allCookies);
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { loading, error } = useSelector((state) => state.user)
@@ -46,8 +52,8 @@ function Login() {
             setIsLoadingData(true)
             dispatch(signInStart())
             const res = await loginUser({ email, password })
-            
-            if(res?.data.isVerified === false){
+            console.log('LOGIN', res?.data.data.verified)
+            if(res?.data.data.verified === false){
                 navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
             } else{
                 dispatch(signInSuccess(res?.data))

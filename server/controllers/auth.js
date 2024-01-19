@@ -113,7 +113,7 @@ export async function verifyNewUser(req, res, next){
 
         const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
         const expiryDate = new Date(Date.now() + 360000)
-        res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: user })
+        res.cookie('fonyAccessToken', authToken, { expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: user })
     } catch (error) {
         console.log('COULD NOT VERIFY USER', error)
         res.status(500).json({ success: false, data: error.message})        
@@ -196,7 +196,7 @@ export async function login (req, res, next){
         const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
         const expiryDate = new Date(Date.now() + 3600000)
         const { password: userPassword, adminPassword, ...userData} = user._doc
-        res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+        res.cookie('fonyAccessToken', authToken, { expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
     } catch (error) {
         console.log('ERROR LOGGING USER', error)
         res.status(500).json({ success: false, data: error.message})
@@ -212,7 +212,7 @@ export async function google(req, res){
             const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
             const { password: hashedPassword, ...userData } = user._doc
             const expiryDate = new Date(Date.now() + 3600000)
-            res.cookie('accessToken', token, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+            res.cookie('accessToken', token, { expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
             //const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
@@ -227,7 +227,7 @@ export async function google(req, res){
             const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
             const { password: hashedPassword2, adminPassword, ...userData } = newUser._doc
             const expiryDate = new Date(Date.now() + 3600000)
-            res.cookie('fonyAccessToken', token, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+            res.cookie('fonyAccessToken', token, { expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
         }
     } catch (error) {
         console.log('ERROR SINGIN USER WITH GOOGLE', error)

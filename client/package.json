@@ -25,7 +25,8 @@
     "react-router-dom": "^6.17.0",
     "react-slick": "^0.29.0",
     "redux-persist": "^6.0.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "universal-cookie": "^7.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
