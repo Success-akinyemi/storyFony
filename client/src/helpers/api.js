@@ -40,7 +40,15 @@ export async function resgisterUser({ fisrtName, lastName, email, penName ,passw
 
 export async function loginUser({ email, password }){
     try {
-        const res = await axios.post('/api/login', { email, password }, {withCredentials: true} )
+        const res = await axios.post('/api/login', { email, password }, 
+            {
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+            } 
+        )
         console.log('respones', res)
         if(res.data){
             return res        
