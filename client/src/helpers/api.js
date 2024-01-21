@@ -177,18 +177,71 @@ export async function handlePrivateStory({id}){
 
 export async function generateNewStoryDesc({desc, storyId, userId}){
     try {
-        const res = await axios.post('/api/user/handleNewStoryDesc', {desc, storyId, userId}, {withCredentials: true})
+        const res = await axios.post('/api/user/story/handleNewStoryDesc', {desc, storyId, userId}, {withCredentials: true})
         console.log('HANDLE NEW STORY DESC', res)
         if(res?.data.success){
-            toast.success('Story Description Updated')
-            return res
+            toast.success(res?.data.data || 'Story Description Updated')
+            window.location.reload()
         }
     } catch (error) {
         console.log('ERROR HANDLING USER NEW STORY DESC', error)
         if (error.response && error.response.data) {
-            const errorMsg = error.response.data.data;
+            const errorMsg = error.response.data.data || 'Failed to upload Story';
             console.log('MSG', errorMsg)
             toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function saveStoryDesc({desc, storyId, userId}){
+    try {
+        const res = await axios.post('/api/user/story/saveDesc', {desc, storyId, userId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success(res?.data.data || 'Story Description Saved')
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR SAVING USER STORY DESC', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to upload Story';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function createNewStory({ storyId, userId }){
+    try {
+        const res = await axios.post('/api/user/story/recreateStory', {storyId, userId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success(res?.data.data || 'New story created')
+            window.location.reload()
+        }
+    }
+     catch (error) {
+        console.log('ERROR SAVING USER STORY DESC', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to upload Story';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
             return errorMsg;
           } else {
             return 'An error occurred during the request.';

@@ -66,6 +66,17 @@
     color: var(--main-bg);
 }
 
+.bookSummary .inputfield .newDesc{
+    border: none;
+    outline: none;
+    padding: 5px;
+    margin-top: 7px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: var(--bg-5);
+    color: var(--main-bg);
+}
+
 .bookSummary .rewrite{
     padding: var(--padding-3);
     display: flex;

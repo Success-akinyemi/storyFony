@@ -154,7 +154,8 @@ export async function createStory(req, res){
           storyImage: storyImage,
           coverImage: coverImage,
           storyDesc: desc,
-          storyLangauage: language
+          storyLangauage: language,
+          endingStyle: ending,
       })
   
       await newStory.save()
@@ -266,13 +267,108 @@ export async function generateNewStoryDesc(req, res){
   const {desc, storyId, userId} = req.body
   try {
     if(req.user.id !== userId){
-      return res.status(401).json({ success: false, data: 'You can only edit your story'})
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
     }
-    const storyDesc = await UserStory.findById({ _id: storyId })
-    console.log(desc)
 
-    res.status(200).json({ success: true, data: storyDesc})
+    const storyDesc = await UserStory.findById({ _id: storyId })
+    if(!storyDesc){
+      return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    const description = storyDesc.storyDesc
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `based on this desc ${description} rewrite the description a new and improve way. note it is a description so it should be short and nice. not too short`,
+      temperature: 0.9,
+      max_tokens: 200
+    })
+
+    const newDesc = response.choices[0].text.trim()
+    storyDesc.storyDesc = newDesc
+    await storyDesc.save()
+    console.log('OLD>>>',description)
+    console.log('NEW>>>',newDesc)
+
+    res.status(201).json({ success: true, data: 'Description created'})
   } catch (error) {
+    console.log('FAILED TO GENERATE NEW DESCRIPTION>>>', error)
     res.status(500).json({ success: false, data: 'failed to generate story description'})
+  }
+}
+
+// save story Description
+export async function saveStoryDesc(req, res){
+  const {desc, storyId, userId} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const storyDesc = await UserStory.findById({ _id: storyId })
+    if(!storyDesc){
+      return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    if(!desc){
+      return res.status(404).json({ success: false, data: 'Story Description cannot be empty'})
+    }
+
+    storyDesc.storyDesc = desc
+    await storyDesc.save()
+    console.log('OLD>>>',desc)
+    console.log('NEW>>>',storyDesc.storyDesc)
+
+    res.status(201).json({ success: true, data: 'Description Saved'})
+  } catch (error) {
+    console.log('FAILED TO GENERATE NEW DESCRIPTION>>>', error)
+    res.status(500).json({ success: false, data: 'failed to generate story description'})
+  }
+}
+
+//Recreate a already existing story for a user
+export async function recreateStory (req, res){
+  const { storyId, userId } = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const oldStory = await UserStory.findById({ _id: storyId })
+    if(!oldStory){
+      return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `Rewrite this Story ${oldStory.story} better based on this title: ${oldStory.userTitle} and description; ${oldStory.storyDesc} in ${oldStory.storyLangauage} langauage the story should be in this type of genre: ${oldStory.genre} the story should have ${oldStory.story.length} number of chapters. ${oldStory.endingStyle ? `the story should have this ending style ${oldStory.endingStyle}` : '' }. Also from the story give a good story title each chapter you genearate should be lenghty enough`,
+      temperature: 0.9,
+      max_tokens: 700
+    })
+
+    //console.log(response.choices[0].text)
+    const newGeneratedStory = response.choices[0].text
+
+    //get each chapters from the generated story
+    const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
+    //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
+    const storyMatches = [...newGeneratedStory.matchAll(chapterRegex)];
+  
+      const storyArray = storyMatches.map((match, index) => ({
+        chapterTitle: match[2].trim(),
+        chapterContent: match[3].trim(),
+        chapterNumber: `Chapter ${index + 1}`,
+      }));
+
+      //console.log('OLD STORY', oldStory.story)
+
+      oldStory.story = storyArray
+      oldStory.save()
+      //console.log('NEW STORY', oldStory.story)
+
+    res.status(201).json({ success: true, data: 'New story generated' })
+  } catch (error) {
+    console.log('ERROR RECREATING STORY', error)
+    res.status(500).json({ success: false, data: 'Failed to recreate story'})
   }
 }

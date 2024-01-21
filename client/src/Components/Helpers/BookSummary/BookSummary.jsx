@@ -2,7 +2,7 @@ import './BookSummary.css'
 import PenImg from '../../../assets/pen2.png'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { generateNewStoryDesc } from '../../../helpers/api'
+import { createNewStory, generateNewStoryDesc, saveStoryDesc } from '../../../helpers/api'
 
 function BookSummary({motive}) {
   const loc = useLocation()
@@ -14,24 +14,45 @@ function BookSummary({motive}) {
   useEffect(() => {
     setMotiveText(motive)
   }, [motive])
-  console.log('first>>', storyId, userId)
 
   const newDesc = async (desc) => {
     try {
       setLoadingState(true)
       const res = await generateNewStoryDesc({desc, storyId, userId})
-      if(res.data.success){
+      //console.log(desc, storyId, userId)
+      if(res?.data.success){
 
       }
     } catch (error) {
-      console.log('Error cretating new description', error)      
+      console.log('Error creating new description', error)      
+    } finally {
+      setLoadingState(false)
+    }
+  }
+
+  const saveDesc = async (desc) => {
+    try {
+      setLoadingState(true)
+      const res = await saveStoryDesc({desc, storyId, userId})
+      if(res?.data.success){
+
+      }
+    } catch (error) {
+      console.log('Error saving new description', error)      
     } finally {
       setLoadingState(false)
     }
   }
 
   const newStory = async () => {
-
+    try {
+      setLoadingState(true)
+      const res = await createNewStory({storyId, userId})
+    } catch (error) {
+      console.log('Error saving new description', error)      
+    } finally {
+      setLoadingState(false)
+    }
   }
 
   return (
@@ -39,9 +60,14 @@ function BookSummary({motive}) {
         <p className="text">You can edit your story line</p>
         <div className="inputfield">
             <textarea defaultValue={motive} value={motiveText} onChange={(e) => setMotiveText(e.target.value)}></textarea>
-            <button disabled={!motiveText} onClick={() => newDesc(motiveText)} className="motive">{loadingState ? 'Generating...' : 'Generate new story line'}</button>
+            <button disabled={!motiveText || loadingState} onClick={() => newDesc(motiveText)} className="motive">{loadingState ? 'Generating...' : 'Generate new story line AI'}</button>
+            {
+              motive !== motiveText && (
+                <button className='newDesc' disabled={!motiveText || loadingState} onClick={() => saveDesc(motiveText)}>Save Story</button>
+              )
+            }
         </div>
-        <button className="rewrite">
+        <button className="rewrite" onClick={newStory}>
             Rewrite the whole story
             <img src={PenImg} className="pen" />
         </button>

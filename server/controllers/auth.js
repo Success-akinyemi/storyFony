@@ -196,7 +196,7 @@ export async function login (req, res, next){
         const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
         const expiryDate = new Date(Date.now() + 3600000)
         const { password: userPassword, adminPassword, ...userData} = user._doc
-        res.cookie('fonyAccessToken', authToken, { expires: expiryDate, sameSite: 'None', secure: true, path: '/' }).status(201).json({ success: true, data: userData })
+        res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true }).status(201).json({ success: true, data: userData, token: authToken })
     } catch (error) {
         console.log('ERROR LOGGING USER', error)
         res.status(500).json({ success: false, data: error.message})
@@ -227,7 +227,7 @@ export async function google(req, res){
             const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
             const { password: hashedPassword2, adminPassword, ...userData } = newUser._doc
             const expiryDate = new Date(Date.now() + 3600000)
-            res.cookie('fonyAccessToken', token, { expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData })
+            res.cookie('fonyAccessToken', token, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true }).status(201).json({ success: true, data: userData })
         }
     } catch (error) {
         console.log('ERROR SINGIN USER WITH GOOGLE', error)

@@ -48,6 +48,9 @@ export const StorySchema = new mongoose.Schema({
     storyLangauage: {
         type: String
     },
+    endingStyle: {
+        type: String
+    },
     storyImage: {
         type: String
     },
