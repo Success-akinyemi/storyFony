@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import jwtDecode from 'jwt-decode';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies()
@@ -34,12 +35,22 @@ function AuthorizeUser() {
 
 function AuthorizeUser() {
   const { currentUser } = useSelector((state) => state.user);
-  const fonyAccessTokenExists = document.cookie.split(';').some((cookie) => cookie.trim().startsWith('fonyAccessToken='));
+  const fonyAccessToken = localStorage.getItem('authToken');
+  const fonyAccessTokenExists = !!fonyAccessToken;
 
   useEffect(() => {
     if (!fonyAccessTokenExists) {
       console.log('NO USER');
       toast.error('PLEASE LOGIN');
+    } else {
+      const decodedToken = jwtDecode(fonyAccessToken);
+
+      // Check if the token is expired
+      if (decodedToken.exp * 1000 < Date.now()) {
+        console.log('EXP', decodedToken.exp)
+        toast.error('Session expiried, Please login');
+        <Navigate to={'/login'} />
+      }
     }
   }, [currentUser, fonyAccessTokenExists]); // Include currentUser and fonyAccessTokenExists in the dependencies array
 
