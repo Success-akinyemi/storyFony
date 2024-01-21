@@ -66,7 +66,7 @@ function Login() {
               //console.log('DATA', data)
                 //console.log('LOGIN USER VERIFIED', data.data.verified)
             if(data.data.verified === false){
-                navigate('/VerificationEmailSent', { state: {resMsg: res?.data.data}})
+                navigate('/VerificationEmailSent', { state: {resMsg: data.data}})
             } if(data.success === true && data.data.verified === true) {
                dispatch(signInSuccess(data))
                navigate('/dashboard')
