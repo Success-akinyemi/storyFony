@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -37,6 +37,7 @@ function AuthorizeUser() {
   const { currentUser } = useSelector((state) => state.user);
   const fonyAccessToken = localStorage.getItem('authToken');
   const fonyAccessTokenExists = !!fonyAccessToken;
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!fonyAccessTokenExists) {
@@ -49,10 +50,10 @@ function AuthorizeUser() {
       if (decodedToken.exp * 1000 < Date.now()) {
         console.log('EXP', decodedToken.exp)
         toast.error('Session expiried, Please login');
-        <Navigate to={'/login'} />
+        navigate('/login')
       }
     }
-  }, [currentUser, fonyAccessTokenExists]); // Include currentUser and fonyAccessTokenExists in the dependencies array
+  }, [currentUser, fonyAccessTokenExists]); 
 
   return fonyAccessTokenExists ? <Outlet /> : <Navigate to={'/login'} />;
 }

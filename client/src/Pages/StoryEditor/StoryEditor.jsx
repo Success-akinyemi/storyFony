@@ -13,6 +13,9 @@ import Beaker2Img from '../../assets/beaker2.png'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import StoryCover from '../../Components/Helpers/StoryCover/StoryCover';
 import { userStoryBookEditor } from '../../hooks/fetch.hooks';
+import PenImg from '../../assets/writerPen.png'
+import TextEditor from '../../Components/Helpers/TextEditor/TextEditor';
+import { formatDistanceToNow } from 'date-fns';
 
 function StoryEditor() {
   const loc = useLocation()
@@ -199,7 +202,24 @@ function StoryEditor() {
             </div>
           </div>
 
-          <div className="right"></div>
+          <div className="right">
+            <div className="info">
+              <div className="head">
+                <h1 className="title">{data?.storyTitle ? data?.storyTitle : data?.userTitle }</h1>
+                <img src={PenImg} alt="pen" className="pen" />    
+              </div>
+              
+              <span className='dateInfo'>Last updated: {/**{formatDistanceToNow(new Date(data?.updatedAt))} */} ago</span>
+            </div>
+
+            <p className="infoText">
+              You can edit the story line to suit your imagnination
+            </p>
+
+            <div className='content'>
+              <TextEditor />
+            </div>
+          </div>
         </div>
     </div>
   )

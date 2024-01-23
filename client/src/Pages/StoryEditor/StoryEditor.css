@@ -292,17 +292,74 @@
 
 .storyEditor .body .left .content .contentInfo .card{
     width: 100%;
+    max-width: 100%;
 }
 
 
 
 .storyEditor .body .right{
-    flex: 2;    
-    background: red;
+    flex: 2;  
+    max-width: 100%;  
+    background: white;
     height: 100%;
+    border-radius: 4px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-x: hidden;
 }
 
+.storyEditor .body .right .info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+}
 
+.storyEditor .body .right .info .head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.storyEditor .body .right .info .head .title{
+    color: var(--main-bg);
+    height: 38px;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.storyEditor .body .right .info .head .pen{
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+}
+
+.storyEditor .body .right .info .dateInfo{
+    height: 16px;
+    font-size: 12px;
+    color: var(--bg-4);
+}
+
+.storyEditor .body .right .infoText{
+    color: var(--bg-4);
+    font-weight: 400;
+    height: 22px;
+    font-size: 16px;
+}
+
+.storyEditor .body .right .content{
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--text-color-3);
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: var(--padding);
+}
 
 .imporCoverPage{
     width: 100%;

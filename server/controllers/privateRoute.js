@@ -60,9 +60,9 @@ export async function createStory(req, res){
       }
       const response = await openai.completions.create({
           model: 'gpt-3.5-turbo-instruct',
-          prompt: `Write a Story based on this title: ${title} and description; ${desc} in ${language} langauage the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writting style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and this ending style ${ending}. Also from the story give it a good story title`,
+          prompt: `Write a Story based on this title: ${title} and description; ${desc} in ${language} langauage the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writting style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lenghty in terms of number of words and be creative, spice up the story. Also from the entire story you generate give it a nice story give title`,
           temperature: 0.9,
-          max_tokens: 700
+          max_tokens: 950
       })
       //console.log(response)
       console.log('STORY>>', response.choices[0].text)
@@ -244,7 +244,7 @@ export async function getUserStoryEdit(req, res){
   }
 }
 
-
+//handle both making story both  private and public
 export async function handlePrivateStory(req, res){
   const { id } = req.params
   try {
@@ -341,9 +341,9 @@ export async function recreateStory (req, res){
 
     const response = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
-      prompt: `Rewrite this Story ${oldStory.story} better based on this title: ${oldStory.userTitle} and description; ${oldStory.storyDesc} in ${oldStory.storyLangauage} langauage the story should be in this type of genre: ${oldStory.genre} the story should have ${oldStory.story.length} number of chapters. ${oldStory.endingStyle ? `the story should have this ending style ${oldStory.endingStyle}` : '' }. Also from the story give a good story title each chapter you genearate should be lenghty enough`,
+      prompt: `Rewrite this Story ${oldStory.story} better based on this title: ${oldStory.userTitle} and description; ${oldStory.storyDesc} in ${oldStory.storyLangauage} langauage the story should be in this type of genre: ${oldStory.genre} the story should have ${oldStory.story.length} number of chapters. ${oldStory.endingStyle ? `the story should have this ending style ${oldStory.endingStyle}` : '' }. Also from the story give a good story title. each chapter you generate should be lenghty in terms of number of words be creative and spice up the story`,
       temperature: 0.9,
-      max_tokens: 700
+      max_tokens: 950
     })
 
     //console.log(response.choices[0].text)

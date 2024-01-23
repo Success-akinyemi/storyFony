@@ -1,5 +1,6 @@
 .tableOfContent{
     width: 100%;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -29,19 +30,19 @@
     border: 1px solid var(--bg-5);
 }
 
-.tableOfContent .t-card .left{
+.tableOfContent .t-card .contentLeft{
     flex: 2;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.tableOfContent .t-card .left img{
+.tableOfContent .t-card .contentLeft img{
     width: 16px;
     height: 16px;
 }
 
-.tableOfContent .t-card .right{
+.tableOfContent .t-card .contentRight{
     width: 100%;
     display: flex;
     gap: 4px;
@@ -50,7 +51,7 @@
     background: transparent;
 }
 
-.tableOfContent .t-card .right h3{
+.tableOfContent .t-card .contentRight h3{
     color: var(--text-color-3);
     font-size: 12px;
 }
@@ -61,12 +62,12 @@
     align-items: center;
 }
 
-.tableOfContent .t-card .right span p{
+.tableOfContent .t-card .contentRight span p{
     font-size: 14px;
     color: var(--text-color-2);
 }
 
-.tableOfContent .t-card .right span img{
+.tableOfContent .t-card .contentRight span img{
     width: 18px;
     height: 18px;
 }

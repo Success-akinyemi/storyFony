@@ -10,11 +10,11 @@ function TableOfContent({storyChapter}) {
             {
                 storyChapter.map((item) => (
                     <div className='t-cardList'>
-                        <div className="left">
+                        <div className="contentLeft">
                             <img src={DotsImg} />
                         </div>
 
-                        <div className="right">
+                        <div className="contentRight">
                             <h3>{item?.chapterNumber}</h3>
                             <span>
                                 <p>{item?.chapterTitle}</p>

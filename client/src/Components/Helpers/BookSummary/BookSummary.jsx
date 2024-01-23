@@ -67,9 +67,15 @@ function BookSummary({motive}) {
               )
             }
         </div>
-        <button className="rewrite" onClick={newStory}>
-            Rewrite the whole story
-            <img src={PenImg} className="pen" />
+        <button disabled={loadingState} className="rewrite" onClick={newStory}>
+            {loadingState ? ('Rewriting') :
+             (
+              <>
+                Rewrite the whole story
+                <img src={PenImg} className="pen" />
+              </>
+             )
+             }
         </button>
     </div>
   )
