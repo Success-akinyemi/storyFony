@@ -26,6 +26,8 @@ function StoryEditor() {
   const [ menuActive, setMenuActive ] = useState(1)
   const [ menuTitle, setMenuTitle ] = useState('Book summary')
   const [ menuImg, setMenuImg ] = useState()
+  const [selectedChapterContent, setSelectedChapterContent] = useState('');
+
   useEffect(() => {
     const userId = loc.pathname.split('/')[2]
     const storyId = loc.pathname.split('/')[3]
@@ -35,6 +37,9 @@ function StoryEditor() {
   const data = apiUserStoryData?.data
   console.log('Story editor', data)
 
+  //Date FNS
+  const updatedAt = data?.updatedAt;
+  const lastUpdatedText = updatedAt ? formatDistanceToNow(new Date(updatedAt)) + ' ago' : '';
 
   //Total number of words
   const words = data?.story.reduce((totalWords, chapter) => {
@@ -100,12 +105,12 @@ function StoryEditor() {
     }
   }
 
-  const renderContentComponet = () => {
+  const renderContentComponet = (handleChapterClick) => {
     switch(menuActive) {
       case 1:
         return <BookSummary motive={data?.storyDesc} />
       case 2: 
-        return <TableOfContent storyChapter={data?.story} />
+        return <TableOfContent storyChapter={data?.story} onChapterClick={handleChapterClick} />
       case 3:
         return <AiVoiceReader />
         case 4:
@@ -113,6 +118,12 @@ function StoryEditor() {
       default: 
         return null
     }
+  }
+
+  //Handle story Content display
+  const handleChapterClick = (chapterContent) => {
+    setSelectedChapterContent(chapterContent)
+    console.log('CONTENT', selectedChapterContent)
   }
   
   return (
@@ -196,7 +207,7 @@ function StoryEditor() {
 
                 </div>
                 <div className="card">
-                  {renderContentComponet()}
+                  {renderContentComponet(handleChapterClick)}
                 </div>
               </div>
             </div>
@@ -209,7 +220,7 @@ function StoryEditor() {
                 <img src={PenImg} alt="pen" className="pen" />    
               </div>
               
-              <span className='dateInfo'>Last updated: {/**{formatDistanceToNow(new Date(data?.updatedAt))} */} ago</span>
+              <span className='dateInfo'>Last updated: {lastUpdatedText}  ago</span>
             </div>
 
             <p className="infoText">
@@ -217,7 +228,7 @@ function StoryEditor() {
             </p>
 
             <div className='content'>
-              <TextEditor />
+              <TextEditor content={selectedChapterContent ? selectedChapterContent : ''} />
             </div>
           </div>
         </div>

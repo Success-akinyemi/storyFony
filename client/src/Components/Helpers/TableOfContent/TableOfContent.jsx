@@ -3,13 +3,13 @@ import PenImg from '../../../assets/pen3.png'
 import DotsImg from '../../../assets/dragDot.png'
 import AddImg from '../../../assets/add.png'
 
-function TableOfContent({storyChapter}) {
+function TableOfContent({storyChapter, onChapterClick }) {
   return (
     <div className='tableOfContent'>
         <div className='t-card'>
             {
                 storyChapter.map((item) => (
-                    <div className='t-cardList'>
+                    <div className='t-cardList' key={item.chapterNumber} onClick={() => onChapterClick(item.chapterContent)}>
                         <div className="contentLeft">
                             <img src={DotsImg} />
                         </div>

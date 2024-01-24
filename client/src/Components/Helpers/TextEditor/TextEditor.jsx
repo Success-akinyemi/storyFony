@@ -1,12 +1,9 @@
 import './TextEditor.css'
 import './Tiptap.css'
 
-import { Color } from '@tiptap/extension-color'
-import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
-import { EditorProvider, useCurrentEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import React from 'react'
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
 
 import FeatherPenImg from '../../../assets/featherPen.png'
 import ImageImg from '../../../assets/image.png'
@@ -19,13 +16,13 @@ import ItalicImg from '../../../assets/italic.png'
 import UnderlineImg from '../../../assets/underline.png'
 import UnorderlistImg from '../../../assets/unorderlist.png'
 import OrderlistImg from '../../../assets/orderlist.png'
+import { useEffect, useState } from 'react';
 
-const MenuBar = () => {
-    const { editor } = useCurrentEditor()
-  
-    if (!editor) {
-      return null
-    }
+const MenuBar = ({ editor }) => {
+  if (!editor) {
+    return null;
+  }
+
   
     return (
       <div className='menuBar'>
@@ -95,6 +92,12 @@ const MenuBar = () => {
           className={editor.isActive('italic') ? 'is-active' : ''}
         >
             <img src={ItalicImg} alt="italic" className="tapIcon" />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={editor.isActive("underline") ? "is_active" : ""}
+        >
+          <img src={UnderlineImg} alt='underline' clasName='tapIcon' />
         </button>
         {/**
          * 
@@ -244,32 +247,33 @@ const MenuBar = () => {
     )
   }
   
-  const extensions = [
-    Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    TextStyle.configure({ types: [ListItem.name] }),
-    StarterKit.configure({
-      bulletList: {
-        keepMarks: true,
-        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-      },
-      orderedList: {
-        keepMarks: true,
-        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-      },
-    }),
-  ]
-  
-  const content = ``
 
-function TextEditor() {
+  const useTiptapEditor = (content) => {
+    const editor = useEditor({
+      extensions: [StarterKit, Underline],
+      content: `${content}`,
+    });
+  
+    useEffect(() => {
+      if (editor) {
+        editor.chain().setContent(`${content}`).run();
+      }
+    }, [editor, content])
+  
+    return editor
+  }
+
+function TextEditor({ content }) {
+  const editor = useTiptapEditor(content);
+
+  console.log('CONTENT', content);
   return (
-    <EditorProvider 
-        slotBefore={<MenuBar />} 
-        extensions={extensions} 
-        content={content}
-        className='textEditor'
-    >
-    </EditorProvider>
+    <div className="textEditor">
+      <MenuBar editor={editor} />
+      <div className="editorContentArea">
+        <EditorContent editor={editor} />
+      </div>
+    </div>
   )
 }
 

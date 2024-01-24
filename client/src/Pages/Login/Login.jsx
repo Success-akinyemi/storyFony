@@ -18,7 +18,7 @@ const cookies = new Cookies();
 function Login() {
     const allCookies = cookies.getAll();
 
-    console.log('All Cookies:', allCookies);
+    //console.log('All Cookies:', allCookies);
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
