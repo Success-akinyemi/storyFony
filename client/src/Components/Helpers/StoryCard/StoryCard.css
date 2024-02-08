@@ -119,6 +119,12 @@
 .storyCard .content .bottom .right .heart{
     width: 16.87px;
     height: 15.12px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.storyCard .content .bottom .right .heart:hover{
+    transform: scale(1.6);
 }
 
 .storyCard .content .bottom .right p{
@@ -162,10 +168,14 @@
 }
 
 .storyCard .content .bottom .moreCard .moreCardLink{
-    height: 22px;
     font-weight: 500;
     font-size: 13px;
     color: var(--text-color-3);
     line-height: 21.6px;
     cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.storyCard .content .bottom .moreCard .moreCardLink:hover{
+    color: var(--text-color-2);
 }

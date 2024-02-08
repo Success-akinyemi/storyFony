@@ -16,6 +16,9 @@ import { userStoryBookEditor } from '../../hooks/fetch.hooks';
 import PenImg from '../../assets/writerPen.png'
 import TextEditor from '../../Components/Helpers/TextEditor/TextEditor';
 import { formatDistanceToNow } from 'date-fns';
+import UploadStoryCover from '../../Components/Helpers/UploadStoryCover/UploadStoryCover';
+import AddNewChapter from '../../Components/Helpers/AddNewChapter/AddNewChapter';
+import { handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
 
 function StoryEditor() {
   const loc = useLocation()
@@ -27,6 +30,9 @@ function StoryEditor() {
   const [ menuTitle, setMenuTitle ] = useState('Book summary')
   const [ menuImg, setMenuImg ] = useState()
   const [selectedChapterContent, setSelectedChapterContent] = useState('');
+  const [currentChapterContent, setCurrentChapterContent] = useState('');
+  const [ isLoading, setIsLoading ] = useState(false)
+  const [ isLoadingCommunity, setIsLoadingCommunity ] = useState(false)
 
   useEffect(() => {
     const userId = loc.pathname.split('/')[2]
@@ -54,20 +60,18 @@ function StoryEditor() {
     switch(selectedCard) {
       case 'uploadProfile' :
         return (
-            <div className='imporCoverPage'>
-              <p className='title'>Import story book cover</p>
-              <div className="up"></div>
-              <div className="bar"></div>
-              <div className="uploadBtn"></div>
-            </div>
+          <UploadStoryCover />
         );
-      case 'funding':
+      case 'AddNewChapter':
         return(
-          <div>Funding</div>
+          <AddNewChapter />
         );
     }
   }
 
+  //Close popup when overlay is clicked
+  /**
+   * 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (event.target.classList.contains('popup-overlay')) {
@@ -81,6 +85,7 @@ function StoryEditor() {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+   */
 
   const closePopup = () => {
     setSelectedCard(null);
@@ -110,11 +115,11 @@ function StoryEditor() {
       case 1:
         return <BookSummary motive={data?.storyDesc} />
       case 2: 
-        return <TableOfContent storyChapter={data?.story} onChapterClick={handleChapterClick} />
+        return <TableOfContent storyChapter={data?.story} onChapterClick={handleChapterClick} currentChapterContent={currentChapterContent} defaultContent={data?.story[0]?.chapterContent} setSelectedCard={setSelectedCard} />
       case 3:
         return <AiVoiceReader />
         case 4:
-          return <StoryCover image={data?.storyImage} desc={data?.storyDesc} setSelectedCard={setSelectedCard} />
+          return <StoryCover image={data?.coverImage} desc={data?.storyDesc} setSelectedCard={setSelectedCard} />
       default: 
         return null
     }
@@ -123,7 +128,36 @@ function StoryEditor() {
   //Handle story Content display
   const handleChapterClick = (chapterContent) => {
     setSelectedChapterContent(chapterContent)
-    console.log('CONTENT', selectedChapterContent)
+    setCurrentChapterContent(chapterContent);
+    //console.log('CONTENT', selectedChapterContent)
+  }
+
+  const handleEditorChange = (content) => {
+    setCurrentChapterContent(content);
+  };
+
+  const handleTogglePrivateStory = async (id) => {
+    try {
+        setIsLoading(true)
+        const userId = user?._id
+        const res = await handlePrivateStory({id, userId})
+    } catch (error) {
+        console.log('ERROR CREATING STORY', error)
+    } finally {
+        setIsLoading(false)
+    }
+  }
+
+  const handleToggleToCommunity = async (id) => {
+    try {
+        setIsLoadingCommunity(true)
+        const userId = user?._id
+        const res = await handlePublishedToCommunity({id, userId})
+    } catch (error) {
+        console.log('ERROR CREATING STORY', error)
+    } finally {
+      setIsLoadingCommunity(false)
+    }
   }
   
   return (
@@ -167,8 +201,8 @@ function StoryEditor() {
                   <span className="action">Action <KeyboardArrowDownIcon className='keyIcon' /></span>
 
                   <div className="actionMenu">
-                    <div className='menus'>Publish to community</div>
-                    <div className='menus'>Public to private</div>
+                    <div className='menus' onClick={() => handleToggleToCommunity(data._id)}>{ isLoadingCommunity ? 'Updating...' : `${data?.PublishedToCommunity ? 'Remove from community' : 'Publish to community'}`}</div>
+                    <div className='menus' onClick={() => handleTogglePrivateStory(data._id)}>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private to Public' : 'Public to private'}`}</div>
                     <div className='menus'>Save to draft</div>
                     <div className='menus'>Download the PDF</div>
                   </div>
@@ -228,7 +262,7 @@ function StoryEditor() {
             </p>
 
             <div className='content'>
-              <TextEditor content={selectedChapterContent ? selectedChapterContent : ''} />
+              <TextEditor content={selectedChapterContent ? selectedChapterContent : ''} onEditorChange={handleEditorChange} defaultContent={data?.story[0]?.chapterContent} image={data?.storyImage} />
             </div>
           </div>
         </div>

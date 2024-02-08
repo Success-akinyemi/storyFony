@@ -17,31 +17,67 @@ import UnderlineImg from '../../../assets/underline.png'
 import UnorderlistImg from '../../../assets/unorderlist.png'
 import OrderlistImg from '../../../assets/orderlist.png'
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
+import { generateChapterImage, rewriteChapter } from '../../../helpers/api';
 
-const MenuBar = ({ editor }) => {
+const MenuBar = ({ editor, content }) => {
+  const loc = useLocation()
+  const storyId = loc.pathname.split('/')[3]
+  const userId = loc.pathname.split('/')[2]
+  const [ newChapter, setNewChapter ] = useState(false)
+  const [ newImage, setNewImage ] = useState(false)
+
   if (!editor) {
     return null;
   }
 
-  
+  const handleNewChapter = async (text, chapterId) => {
+    if(text === undefined){
+      toast.error('Select chapter in table of content')
+    }
+    try {
+      setNewChapter(true)
+      const res = await rewriteChapter({ text, userId, storyId, chapterId })
+    } catch (error) {
+      
+    } finally {
+      setNewChapter(false)
+    }
+  }
+
+  const handleChapterImage = async (text, chapterId) => {
+    if(text === undefined){
+      toast.error('Select chapter in table of content')
+    }
+    try {
+      setNewImage(true)
+      const res = await generateChapterImage({ text, userId, storyId, chapterId })
+    } catch (error) {
+      
+    } finally {
+      setNewImage(false)
+    }
+  }
+
     return (
       <div className='menuBar'>
-        <span className="options">
+        <button disabled={newChapter} className="options" onClick={() => handleNewChapter(content?.chapterContent, content._id)}>
             <img src={FeatherPenImg} alt="feather pen" />
-            <p>Write</p>
-        </span>
-        <span className="options">
+            <p>{newChapter ? 'Writing...' : 'Write'}</p>
+        </button>
+        <button disabled={newImage} className="options" onClick={() => handleChapterImage(content?.chapterContent, content._id)}>
             <img src={ImageImg} alt="ai image" />
-            <p>AI image</p>
-        </span>
-        <span className="options">
+            <p>{newImage ? 'Generating...' : 'AI image'}</p>
+        </button>
+        <button className="options">
             <img src={RephraseWordImg} alt="repharse word"/>
             <p>Rephrase words</p>
-        </span>
-        <span className="options">
+        </button>
+        <button className="options">
             <img src={ExpandWordImg} alt="expand word" />
             <p>Expand word</p>
-        </span>
+        </button>
         <button
           onClick={() => editor.chain().focus().undo().run()}
           disabled={
@@ -99,98 +135,6 @@ const MenuBar = ({ editor }) => {
         >
           <img src={UnderlineImg} alt='underline' clasName='tapIcon' />
         </button>
-        {/**
-         * 
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .toggleStrike()
-              .run()
-          }
-          className={editor.isActive('strike') ? 'is-active' : ''}
-        >
-          strike
-        </button>
-         */}
-        {/**
-         * 
-        <button
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .toggleCode()
-              .run()
-          }
-          className={editor.isActive('code') ? 'is-active' : ''}
-        >
-          code
-        </button>
-         */}
-        {/**
-         * 
-         <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
-           clear marks
-         </button>
-         */}
-        {/**
-         * 
-         <button onClick={() => editor.chain().focus().clearNodes().run()}>
-           clear nodes
-         </button>
-         */}
-        {/**
-         * 
-         <button
-           onClick={() => editor.chain().focus().setParagraph().run()}
-           className={editor.isActive('paragraph') ? 'is-active' : ''}
-         >
-           paragraph
-         </button>
-         */}
-         {/**
-          * 
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-        >
-          h1
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-        >
-          h2
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-        >
-          h3
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-          className={editor.isActive('heading', { level: 4 }) ? 'is-active' : ''}
-        >
-          h4
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-          className={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}
-        >
-          h5
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-          className={editor.isActive('heading', { level: 6 }) ? 'is-active' : ''}
-        >
-          h6
-        </button>
-          */}
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive('bulletList') ? 'is-active' : ''}
@@ -203,75 +147,41 @@ const MenuBar = ({ editor }) => {
         >
           <img src={OrderlistImg} alt="bold" className="tapIcon" />
         </button>
-        {/**
-         * 
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'is-active' : ''}
-        >
-          code block
-        </button>
-         */}
-         {/**
-          * 
-          <button
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={editor.isActive('blockquote') ? 'is-active' : ''}
-          >
-            blockquote
-          </button>
-          */}
-        {/**
-         * 
-        <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-          horizontal rule
-        </button>
-         */}
-        {/**
-         * 
-        <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-          hard break
-        </button>
-         */}
-
-        {/**
-         * 
-        <button
-          onClick={() => editor.chain().focus().setColor('#958DF1').run()}
-          className={editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''}
-        >
-          purple
-        </button>
-         */}
       </div>
     )
   }
   
 
-  const useTiptapEditor = (content) => {
+  const useTiptapEditor = (content, onEditorChange) => {
     const editor = useEditor({
       extensions: [StarterKit, Underline],
       content: `${content}`,
+      onUpdate: ({ editor }) => {
+        const newContent = editor.getHTML();
+        onEditorChange(newContent)
+      },
     });
   
     useEffect(() => {
-      if (editor) {
-        editor.chain().setContent(`${content}`).run();
+      if (editor && content !== editor.getHTML()) {
+        editor.chain().focus().setContent(content).run();
       }
     }, [editor, content])
   
     return editor
   }
 
-function TextEditor({ content }) {
-  const editor = useTiptapEditor(content);
+function TextEditor({ content, onEditorChange, defaultContent, image }) {
+  const editor = useTiptapEditor(content?.chapterContent || defaultContent, onEditorChange);
+  
 
-  console.log('CONTENT', content);
+  //console.log('CONTENT', content);
   return (
     <div className="textEditor">
-      <MenuBar editor={editor} />
+      <MenuBar editor={editor} content={content} />
       <div className="editorContentArea">
         <EditorContent editor={editor} />
+        <img src={content?.chapterImage ? content?.chapterImage : image} className='editorImg' />
       </div>
     </div>
   )

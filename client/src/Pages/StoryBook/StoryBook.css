@@ -243,6 +243,11 @@
     line-height: 42px;
 }
 
+.storyBook .content .container-1 .left .storyCard .chapterStory p,
+.storyBook .content .container-2 .left .storyCard .chapterStory p{
+    color: var(--text-color-2);
+}
+
 .storyBook .content .container-1 .right,
 .storyBook .content .container-2 .right{
     width: 400px;

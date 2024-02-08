@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { userStoryBook } from '../../hooks/fetch.hooks'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
+import parser from 'html-react-parser'
 
 function StoryBook() {
     const loc = useLocation()
@@ -102,7 +103,7 @@ function StoryBook() {
                                     <div className="titleCard">{item.chapterNumber}</div>
                                     <div className="storyCard">
                                         <div className="chapterTitle">{item.chapterTitle}</div>
-                                        <div className="chapterStory">{item.chapterContent}</div>
+                                        <div className="chapterStory">{parser(item.chapterContent)}</div>
                                     </div>
                                 </div>
                                 <div className="right">
@@ -115,7 +116,7 @@ function StoryBook() {
                                     <div className="titleCard">{item.chapterNumber}</div>
                                     <div className='storyCard'>
                                         <div className="chapterTitle">{item.chapterTitle}</div>
-                                        <div className='chapterStory'>{item.chapterContent}</div>
+                                        <div className='chapterStory'>{parser(item.chapterContent)}</div>
                                     </div>
                                 </div>
                                 <div className="right">

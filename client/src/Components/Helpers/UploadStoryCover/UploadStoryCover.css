@@ -1,11 +1,117 @@
-.UploadStoryCover{
+.uploadStoryCover{
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.UploadStoryCover p{
+.uploadStoryCover .title{
     font-size: 18px;
     color: var(--text-color-2);
+}
+
+.uploadStoryCover .imageUploader{
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--text-color-3);
+    padding: 30px;
+    height: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.uploadStoryCover .imageUploader .inputCard{
+    width: 100%;
+    height: 100%;
+}
+
+.uploadStoryCover .imageUploader .imgInput{
+    width: 100%;
+    height: 100%;
+}
+
+.uploadStoryCover .imageUploader .info{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+}
+
+.uploadStoryCover .imageUploader .t-1{
+    font-size: 14px;
+    line-height: 18.9px;
+    color: var(--text-color-2);
+}
+
+.uploadStoryCover .imageUploader .t-2{
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-color-2);
+    line-height: 16.2px;
+}
+
+.uploadStoryCover .content{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.uploadStoryCover .content .fileName{
+    height: 19px;
+    line-height: 18.9px;
+    color: var(--text-color-2);
+    font-size: 14px;
+}
+
+.uploadStoryCover .content .uploadingStats{
+    font-size: 12;
+    font-weight: 400;
+    color: var(--text-color-2);
+    height: 16px;
+}
+
+.uploadStoryCover .content .uploadingStats .textGreen{
+    color: var(--border-1);
+}
+
+.uploadStoryCover .content .uploadingStats .textGray{
+    color: var(--text-color-3);
+}
+
+.uploadStoryCover .content .uploadingStats .textRed{
+    color: var(--bg-5);
+}
+
+.uploadStoryCover .content .statusbar{
+    width: 100%;
+    background: var(--text-color-3);
+    height: 7px;
+    border-radius: 22px;
+}
+
+.uploadStoryCover .btn{
+    width: 100%;
+}
+
+.uploadStoryCover .btn .button{
+    width: 100%;
+    border-radius: 22px;
+    background: var(--bg-5);
+    color: var(--text-color-2);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 56px;
+    padding: var(--padding-2);
+    line-height: 24;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 500;
 }

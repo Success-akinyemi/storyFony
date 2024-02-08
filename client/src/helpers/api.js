@@ -154,12 +154,31 @@ export async function createStory({title, desc, motive, genreValue, ending, mimi
     }
 }
 
-export async function handlePrivateStory({id}){
+export async function handlePrivateStory({id, userId}){
     try {
-        const res = await axios.post(`/api/user/story/handlePrivateStory/${id}`, { withCredentials: true })
-        console.log('HANDLE PRIVATE STORY', res)
+        const res = await axios.post(`/api/user/story/handlePrivateStory`, {id, userId}, { withCredentials: true })
         if(res?.data.success){
-            toast.success('Story Updated')
+            toast.success(res?.data.data ? res?.data.data : 'Story Updated')
+            return res
+        }
+    } catch (error) {
+        console.log('ERROR HANDLING USER PRIVATE STORY', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function handlePublishedToCommunity({id, userId}){
+    try {
+        const res = await axios.post(`/api/user/story/handlePublishedToCommunity`, {id, userId}, { withCredentials: true })
+        if(res?.data.success){
+            toast.success(res?.data.data ? res?.data.data : 'Story Updated')
             return res
         }
     } catch (error) {
@@ -236,6 +255,173 @@ export async function createNewStory({ storyId, userId }){
         console.log('ERROR SAVING USER STORY DESC', error)
         if (error.response && error.response.data) {
             const errorMsg = error.response.data.data || 'Failed to upload Story';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function rewriteChapter({ text, userId, storyId, chapterId }){
+    try {
+        const res =  await axios.post('/api/user/story/rewriteChapter', {text, userId, storyId, chapterId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success('Chapter Updated')
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to upload Story';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function generateChapterImage({ text, userId, storyId, chapterId }){
+    try {
+        const res =  await axios.post('/api/user/story/generateChapterImage', {text, userId, storyId, chapterId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success('Image Generated')
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to upload Story';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function updateStoryChapterContent({userId, storyId, chapterId, currentChapterContent}){
+    try {
+        const res = await axios.post('/api/user/story/updateStoryChapterContent', {userId, storyId, chapterId, currentChapterContent}, { withCredentials: true})
+        if(res?.data.success){
+            toast.success('Changes saved')
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to save chapter';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function generateCoverStoryImage({desc, storyId, userId}){
+    try {
+        const res = await axios.post('/api/user/story/generateCoverStoryImage', {desc, storyId, userId}, { withCredentials: true})
+        if(res?.data.success){
+            toast.success('Cover Image Generated')
+            window.location.reload()
+        } 
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to save chapter';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function uploadCoverImg(formData){
+    try {
+        const res = await axios.post('/api/user/story/uploadCoverImg', formData, {withCredentials: true})
+        if(res?.data.success){
+            toast.success('Cover Image Saved')
+            window.location.reload()
+        } 
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to save cover image';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function addNewChapters({storyId, userId, newChapter, chapterImg}){
+    try {
+        const res = await axios.post('/api/user/story/addNewChapters', {storyId, userId, newChapter, chapterImg}, {withCredentials: true})
+        if(res.data.success){
+            toast.success('Chapters added')
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to save chapter';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function likeStory({userId, storyId, plan}){
+    try {
+        const res = await axios.post('/api/user/story/likeStory', {userId, storyId, plan}, {withCredentials: true})
+        if(res.status.success){
+            toast.success('Liked')
+            return true;
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to save chapter';
             console.log('MSG', errorMsg)
             toast.error(errorMsg)
             const errorStatus = error.response.status;

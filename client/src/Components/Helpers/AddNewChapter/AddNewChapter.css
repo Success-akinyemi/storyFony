@@ -1,0 +1,88 @@
+.addNewChapter{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.addNewChapter .newChapterForm{
+    display: flex;
+    width: 100%;
+    gap: 12px;
+    flex-direction: column;
+}
+
+.addNewChapter .newChapterForm .title{
+    font-size: 18px;
+    color: var(--text-color-2);
+}
+
+.addNewChapter .newChapterForm .inputs{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.addNewChapter .newChapterForm label{
+    font-size: 16px;
+    color: var(--text-color-2);
+}
+
+.addNewChapter .newChapterForm input{
+    width: 100%;
+    border: 1px solid var(--text-color-3);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--text-color-2);
+    outline: none;
+    background: transparent;
+}
+
+.addNewChapter .newChapterForm small{
+    font-size: 14px;
+    color: var(--text-color-3);
+}
+
+.addNewChapter .newChapterForm small .ink{
+    color: var(--bg-5);
+}
+
+.addNewChapter .newChapterForm .options{
+    display: flex;
+    gap: 15px;
+}
+
+.addNewChapter .newChapterForm .options .option{
+    padding: 10px 25px;
+    background: var(--main-bg);
+    border-radius: 22px;
+    cursor: pointer;
+    color: var(--text-color-2);
+}
+
+.addNewChapter .newChapterForm .options .option.active{
+    background: var(--bg-5);
+}
+
+.addNewChapter .newChapterForm .btn{
+    width: 100%;
+    margin-top: 20px;
+}
+
+.addNewChapter .newChapterForm .btn .button{
+    width: 100%;
+    height: 56px;
+    background: var(--bg-5);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 22px;
+    border: none;
+    outline: none;
+    padding: var(--padding-2);
+}

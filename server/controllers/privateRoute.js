@@ -21,13 +21,14 @@ const firebaseConfig = {
  const app = initializeApp(firebaseConfig);
  const storage = getStorage(app)
 
+
 const createFirebaseStorageUrl = async (imageData, imageName) => {
   try {
     const storageRef = ref(storage, imageName);
     const uniqueName = `${imageName}-${uuidv4()}.jpg`
     const imageBlob = await fetch(`data:image/jpeg;base64,${imageData}`).then((response) => response.blob());
 
-    await uploadBytes(storageRef, imageBlob)
+    await uploadBytes(storageRef, imageBlob, { name: uniqueName })
     const url = await getDownloadURL(storageRef);
     console.log('URL FOM', url)
 
@@ -44,7 +45,7 @@ export async function createStory(req, res){
     
     try {
       console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
-      const inkNeeded = numberOfSeries * 40
+      const inkNeeded = numberOfSeries * process.env.FONY_INK_COST_PER_CHAPTER
       if(!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending ){
         return res.status(400).json({ success: false, data: 'Please fill all neccessary fields'})
       }
@@ -64,7 +65,7 @@ export async function createStory(req, res){
           temperature: 0.9,
           max_tokens: 950
       })
-      //console.log(response)
+      console.log(response)
       console.log('STORY>>', response.choices[0].text)
       const genertedStory = response.choices[0].text
 
@@ -76,7 +77,7 @@ export async function createStory(req, res){
       const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
       //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
       const storyMatches = [...genertedStory.matchAll(chapterRegex)];
-  
+      
       const storyArray = storyMatches.map((match, index) => ({
         chapterTitle: match[2].trim(),
         chapterContent: match[3].trim(),
@@ -108,7 +109,8 @@ export async function createStory(req, res){
 
       if (imageRes.data.length > 0) {
         console.log('base_64 of image', imageRes.data[0].b64_json)
-        storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, 'story-img')
+        const uniqueName = `image-${uuidv4()}.jpg`
+        storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, `${uniqueName}`)
         console.log('storyImage>>',storyImage)
       }
 
@@ -136,13 +138,30 @@ export async function createStory(req, res){
       let coverImage = '';
       if (coverImageRes.data.length > 0) {
         console.log('base_64 of cover image', coverImageRes.data[0].b64_json)
-        coverImage = await createFirebaseStorageUrl(coverImageRes.data[0].b64_json, 'cover-img');
+        const uniqueName = `image-${uuidv4()}.jpg`
+        coverImage = await createFirebaseStorageUrl(coverImageRes.data[0].b64_json, `${uniqueName}`);
         console.log('coverImage>>', coverImage)
       }
 
+          // Create an array to store chapter images
+      const chapterImages = [];
+
+      // Iterate through each chapter in storyArray
+      const updatedStoryArray = storyArray.map((chapter) => {
+        // Set the chapterImage for each chapter to storyImage
+        const chapterImage = storyImage;
+        chapterImages.push(chapterImage);
+
+        // Return the chapter with updated chapterImage
+        return {
+          ...chapter,
+          chapterImage: chapterImage,
+        };
+      });
+
 
       const newStory = new UserStory({
-          story: storyArray,
+          story: updatedStoryArray,
           email: userEmail,
           author: `${user.name}`,
           motive: motive,
@@ -246,19 +265,63 @@ export async function getUserStoryEdit(req, res){
 
 //handle both making story both  private and public
 export async function handlePrivateStory(req, res){
-  const { id } = req.params
+  const { id, userId } = req.body
+  console.log('BD', id)
   try {
-    const story = await UserStory.findById({ id })
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+    const story = await UserStory.findById({ _id: id })
     if(!story){
       return res.status(404).json({ success: false, data: 'Story not Found'})
     }
-    story.privateStory = false
-    await story.save()
 
-    res.status(200).json({ success: true, data: 'Story Updated'})
+    if(story.privateStory === false){
+      story.privateStory = true
+      await story.save()
+      return res.status(200).json({ success: true, data: 'Story Made Private'})
+    }
+
+    if(story.privateStory === true){
+      story.privateStory = false
+      await story.save()
+      return res.status(200).json({ success: true, data: 'Story Made Public'})
+    }
+
   } catch (error) {
     console.log('ERROR HANDLING PRIVATE STORY', error)
-    res.status(500).json({ success: false, data: 'failed to get stories'})
+    res.status(500).json({ success: false, data: 'failed to update story'})
+  }
+}
+
+//handle both making story availble to community or not
+export async function handlePublishedToCommunity(req, res){
+  const { id, userId } = req.body
+  console.log('BD', id)
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+    const story = await UserStory.findById({ _id: id })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    if(story.PublishedToCommunity === false){
+      story.PublishedToCommunity = true
+      await story.save()
+      return res.status(200).json({ success: true, data: 'Story Published To Community'})
+    }
+
+    if(story.PublishedToCommunity === true){
+      story.PublishedToCommunity = false
+      await story.save()
+      return res.status(200).json({ success: true, data: 'Story Not Published To Community'})
+    }
+
+  } catch (error) {
+    console.log('ERROR HANDLING PRIVATE STORY', error)
+    res.status(500).json({ success: false, data: 'failed to update story'})
   }
 }
 
@@ -370,5 +433,335 @@ export async function recreateStory (req, res){
   } catch (error) {
     console.log('ERROR RECREATING STORY', error)
     res.status(500).json({ success: false, data: 'Failed to recreate story'})
+  }
+}
+
+//Rewrite a chapter for a existing story for a user
+export async function rewriteChapter(req, res){
+  const {text, userId, storyId, chapterId} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    } 
+
+    const chapterIndex  = story.story.findIndex((chapter) => chapter ._id.toString() === chapterId);
+    if (chapterIndex  !== -1) {
+      const chapter = story.story[chapterIndex];
+      console.log('OLD CHAPTER>>', chapter.chapterContent);
+
+      const response = await openai.completions.create({
+        model: 'gpt-3.5-turbo-instruct',
+        prompt: `Rewrite this Chapter text in a more better way ${chapter.chapterContent}. it is a part of a story so be careful when rewriting it make the new text better at the same maintain the genre styling and writing style of the former so as to maintain the flow with other chapters. the generated text should be lenghty enough`,
+        temperature: 0.9,
+        max_tokens: 950
+      })
+
+      const newGeneratedStory = response.choices[0].text
+      console.log('NEW CHAPTER CONTENT', newGeneratedStory)
+      
+      // Update the chapter content
+      chapter.chapterContent = newGeneratedStory;
+      await story.save()
+
+      res.status(201).json({success: true, data:story })
+    
+    } else {
+      console.log('Chapter not found');
+      return res.status(404).json({success: false, data: 'This chapter does not exist'})
+    }
+
+
+  } catch (error) {
+    console.log('ERROR REWRITING CHAPTER', error)
+    res.status(500).json({success: false, data: 'Failed to rewrite chapter'})
+  }
+}
+
+//generate chapter image
+export async function generateChapterImage(req, res){
+  const {text, userId, storyId, chapterId} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    } 
+
+    const chapterIndex  = story.story.findIndex((chapter) => chapter._id.toString() === chapterId);
+    
+    if (chapterIndex  !== -1) {
+      const chapter = story.story[chapterIndex];
+      //console.log("CHAPTER", chapter)
+      //FOR DALL_E_3
+        /**
+         * 
+        const imageRes = await openai.images.generate({
+          model: "dall-e-3",
+          prompt: `based on this title: ${chapter.chapterContent}, generate an image. the image should tell the story given to you`,
+          n: 1,
+          size: "1792x1024",
+          response_format: 'b64_json',
+          style: 'vivid'
+        })
+         */
+
+        //FOR DALL_E-2
+        const imageRes = await openai.images.generate({
+          model: "dall-e-2",
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the chapter title: ${chapter.chapterTitle}`,
+          n: 1,
+          size: "1024x1024",
+          response_format: 'b64_json',
+        })
+        let storyImage = '';
+  
+        if (imageRes.data.length > 0) {
+          //console.log('base_64 of image', imageRes.data[0].b64_json)
+          const uniqueName = `image-${uuidv4()}.jpg`
+          storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, `${uniqueName}`)
+          console.log('storyImage>>',storyImage)
+
+          chapter.chapterImage = storyImage
+          await story.save()
+          res.status(201).json({success: true, data:story })
+        }
+
+        
+    } else {
+      console.log('Chapter not found');
+      return res.status(404).json({success: false, data: 'This chapter does not exist'})
+    }
+  } catch (error) {
+    console.log('ERROR CREATING CHAPTER IMAGE', error)
+    res.status(500).json({ success: false, data: 'Failed to create image for chapter'})
+  }
+}
+
+//save edited story chapter content
+export async function updateStoryChapterContent(req, res){
+  const {userId, storyId, chapterId, currentChapterContent} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    } 
+
+    const chapterIndex  = story.story.findIndex((chapter) => chapter._id.toString() === chapterId);
+    
+    if (chapterIndex  !== -1) {
+      const chapter = story.story[chapterIndex];
+      //console.log('Chapter', chapter)
+      //console.log('TEXT>>', currentChapterContent)
+
+      const editedContent = JSON.stringify(currentChapterContent)
+      chapter.chapterContent = editedContent
+      await story.save()
+
+      res.status(200).json({ success: true, data: 'story created' })
+    } else {
+      console.log('Chapter not found');
+      return res.status(404).json({success: false, data: 'This chapter does not exist'})
+    }
+
+  } catch (error) {
+    console.log('FAILED TO UPDATE STORY CHAPTER CONTENT', error)
+    res.status(500).json({ success: false, data: 'Failed to save story chapter'})
+  }
+}
+
+export async function generateCoverStoryImage(req, res){
+  const { desc, storyId, userId } = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    }
+
+    if(story){
+      //FOR DALL_E_3
+        /**
+         * 
+        const imageRes = await openai.images.generate({
+          model: "dall-e-3",
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the story`,
+          n: 1,
+          size: "1792x1024",
+          response_format: 'b64_json',
+          style: 'vivid'
+        })
+         */
+
+        //FOR DALL_E-2
+        const imageRes = await openai.images.generate({
+          model: "dall-e-2",
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the story`,
+          n: 1,
+          size: "1024x1024",
+          response_format: 'b64_json',
+        })
+        let storyImage = '';
+  
+        if (imageRes.data.length > 0) {
+          //console.log('base_64 of image', imageRes.data[0].b64_json)
+          const uniqueName = `image-${uuidv4()}.jpg`
+          storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, `${uniqueName}`)
+          console.log('storyImage>>',storyImage)
+
+          story.coverImage = storyImage
+          await story.save()
+
+          console.log('INK BEFORE,',user.totalCredit)
+          user.totalCredit -= 5
+          user.totalCreditUsed += 5
+          await user.save()
+          console.log('INK AFTER,',user.totalCredit)
+          res.status(201).json({success: true, data:story })
+        }
+    }
+    
+  } catch (error) {
+    console.log('ERROR GENERATING NEW COVER IMAGE FOR STORY', error)
+    res.status(500).json('Unable to generate cover image for story')
+  }
+}
+
+export async function uploadCoverImg(req, res){
+  const { coverImg, userId, storyId } = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    }
+
+    if(story){
+      story.coverImage = coverImg
+      await story.save()
+    }
+    
+    res.status(201).json({ success: true, data: story })
+  } catch (error) {
+    console.log('FAILED TO SAVE STORY IMAGE.', error)
+    res.status(500).json({ success: false, data:'Failed to save cover image.'})
+  }
+}
+
+export async function addNewChapters(req, res){
+  const {storyId, userId, newChapter, chapterImg} = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only edit your story'})
+    }
+
+    const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    }
+
+    const inkNeeded = newChapter * process.env.FONY_INK_COST_PER_CHAPTER
+
+    if(inkNeeded > user.totalCredit){
+      return res.status(401).json({ success: false, data: 'Insufficient Ink credit'})
+    }
+
+    const lastChapterStory = story.story[story.story.length - 1]
+
+    if(story){
+      const response = await openai.completions.create({
+        model: 'gpt-3.5-turbo-instruct',
+        prompt: `Based on this story description ${story.desc}. the last chapter of the story is this: ${lastChapterStory.chapterContent} and it is chapter ${story.story.length}. generate ${newChapter} more chapters to be added to the story it will continue from where the last chapter stops. the new generated chapters must blend with the existng story. also give each chapter a befitting title`,
+        temperature: 0.9,
+        max_tokens: 950
+    })
+    const genertedStory = response.choices[0].text
+    console.log('GENSTORY', genertedStory)
+    //get each chapters from the generated story
+    const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
+    //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
+    const storyMatches = [...genertedStory.matchAll(chapterRegex)];
+
+    const startingChapterNumber = parseInt(storyMatches[0][1], 10);
+
+    const storyArray = storyMatches.map((match, index) => {
+      const newChapterNumber = startingChapterNumber + index;
+      
+      return {
+        chapterTitle: match[2].trim(),
+        chapterContent: match[3].trim(),
+        chapterNumber: `Chapter ${newChapterNumber}`,
+        chapterImg: story.storyImage
+      };
+    });
+
+    story.story.push(...storyArray)
+    user.totalCredit -= inkNeeded;
+    await story.save()
+    await user.save()
+
+    
+    res.status(201).json({ success: true, data: story })
+  }
+  } catch (error) {
+    console.log('ERROR CREATING NEW CHAPTERS', error)
+    res.status(500).json({success: false, data:'Failed to create story'})
+  }
+}
+
+export async function likeStory(req, res){
+  const { userId, storyId, plan } = req.body
+  try {
+    const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story does not exist'})
+    }
+    if(!user){
+      return res.status(404).json({ success: false, data: 'Invalid user'})
+    }
+
+    if(plan === 'add'){
+      if(!story.likes.includes(user._id)){
+        story.likes.push(user._id)
+        await story.save()
+      }
+
+      return res.status(200).json({ success: true, data: story})
+    }
+
+    if(plan === 'remove'){
+      const index = story.likes.indexOf(user._id)
+      if(index !== -1){
+        story.likes.splice(index, 1)
+        await story.save()
+      }
+
+      return res.status(200).json({ success: true, data: story })
+    }
+
+  } catch (error) {
+    console.log('FAILED TO LIKE STORY', error)
+    res.status(500).json('unable to like story.')
   }
 }

@@ -58,13 +58,17 @@ export const StorySchema = new mongoose.Schema({
         type: String
     },
     likes: {
-        type: Number,
-        default: 0
-    },
+        type: [mongoose.Schema.Types.ObjectId], 
+        default: [], 
+      },
     privateStory: {
         type: Boolean,
         default: true
-    }
+    },
+    PublishedToCommunity: {
+        type: Boolean,
+        default: false
+    },
 },
 { timestamps: true}
 )
