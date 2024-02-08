@@ -19,6 +19,7 @@ import { formatDistanceToNow } from 'date-fns';
 import UploadStoryCover from '../../Components/Helpers/UploadStoryCover/UploadStoryCover';
 import AddNewChapter from '../../Components/Helpers/AddNewChapter/AddNewChapter';
 import { handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
+import toast from 'react-hot-toast';
 
 function StoryEditor() {
   const loc = useLocation()
@@ -137,6 +138,10 @@ function StoryEditor() {
   };
 
   const handleTogglePrivateStory = async (id) => {
+    if(isLoading){
+      toast.error('Please wait')
+      return;
+    }
     try {
         setIsLoading(true)
         const userId = user?._id
@@ -149,6 +154,10 @@ function StoryEditor() {
   }
 
   const handleToggleToCommunity = async (id) => {
+    if(isLoadingCommunity){
+      toast.error('Please Wait')
+      return;
+    }
     try {
         setIsLoadingCommunity(true)
         const userId = user?._id

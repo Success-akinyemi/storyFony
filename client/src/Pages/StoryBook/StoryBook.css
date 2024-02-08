@@ -368,6 +368,10 @@
     justify-content: center;
 }
 
+.storyBook .content footer .likeCard .likeBox.red{
+    border: 1px solid var(--red);
+}
+
 .storyBook .content footer .likeCard .likeBox .icon{
     width: 27.7px;
     height: 27.7px;
@@ -379,4 +383,5 @@
     color: var(--text-color-2);
     line-height: 18.9px;
     color: var(--text-color-1);
+    text-align: center;
 }

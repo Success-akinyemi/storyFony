@@ -53,7 +53,9 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
         {
             !miniNav ? (
                 <div className="logo">
-                    <Logo />
+                    <Link className='link' to='/dashboard'>
+                        <Logo />
+                    </Link>
                 </div>
 
             ) : (

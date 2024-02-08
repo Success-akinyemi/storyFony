@@ -416,12 +416,13 @@ export async function likeStory({userId, storyId, plan}){
         const res = await axios.post('/api/user/story/likeStory', {userId, storyId, plan}, {withCredentials: true})
         if(res.status.success){
             toast.success('Liked')
-            return true;
+            window.location.reload()
+            return res;
         }
     } catch (error) {
         console.log('ERROR RECREATING CHAPTER STORY ', error)
         if (error.response && error.response.data) {
-            const errorMsg = error.response.data.data || 'Failed to save chapter';
+            const errorMsg = error.response.data.data || 'Failed to like chapter';
             console.log('MSG', errorMsg)
             toast.error(errorMsg)
             const errorStatus = error.response.status;

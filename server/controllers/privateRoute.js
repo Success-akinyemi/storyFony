@@ -56,8 +56,8 @@ export async function createStory(req, res){
         return res.status(404).json({ success: false, data: 'Invalid User'})
       }
 
-      if(inkNeeded > user.totalCredit){
-        return res.status(401).json({ success: false, data: 'Insufficient Ink credit'})
+      if(inkNeeded > user.totalCreditBalance){
+        return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
       }
       const response = await openai.completions.create({
           model: 'gpt-3.5-turbo-instruct',
@@ -178,14 +178,15 @@ export async function createStory(req, res){
       })
   
       await newStory.save()
-      console.log('STORY SAVED>>',newStory)
+      //console.log('STORY SAVED>>',newStory)
 
       //calculate user total ink need
       user.totalCreditUsed += inkNeeded
+      user.totalCreditBalance -= inkNeeded
       await user.save()
-      console.log('USER INK DEDUCTED>>', user.totalCreditUsed)
+      //console.log('USER INK DEDUCTED>>', user.totalCreditUsed)
   
-      res.status(201).json({ success: true, data: genertedStory})
+      res.status(201).json({ success: true, data: genertedStory, user: {success: true, data: user}})
   }  catch (error) {
         console.log('ERROR CREATING STORY', error)
         res.status(500).json({ success: false, data: 'Failed to Create Story'})
@@ -195,7 +196,7 @@ export async function createStory(req, res){
 export async function getUserStories(req, res){
   const { id } = req.params
   console.log(id)
-  console.log('working userStories')
+  console.log('working userStories', id)
   try {
     const user = await UserModel.findOne({ _id: id })
     if(!user){
@@ -594,6 +595,10 @@ export async function generateCoverStoryImage(req, res){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     }
 
+    if(user.totalCreditBalance < process.env.FONY_INK_COST_PER_IMAGE){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
+    }
+
     if(story){
       //FOR DALL_E_3
         /**
@@ -627,11 +632,11 @@ export async function generateCoverStoryImage(req, res){
           story.coverImage = storyImage
           await story.save()
 
-          console.log('INK BEFORE,',user.totalCredit)
-          user.totalCredit -= 5
-          user.totalCreditUsed += 5
+          //console.log('INK BEFORE,',user.totalCredit)
+          user.totalCreditUsed += process.env.FONY_INK_COST_PER_IMAGE
+          user.totalCreditBalance -= process.env.FONY_INK_COST_PER_IMAGE
           await user.save()
-          console.log('INK AFTER,',user.totalCredit)
+          //console.log('INK AFTER,',user.totalCredit)
           res.status(201).json({success: true, data:story })
         }
     }
@@ -682,8 +687,8 @@ export async function addNewChapters(req, res){
 
     const inkNeeded = newChapter * process.env.FONY_INK_COST_PER_CHAPTER
 
-    if(inkNeeded > user.totalCredit){
-      return res.status(401).json({ success: false, data: 'Insufficient Ink credit'})
+    if(inkNeeded > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
     const lastChapterStory = story.story[story.story.length - 1]
@@ -716,7 +721,8 @@ export async function addNewChapters(req, res){
     });
 
     story.story.push(...storyArray)
-    user.totalCredit -= inkNeeded;
+    user.totalCreditEverUsed += inkNeeded;
+    user.totalCreditBalance -= inkNeeded;
     await story.save()
     await user.save()
 
@@ -732,7 +738,8 @@ export async function addNewChapters(req, res){
 export async function likeStory(req, res){
   const { userId, storyId, plan } = req.body
   try {
-    const story = await UserStory.findById({ _id: storyId })
+    const story = await UserStory.findById(storyId)
+    console.log('Story', story)
     const user = await UserModel.findById({ _id: userId })
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})

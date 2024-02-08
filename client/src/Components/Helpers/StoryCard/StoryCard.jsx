@@ -6,6 +6,7 @@ import BorderHeartImg from '../../../assets/borderHeart.png'
 import { useState } from 'react'
 import { handlePrivateStory, likeStory } from '../../../helpers/api'
 import { useSelector } from 'react-redux'
+import { Toaster } from 'react-hot-toast'
 
 
 function StoryCard({ data }) {
@@ -14,7 +15,7 @@ function StoryCard({ data }) {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ uploadingLike, setUplaodingLike ] = useState(false)
 
-    const isUserLiked = data?.likes.includes(user._id)
+    const isUserLiked = data?.likes?.includes(user._id)
 
 
     const handleTogglePrivateStory = async (id) => {
@@ -44,6 +45,7 @@ function StoryCard({ data }) {
 
   return (
     <div className='storyCard'>
+        <Toaster position='top-center'></Toaster>
         <img src={data?.coverImage ? data?.coverImage : data?.storyImage} alt='background' className='background' />
 
         <span className="tag">{data?.genre}</span>
@@ -73,8 +75,8 @@ function StoryCard({ data }) {
                             <img src={BorderHeartImg} onClick={() => handleLike('add')}  className='heart' alt='heart' />
                         )
                     }
-                    <p>{data?.likes.length}</p>
-                    {console.log('first',data?.likes.length)}
+                    <p>{data?.likes?.length}</p>
+                    {console.log('first',data?.likes?.length)}
 
                     <div className="moreImg">
 

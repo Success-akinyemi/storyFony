@@ -10,14 +10,16 @@ import { useFetch } from '../../hooks/fetch.hooks'
 import InsufficientInk from '../../Components/Helpers/InsufficientInk/InsufficientInk'
 import { createStory } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { signInSuccess } from '../../redux/user/userslice'
 
 function CreateStory() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const {currentUser} = useSelector(state => state.user)
     const user = currentUser?.data
     const { apiData } = useFetch()
@@ -128,9 +130,10 @@ function CreateStory() {
             const userEmail = user?.email
             //console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
             const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
-            //console.log('RES', res)
+            console.log('RES', res)
             if(res?.data.success){
                 setStory(res?.data.data)
+                dispatch(signInSuccess(res?.data.user))
                 navigate('/dashboard')
             }
         } catch (error) {

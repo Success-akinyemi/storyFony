@@ -7,9 +7,15 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { userStoryBook } from '../../hooks/fetch.hooks'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
 import parser from 'html-react-parser'
+import { useSelector } from 'react-redux';
+import HeartImg from '../../assets/heart.png'
+import BorderHeartImg from '../../assets/borderHeart.png'
+
 
 function StoryBook() {
     const loc = useLocation()
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
     const [ query, setQuery ] = useState({})
     const [storyData, setStoryData] = useState(null);
     const [ currentPage, setCurrentPage ] = useState(1)
@@ -47,6 +53,8 @@ function StoryBook() {
             month: 'short',
             day: '2-digit',
           });
+
+          const isUserLiked = likes?.includes(user._id)
 
   return (
     <div className='storyBook'>
@@ -169,8 +177,24 @@ function StoryBook() {
 
                 
                 <div className="likeCard">
-                    <div className="likeBox"><FavoriteBorderIcon className='icon' /></div>
-                    <p>{likes} Liked this story</p>
+                    <div className={`likeBox ${isUserLiked ? 'red' : ''}`}>
+                        {
+                            isUserLiked 
+                                ? 
+                                <img  src={HeartImg} alt='heart for user who have liked the image' className='icon' />
+                                :
+                                <img  src={BorderHeartImg} alt='heart for user yet to like story' className='icon' />
+                        }
+                    </div>
+                    <p>
+                        {isUserLiked ? 
+                            (
+                                `you and ${likes.length - 1} others Liked this story`
+                            ) : (
+                                `${likes.length} liked this story`
+                            )
+                        }
+                    </p>
                 </div>
             </footer>
         </div>

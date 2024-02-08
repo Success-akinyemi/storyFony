@@ -52,6 +52,10 @@ export const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    totalCreditBalance: {
+        type: Number,
+        default: 4000,
+    },
     totalCreditEverUsed: {
         type: Number,
         default: 0

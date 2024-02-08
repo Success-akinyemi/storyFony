@@ -57,10 +57,12 @@ export const StorySchema = new mongoose.Schema({
     coverImage: {
         type: String
     },
-    likes: {
-        type: [mongoose.Schema.Types.ObjectId], 
-        default: [], 
-      },
+    likes: [
+        { 
+            type: mongoose.Schema.Types.ObjectId, ref: 'User' ,
+            ref: 'storyGenertorUsers'
+        }
+    ],
     privateStory: {
         type: Boolean,
         default: true
