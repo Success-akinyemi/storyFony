@@ -5,10 +5,13 @@ import './Navbar.css'
 import { useEffect, useState } from 'react'
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { useSelector } from 'react-redux'
 
 function Navbar({ enableScrollEffect }) {
     const [isScroll, setIsScroll] = useState(false)
     const [menuOpen, setMenuOpen ] = useState(false)
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
 
         useEffect(() => {
             if(enableScrollEffect){
@@ -46,11 +49,21 @@ function Navbar({ enableScrollEffect }) {
             </div>
 
             <div className="cta">
-                <Link to='/login' className='link span-1'>Login</Link>
+                {
+                    user ? (
+                        <span className='span-2'>
+                            <Link to='/dashboard' className='link newAccountLink'>Dashboard</Link>
+                        </span>
+                    ) : (
+                        <>
+                            <Link to='/login' className='link span-1'>Login</Link>
 
-                <span className='span-2'>
-                    <Link to='/signup' className='link newAccountLink'>Create account</Link>
-                </span>
+                            <span className='span-2'>
+                                <Link to='/signup' className='link newAccountLink'>Create account</Link>
+                            </span>
+                        </>
+                    )
+                }
             </div>
 
         </div>

@@ -320,7 +320,6 @@
 }
 
 .createStory .conatiner .content3 .storyContent .inputGroup1 .text p,
-.createStory .conatiner .content3 .storyContent .inputGroup2 .text p,
 .createStory .conatiner .content4 .body .text p{
     width: 797px;
     height: 24px;
@@ -361,6 +360,38 @@
     width: 100%;
     height: 190px;
     gap: 12px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text{
+    display: flex;
+    justify-content: space-between;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text .pack{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text .pack p{
+    height: 24px;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--text-color-1);
+}
+
+.createStory .conatiner .content3 .storyContent .inputGroup2 .text .pack .AiDescbtn{
+    padding: 5px 15px;
+    border-radius: 22px;
+    font-weight: 700;
+    color: var(--text-color-2);
+    background: var(--bg-5);
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .createStory .conatiner .content3 .storyContent .inputGroup2 textarea{

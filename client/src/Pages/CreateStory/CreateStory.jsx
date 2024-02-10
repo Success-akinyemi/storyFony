@@ -2,13 +2,14 @@ import AuthUserNavbar from '../../Components/AuthUserNavbar/AuthUserNavbar'
 import './CreateStory.css'
 import LogoImg from '../../assets/icon.png'
 import EditPen from '../../assets/editpen.png'
+import PenImg from '../../assets/pen2.png'
 import { useEffect, useState } from 'react'
 import { authors, createStoryPlaceHolder, endingStyle, languages } from '../../data/general'
 import { genreData } from '../../data/genreData'
 import CheckImg from '../../assets/checkImg.png'
 import { useFetch } from '../../hooks/fetch.hooks'
 import InsufficientInk from '../../Components/Helpers/InsufficientInk/InsufficientInk'
-import { createStory } from '../../helpers/api'
+import { createStory, generateAiDesc } from '../../helpers/api'
 import Spinner from '../../Components/Helpers/Spinner/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -22,7 +23,7 @@ function CreateStory() {
     const dispatch = useDispatch()
     const {currentUser} = useSelector(state => state.user)
     const user = currentUser?.data
-    const { apiData } = useFetch()
+    //const { apiData } = useFetch()
     const [ card, setCard ] = useState(1)
     const [ numberOfWords, setNumberOfWords] = useState(0)
     const [ numberOfLetters, setNumberOfLetters] = useState(0)
@@ -47,12 +48,29 @@ function CreateStory() {
     const [ loadingState, setLoadingState ] = useState(false)
 
     const [ story, setStory ] = useState('')
+    const [ isGeneratingDesc, setGeneratingDesc] = useState(false)
     const { placeholder, reason } = createStoryPlaceHolder
 
 
     const onBackClick = () => {
         if(card !== 1){
             setCard(card -1)
+        }
+    }
+
+    const handleGenerateAiDesc = async () => {
+        const userId = user._id
+        try {
+            setGeneratingDesc(true)
+            const res = await generateAiDesc({userId, genreValue})
+            if(res?.data.success){
+                const trimmedDesc = res?.data.data.trim();
+                setDesc(trimmedDesc);
+            }
+        } catch (error) {
+            
+        } finally{
+            setGeneratingDesc(false)
         }
     }
 
@@ -313,7 +331,21 @@ function CreateStory() {
 
                                 <div className='inputGroup2'>
                                     <span className="text">
-                                        <p>Description your story</p>
+                                        <div className="pack">
+                                            <p>Description your story</p>
+                                            <button onClick={handleGenerateAiDesc} className='AiDescbtn'>
+                                                {
+                                                    isGeneratingDesc ? (
+                                                        'Generating...'
+                                                    ) : (
+                                                        <>
+                                                            <img src={PenImg} alt='pen' />
+                                                            Generate with AI
+                                                        </>
+                                                    )
+                                                }
+                                            </button>
+                                        </div>
                                         <small>{numberOfWords}/{maxWords}</small>
                                     </span>
                                     <textarea 
@@ -323,6 +355,7 @@ function CreateStory() {
                                         value={desc}
                                         onChange={handleWordInputChange}
                                         placeholder={placeholder}
+                                        disabled={isGeneratingDesc}
                                     >
                                         
                                     </textarea>

@@ -16,6 +16,8 @@
     display: flex;
     grid-area: 112px;
     height: 497px;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .footer .top .card .left{

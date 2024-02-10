@@ -435,3 +435,26 @@ export async function likeStory({userId, storyId, plan}){
           }
     }
 }
+
+export async function generateAiDesc({userId, genreValue}){
+    try {
+        const res = await axios.post('/api/user/story/generateAiDesc', {userId, genreValue}, {withCredentials: true})
+        if(res?.data.success){
+            return res
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to generate description';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}

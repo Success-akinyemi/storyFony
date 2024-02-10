@@ -78,10 +78,10 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
         </div>
         
         <div className={`right ${menuOpen ? 'show' : 'hide'}`}>
+            
             <div className="closeBtn" onClick={toggle}>
                 <CloseIcon className='closeIcon' />
             </div>
-
         {!miniNav ? 
             (
                 <div className="links">
@@ -90,10 +90,10 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
                     <Link className='link authNavLink'>My Subscription</Link>
                     <Link className='link authNavLink guide'>Guide <KeyboardArrowDownIcon className='icon' /> 
                     <div className="guideCard">
-                        <Link className='link'>Use case studies</Link>
+                        <Link className='link' to='/use-case'>Use case studies</Link>
                         <Link className='link' to='/public-shelf'>Public story shelf</Link>
-                        <Link className='link'>Learn centre</Link>
-                        <Link className='link'>Support</Link>
+                        <Link className='link' to='/term-of-use'>Learn centre</Link>
+                        <Link className='link' to='/support'>Support</Link>
                     </div>
                     </Link>
                 </div>

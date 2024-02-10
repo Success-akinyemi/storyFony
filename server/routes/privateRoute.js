@@ -17,10 +17,13 @@ privateRouter.route('/user/story/generateCoverStoryImage').post(verifyToken, con
 privateRouter.route('/user/story/uploadCoverImg').post(verifyToken, controller.uploadCoverImg) //save new story cover image upoaded by user
 privateRouter.route('/user/story/addNewChapters').post(verifyToken, controller.addNewChapters) //add new chapters to a story
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
+privateRouter.route('/user/story/generateAiDesc').post(verifyToken, controller.generateAiDesc) //generate a story decsription for a user using AI
+
 
 
 //GET ROUTES
 privateRouter.route('/user/stories/:id').get(verifyToken, controller.getUserStories) //get all stories of a user
+privateRouter.route('/user/likedStories/:id').get(verifyToken, controller.getLikedUserStories) //get all stories liked by a user
 privateRouter.route('/user/story/:id/:storyId').get(verifyToken, controller.getUserStory) //get particular story of a user
 privateRouter.route('/user/story/edit/:id/:storyId').get(verifyToken, controller.getUserStoryEdit) //get particular story of a user to edit
 

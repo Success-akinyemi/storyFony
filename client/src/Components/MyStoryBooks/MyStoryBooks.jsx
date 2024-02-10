@@ -8,7 +8,7 @@ import { useState } from 'react';
 import Spinner from '../Helpers/Spinner/Spinner';
 import toast from 'react-hot-toast';
 
-function MyStoryBooks() {
+function MyStoryBooks({setSelectedCard, setShareStoryId}) {
     const { apiUserStoryData, isLoadingStory, storyStatus, storyServerError } = userStoryBook();
     const dataa = apiUserStoryData?.data
     const navigate = useNavigate()
@@ -49,7 +49,7 @@ function MyStoryBooks() {
                         currentItems?.map((item, idx) => (
                             <div className="card card-2" key={idx}>
                                 <div className="overlay"></div>
-                                <StoryCard data={item} />
+                                <StoryCard data={item} setSelectedCard={setSelectedCard} setShareStoryId={setShareStoryId} />
                             </div>
                         ))
                     }
@@ -61,20 +61,28 @@ function MyStoryBooks() {
                     ) : ('')
                 }
                 <div className="btn">
-                    <button 
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className='btn1'
-                    >
-                        Back
-                    </button>
-                    <button 
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                        disabled={indexOfLastItem >= data?.length}
-                        className='btn2'
-                    >
-                        Next
-                    </button>
+                    {
+                        currentPage > 1 && (
+                            <button 
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className='btn1'
+                            >
+                                Back
+                            </button>
+                        )
+                    }
+                    {
+                        totalNumberOfPages > 1 && currentPage < totalNumberOfPages ? (
+                            <button 
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                                disabled={indexOfLastItem >= data?.length}
+                                className='btn2'
+                            >
+                                Next
+                            </button>
+                        ) : ('')
+                    }
                 </div>
             </div>
             </div>

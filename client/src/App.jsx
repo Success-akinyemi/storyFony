@@ -19,6 +19,8 @@ import StoryBook from './Pages/StoryBook/StoryBook'
 import PublicShelf from './Pages/PublicShelf/PublicShelf'
 import ProfilePage from './Pages/ProfilePage/ProfilePage'
 import StoryEditor from './Pages/StoryEditor/StoryEditor'
+import Support from './Pages/Support/Support'
+import TermOfUse from './Pages/TermOfUse/TermOfUse'
 
 function App() {
 
@@ -65,7 +67,14 @@ function App() {
           <Route element={<AuthorizeUser />}>
             <Route path='/profile-page' element={<ProfilePage />} />
           </Route>
-          <Route path='/public-shelf' element={<PublicShelf />} />
+          <Route element={<AuthorizeUser />}>
+            <Route path='/public-shelf' element={<PublicShelf />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/support' element={<Support />} />
+          </Route>
+          <Route path='/term-of-use' element={<TermOfUse />} />
+          
         </Routes>
       </BrowserRouter>
     </div>

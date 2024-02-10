@@ -61,29 +61,18 @@ export async function createStory(req, res){
       }
       const response = await openai.completions.create({
           model: 'gpt-3.5-turbo-instruct',
-          prompt: `Write a Story based on this title: ${title} and description; ${desc} in ${language} langauage the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writting style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lenghty in terms of number of words and be creative, spice up the story. Also from the entire story you generate give it a nice story give title`,
+          prompt: `Write a Story based on this title: ${title} and description; ${desc}. the story must be in ${language} langauage the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writting style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lenghty in terms of number of words and be creative, spice up the story. Also from the entire story you generate give it a nice story give title`,
           temperature: 0.9,
           max_tokens: 950
       })
       console.log(response)
       console.log('STORY>>', response.choices[0].text)
       const genertedStory = response.choices[0].text
-
       //get the title from generated story
       const titleMatch = genertedStory.match(/Title: (.+?)\n/);
       const extractedTitle = titleMatch ? titleMatch[1] : '';
-      
-      //get each chapters from the generated story
-      const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
-      //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
-      const storyMatches = [...genertedStory.matchAll(chapterRegex)];
-      
-      const storyArray = storyMatches.map((match, index) => ({
-        chapterTitle: match[2].trim(),
-        chapterContent: match[3].trim(),
-        chapterNumber: `Chapter ${index + 1}`,
-      }));
 
+      //GENERATE IMAGE
       //FOR DALL_E_3
       /**
        * 
@@ -143,42 +132,86 @@ export async function createStory(req, res){
         console.log('coverImage>>', coverImage)
       }
 
-          // Create an array to store chapter images
-      const chapterImages = [];
+      if(language === 'English'){
+        //get the title from generated story
+        const titleMatch = genertedStory.match(/Title: (.+?)\n/);
+        const extractedTitle = titleMatch ? titleMatch[1] : '';
+        
+        //get each chapters from the generated story
+        const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
+        //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
+        const storyMatches = [...genertedStory.matchAll(chapterRegex)];
+        
+        const storyArray = storyMatches.map((match, index) => ({
+          chapterTitle: match[2].trim(),
+          chapterContent: match[3].trim(),
+          chapterNumber: `Chapter ${index + 1}`,
+        }));
 
-      // Iterate through each chapter in storyArray
-      const updatedStoryArray = storyArray.map((chapter) => {
-        // Set the chapterImage for each chapter to storyImage
-        const chapterImage = storyImage;
-        chapterImages.push(chapterImage);
+        // Create an array to store chapter images
+        const chapterImages = [];
 
-        // Return the chapter with updated chapterImage
-        return {
-          ...chapter,
-          chapterImage: chapterImage,
-        };
-      });
+        // Iterate through each chapter in storyArray
+        const updatedStoryArray = storyArray.map((chapter) => {
+          // Set the chapterImage for each chapter to storyImage
+          const chapterImage = storyImage;
+          chapterImages.push(chapterImage);
+
+          // Return the chapter with updated chapterImage
+          return {
+            ...chapter,
+            chapterImage: chapterImage,
+          };
+        });
 
 
-      const newStory = new UserStory({
-          story: updatedStoryArray,
-          email: userEmail,
-          author: `${user.name}`,
-          motive: motive,
-          authorPenName: user.penName,
-          authorImg: user.profileImg,
-          genre: genreValue,
-          userTitle: title,
-          storyTitle: extractedTitle,
-          storyImage: storyImage,
-          coverImage: coverImage,
-          storyDesc: desc,
-          storyLangauage: language,
-          endingStyle: ending,
-      })
-  
-      await newStory.save()
-      //console.log('STORY SAVED>>',newStory)
+        const newStory = new UserStory({
+            story: updatedStoryArray,
+            email: userEmail,
+            author: `${user.name}`,
+            motive: motive,
+            authorPenName: user.penName,
+            authorImg: user.profileImg,
+            genre: genreValue,
+            userTitle: title,
+            storyTitle: extractedTitle,
+            storyImage: storyImage,
+            coverImage: coverImage,
+            storyDesc: desc,
+            storyLangauage: language.toLowerCase(),
+            endingStyle: ending,
+        })
+
+        await newStory.save()
+        //console.log('STORY SAVED>>',newStory)
+        return res.status(201).json({ success: true, data: genertedStory, user: {success: true, data: user}})
+    }
+
+    //to save any other language that can't be manipulated
+    const storyArray = {
+      chapterTitle: title,
+      chapterContent: genertedStory,
+      chapterNumber: `Chapter`,
+    };
+
+  const newStory = new UserStory({
+    story: storyArray,
+    email: userEmail,
+    author: `${user.name}`,
+    motive: motive,
+    authorPenName: user.penName,
+    authorImg: user.profileImg,
+    genre: genreValue,
+    userTitle: title,
+    storyTitle: title, //extractedTitle,
+    storyImage: storyImage,
+    coverImage: coverImage,
+    storyDesc: desc,
+    storyLangauage: language.toLowerCase(),
+    endingStyle: ending,
+  })
+
+await newStory.save()
 
       //calculate user total ink need
       user.totalCreditUsed += inkNeeded
@@ -211,6 +244,24 @@ export async function getUserStories(req, res){
   } catch (error) {
     console.log('ERROR GETTING ALL USER STORIES', error)
     res.status(500).json({ success: false, data: 'failed to get stories'})
+  }
+}
+
+export async function getLikedUserStories(req, res){
+  const { id } = req.params
+  try {
+    const user = await UserModel.findOne({ _id: id })
+    if(!user){
+      return res.status(404).json({ success: false, data: 'Invalid user'})
+    }
+
+    const likedStories = await UserStory.find({ likes: user._id })
+
+    console.log('LIKED STORIES', likedStories)
+    res.status(200).json({ success: true, data: likedStories });
+  } catch (error) {
+    console.log('COULD NOT GET USER LIKED STORIES')
+    res.status(500).json({ success: false, data: 'Could not get Liked stories'})
   }
 }
 
@@ -770,5 +821,40 @@ export async function likeStory(req, res){
   } catch (error) {
     console.log('FAILED TO LIKE STORY', error)
     res.status(500).json('unable to like story.')
+  }
+}
+
+export async function generateAiDesc(req, res){
+  const { userId, genreValue } = req.body
+  try {
+    const user = await UserModel.findById({ _id: userId })
+    if(!user){
+      return res.status(404).json({ success: false, data: 'Invalid user'})
+    }
+    if(req.user.id !== userId){
+      return res.status(404).json({ success: false, data: 'You can only work on your story'})
+    }
+
+    if(process.env.FONY_INK_COST_PER_DESCRIPTION > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
+    }
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `generate a captivating and intreting description for a story centered around ${genreValue}. the description must be complete, and also the decription must be a public safe one`,
+      temperature: 0.9,
+      max_tokens: 90
+    })
+    //console.log('first', response)
+    const genertedStory = response.choices[0].text
+
+    //debit user
+    user.totalCreditUsed += process.env.FONY_INK_COST_PER_DESCRIPTION
+    user.totalCreditBalance -= process.env.FONY_INK_COST_PER_DESCRIPTION
+
+    res.status(201).json({ success: true, data: genertedStory })
+  } catch (error) {
+    console.log('COULD NOT GENERATE AI DESCRIPTION', error)
+    res.status(500).json('Could not generate')
   }
 }

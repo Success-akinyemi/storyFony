@@ -9,12 +9,14 @@ import LikedStories from '../../Components/LikedStories/LikedStories';
 import UploadProfilePhoto from '../../Components/UploadProfilePhoto/UploadProfilePhoto';
 import AuthUserNavbar from '../../Components/AuthUserNavbar/AuthUserNavbar';
 import { useSelector } from 'react-redux';
+import ShareOnSocialMedia from '../../Components/Helpers/ShareOnSocialMedia/ShareOnSocialMedia';
 
 function UserDashboard() {
   const  {currentUser}  = useSelector(state => state.user)
   const user = currentUser?.data
   const [selectedCard, setSelectedCard] = useState(null)
   const [ select, setSelect ] = useState('myStoryBook')
+  const [shareStoryId, setShareStoryId] = useState('')
 
 
   const renderPopupComponent = () => {
@@ -23,26 +25,30 @@ function UserDashboard() {
         return (
             <UploadProfilePhoto />
         );
-      case 'funding':
+      case 'shareStoryToSocialMedia':
         return(
-          <div>Funding</div>
+          <ShareOnSocialMedia shareStoryId={shareStoryId} />
         );
     }
   }
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (event.target.classList.contains('popup-overlay')) {
-        setSelectedCard(null);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+    //Close popup when overlay is clicked
+    /**
+     useEffect(() => {
+       const handleClickOutside = (event) => {
+         if (event.target.classList.contains('popup-overlay')) {
+           setSelectedCard(null);
+         }
+       };
+   
+       document.addEventListener('click', handleClickOutside);
+   
+       return () => {
+         document.removeEventListener('click', handleClickOutside);
+       };
+     }, []);
+     * 
+     */
 
   const closePopup = () => {
     setSelectedCard(null);
@@ -54,10 +60,10 @@ function UserDashboard() {
     <div className='userDashboard'>
       {selectedCard && (
         <>
-          <div className='popup-overlay' onClick={closePopup}></div>
+          <div className='popup-overlay'></div>
           <div className={`popup active`}>
               <span className='popup-close' onClick={closePopup}>
-                Close
+                X
               </span>
             <div className='popup-content'>
                 {renderPopupComponent()}
@@ -96,7 +102,7 @@ function UserDashboard() {
         </div>
 
         { select === 'myStoryBook' && (
-          <MyStoryBooks />
+          <MyStoryBooks  setSelectedCard={setSelectedCard} setShareStoryId={setShareStoryId} />
         )}
 
         { select === 'myBookmarked' && (

@@ -33,7 +33,7 @@ function StoryBook() {
       }
     }, [isLoadingStory, apiUserStoryData]);
 
-    if (isLoadingStory || !storyData) return <Spinner />;
+    if (isLoadingStory || !storyData) return <div className='StoryBookloadingState'><Spinner /></div>;
     //const storyData = apiUserStoryData?.data
     console.log('storyData',storyData)
     const { storyTitle, authorPenName, privateStory, motive, coverImage, storyImage, story, likes, createdAt, authorImg, userTitle } = storyData
@@ -191,7 +191,7 @@ function StoryBook() {
                             (
                                 `you and ${likes.length - 1} others Liked this story`
                             ) : (
-                                `${likes.length} liked this story`
+                                `${likes?.length} liked this story`
                             )
                         }
                     </p>

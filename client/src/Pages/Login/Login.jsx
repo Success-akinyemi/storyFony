@@ -14,6 +14,7 @@ import OAuth from '../../Components/OAuth/OAuth'
 
 import Cookies from 'universal-cookie';
 import { apiUrl } from '../../Utils/api'
+import toast from 'react-hot-toast'
 const cookies = new Cookies();
 function Login() {
     const allCookies = cookies.getAll();
@@ -65,9 +66,13 @@ function Login() {
               const data =  await res?.json()
               console.log('DATA', data)
                 //console.log('LOGIN USER VERIFIED', data.data.verified)
-            if(data.data.verified === false){
+              if(data.success === false){
+                toast.error(data?.data)
+              }
+                if(data.data.verified === false){
                 navigate('/VerificationEmailSent', { state: {resMsg: data.data}})
-            } if(data.success === true && data.data.verified === true) {
+            } 
+            if(data.success === true && data.data.verified === true) {
                 localStorage.setItem('authToken', data.token)
                dispatch(signInSuccess(data))
                navigate('/dashboard')

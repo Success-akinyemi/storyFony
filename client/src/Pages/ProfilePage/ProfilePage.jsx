@@ -138,7 +138,7 @@ function ProfilePage() {
             </div>
             <div className="formInput">
               <label>Email</label>
-              <input onChange={handleChange} id="email" defaultValue={user?.email} type="text" placeholder="Email Address" />
+              <input disabled onChange={handleChange} id="email" defaultValue={user?.email} type="text" placeholder="Email Address" />
             </div>
             <div className="formInput">
               <label>PenName</label>
