@@ -60,12 +60,23 @@ function CreateStory() {
 
     const handleGenerateAiDesc = async () => {
         const userId = user._id
+        const availabeInk = user?.totalCreditBalance
+        const costOfSeries = import.meta.env.VITE_COST_PER_SERIES
+
+        const totalInkNeeded = numberOfSeries * costOfSeries
+
+        if(totalInkNeeded > availabeInk){
+            setErrorMessage('insufficienBalance')
+            setShowError(true)
+            return;
+        }
         try {
             setGeneratingDesc(true)
             const res = await generateAiDesc({userId, genreValue})
             if(res?.data.success){
                 const trimmedDesc = res?.data.data.trim();
                 setDesc(trimmedDesc);
+                dispatch(signInSuccess(res?.data.user))
             }
         } catch (error) {
             
@@ -133,8 +144,8 @@ function CreateStory() {
     }, [title, desc, motive, genreValue, ending, numberOfSeries, language])
     
     const handleCreateStory = async () => {
-        const availabeInk = user?.totalCredit
-        const costOfSeries = 40
+        const availabeInk = user?.totalCreditBalance
+        const costOfSeries = import.meta.env.VITE_COST_PER_SERIES
 
         const totalInkNeeded = numberOfSeries * costOfSeries
 

@@ -103,15 +103,15 @@ function StoryBook() {
         <div className="content">
             <p>Lets dive in!</p>
             {
-                currentItems.map((item) => (
+                currentItems?.map((item) => (
                     <div>
                         {item.chapterImage ? (
-                            <div className="container-1" key={item._id}>
+                            <div className="container-1" key={item?._id}>
                                 <div className="left">
-                                    <div className="titleCard">{item.chapterNumber}</div>
+                                    <div className="titleCard">{item?.chapterNumber}</div>
                                     <div className="storyCard">
-                                        <div className="chapterTitle">{item.chapterTitle}</div>
-                                        <div className="chapterStory">{parser(item.chapterContent)}</div>
+                                        <div className="chapterTitle">{item?.chapterTitle}</div>
+                                        <div className="chapterStory">{parser(item?.chapterContent)}</div>
                                     </div>
                                 </div>
                                 <div className="right">
@@ -119,12 +119,12 @@ function StoryBook() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="container-2" key={item._id}>
+                            <div className="container-2" key={item?._id}>
                                 <div className="left">
-                                    <div className="titleCard">{item.chapterNumber}</div>
+                                    <div className="titleCard">{item?.chapterNumber}</div>
                                     <div className='storyCard'>
-                                        <div className="chapterTitle">{item.chapterTitle}</div>
-                                        <div className='chapterStory'>{parser(item.chapterContent)}</div>
+                                        <div className="chapterTitle">{item?.chapterTitle}</div>
+                                        <div className='chapterStory'>{parser(item?.chapterContent)}</div>
                                     </div>
                                 </div>
                                 <div className="right">

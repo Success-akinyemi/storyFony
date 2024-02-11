@@ -31,7 +31,7 @@ export const languages = [
     { text: 'English' },
     { text: 'French' },
     { text: 'Spanish' },
-    { text: 'Chineese' },
+    { text: 'Chinese' },
     { text: 'Swahili' },
     { text: 'Arabic' },
 ]

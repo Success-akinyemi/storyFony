@@ -21,3 +21,72 @@
     background-size: cover;
     flex-direction: column;
 }
+
+.termOfUse .conatiner .content{
+    position: absolute;
+    top: 165px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 500px;
+    margin: auto;
+}
+
+.termOfUse .conatiner .content h1{
+    height: 46px;
+    font-size: 34px;
+    color: var(--text-color-2);
+    text-align: center;
+    font-weight: 400;
+}
+
+.termOfUse .conatiner .content p{
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--text-color-3);
+    text-align: center;
+}
+
+.termOfUse .conatiner .termCard{
+    position: absolute;
+    top: 400px;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    border-radius: 4px;
+    padding: 30px;
+    background: var(--bg-4);
+}
+
+.termOfUse .termCard h1{
+    height: 32px;
+    font-size: 24px;
+    color: var(--text-color-2);
+}
+
+.termOfUse .termCard .termContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-color-2);
+}
+
+.termOfUse .termCard .termContent h3{
+    font-weight: 400;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+.termOfUse .termCard .termContent .footNote{
+    margin-top: 12px;
+}
+
+.termOfUse .foot{
+    margin-top: 110rem;
+}

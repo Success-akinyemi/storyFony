@@ -39,13 +39,13 @@ const createFirebaseStorageUrl = async (imageData, imageName) => {
   }
 }
 
-
+/** 
 export async function createStory(req, res){
     const {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded} = req.body
     
     try {
       console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
-      const inkNeeded = numberOfSeries * process.env.FONY_INK_COST_PER_CHAPTER
+      const inkNeeded = numberOfSeries * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
       if(!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending ){
         return res.status(400).json({ success: false, data: 'Please fill all neccessary fields'})
       }
@@ -65,7 +65,7 @@ export async function createStory(req, res){
           temperature: 0.9,
           max_tokens: 950
       })
-      console.log(response)
+      console.log('RAW STORY', response)
       console.log('STORY>>', response.choices[0].text)
       const genertedStory = response.choices[0].text
       //get the title from generated story
@@ -74,17 +74,14 @@ export async function createStory(req, res){
 
       //GENERATE IMAGE
       //FOR DALL_E_3
-      /**
-       * 
-      const imageRes = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
-        n: 1,
-        size: "1792x1024",
-        response_format: 'b64_json',
-        style: 'vivid'
-      })
-       */
+      //const imageRes = await openai.images.generate({
+        //model: "dall-e-3",
+        //prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
+        //n: 1,
+        //size: "1792x1024",
+        //response_format: 'b64_json',
+        //style: 'vivid'
+      //})
 
       //FOR DALL_E-2
       const imageRes = await openai.images.generate({
@@ -104,17 +101,14 @@ export async function createStory(req, res){
       }
 
       //FOR DALL_E_3
-      /**
-       * 
-      const coverImageRes = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: `based on this title: ${extractedTitle} generate a cover image for it that can be used in the background`,
-        n: 1,
-        size: "1792x1024",
-        response_format: 'b64_json',
-        style: 'vivid'
-      })
-       */
+      //const coverImageRes = await openai.images.generate({
+        //model: "dall-e-3",
+        //prompt: `based on this title: ${extractedTitle} generate a cover image for it that can be used in the background`,
+        //n: 1,
+        //size: "1792x1024",
+        //response_format: 'b64_json',
+        //style: 'vivid'
+      //})
 
       //FOR DALL_E_2
       const coverImageRes = await openai.images.generate({
@@ -184,8 +178,71 @@ export async function createStory(req, res){
 
         await newStory.save()
         //console.log('STORY SAVED>>',newStory)
+        //calculate user total ink need
+        user.totalCreditUsed += inkNeeded
+        user.totalCreditBalance -= inkNeeded
+        await user.save()
         return res.status(201).json({ success: true, data: genertedStory, user: {success: true, data: user}})
-    }
+      }
+
+      if(language === 'French'){
+        //get the title from generated story
+        const titleMatch = genertedStory.match(/Titre: (.+?)\n/);
+        const extractedTitle = titleMatch ? titleMatch[1] : '';
+        
+        //get each chapters from the generated story
+        const chapterRegex = /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g;
+        //const chapterRegex = /Chapitre (\d+)([\s\S]*?)(?=(Chapitre \d+|$))/g;
+        const storyMatches = [...genertedStory.matchAll(chapterRegex)];
+        
+        const storyArray = storyMatches.map((match, index) => ({
+          chapterTitle: match[2].trim(),
+          chapterContent: match[3].trim(),
+          chapterNumber: `Chapitre ${index + 1}`,
+        }));
+
+        // Create an array to store chapter images
+        const chapterImages = [];
+
+        // Iterate through each chapter in storyArray
+        const updatedStoryArray = storyArray.map((chapter) => {
+          // Set the chapterImage for each chapter to storyImage
+          const chapterImage = storyImage;
+          chapterImages.push(chapterImage);
+
+          // Return the chapter with updated chapterImage
+          return {
+            ...chapter,
+            chapterImage: chapterImage,
+          };
+        });
+
+
+        const newStory = new UserStory({
+            story: updatedStoryArray,
+            email: userEmail,
+            author: `${user.name}`,
+            motive: motive,
+            authorPenName: user.penName,
+            authorImg: user.profileImg,
+            genre: genreValue,
+            userTitle: title,
+            storyTitle: extractedTitle,
+            storyImage: storyImage,
+            coverImage: coverImage,
+            storyDesc: desc,
+            storyLangauage: language.toLowerCase(),
+            endingStyle: ending,
+        })
+
+        await newStory.save()
+        //calculate user total ink need
+        user.totalCreditUsed += inkNeeded
+        user.totalCreditBalance -= inkNeeded
+        await user.save()
+        //console.log('STORY SAVED>>',newStory)
+        return res.status(201).json({ success: true, data: genertedStory, user: {success: true, data: user}})
+      }
 
     //to save any other language that can't be manipulated
     const storyArray = {
@@ -224,6 +281,146 @@ await newStory.save()
         console.log('ERROR CREATING STORY', error)
         res.status(500).json({ success: false, data: 'Failed to Create Story'})
     }
+}
+*/
+
+export async function createStory(req, res) {
+  const {
+    title,
+    desc,
+    motive,
+    genreValue,
+    ending,
+    mimicAuthor,
+    numberOfSeries,
+    language,
+    userEmail,
+    totalInkNeeded,
+  } = req.body;
+
+  let genertedStory;
+  let storyImage = '';
+  let coverImage = '';
+  const user = await UserModel.findOne({ email: userEmail });
+
+  const inkNeeded = numberOfSeries * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
+  try {
+    const commonLogic = async (language, titleMatchRegex, chapterRegex, heading) => {
+
+      if (!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending) {
+        return res.status(400).json({ success: false, data: 'Please fill all necessary fields' });
+      }
+
+      const user = await UserModel.findOne({ email: userEmail });
+
+      if (!user) {
+        return res.status(404).json({ success: false, data: 'Invalid User' });
+      }
+
+      if (inkNeeded > user.totalCreditBalance) {
+        return res.status(402).json({ success: false, data: 'Insufficient Ink credit' });
+      }
+
+      const response = await openai.completions.create({
+        model: 'gpt-3.5-turbo-instruct',
+        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a title`,
+        temperature: 0.9,
+        max_tokens: 950,
+      });
+      console.log('RAW RESPONSE', response)
+
+      genertedStory = response.choices[0].text;
+      const titleMatch = genertedStory.match(titleMatchRegex);
+      const extractedTitle = titleMatch ? titleMatch[1] : '';
+
+      const imageRes = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
+        n: 1,
+        size: "1024x1024",
+        response_format: 'b64_json',
+      });
+
+      
+      if (imageRes.data.length > 0) {
+        const uniqueName = `image-${uuidv4()}.jpg`;
+        storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, `${uniqueName}`);
+      }
+
+      const coverImageRes = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: `based on this title: ${extractedTitle} generate a cover image for it that can be used in the background`,
+        n: 1,
+        size: "1024x1024",
+        response_format: 'b64_json',
+      });
+
+      
+      if (coverImageRes.data.length > 0) {
+        const uniqueName = `image-${uuidv4()}.jpg`;
+        coverImage = await createFirebaseStorageUrl(coverImageRes.data[0].b64_json, `${uniqueName}`);
+      }
+
+      const storyArray = processGeneratedStory(genertedStory, storyImage, numberOfSeries, chapterRegex, heading);
+
+      const newStory = new UserStory({
+        story: storyArray,
+        email: userEmail,
+        author: `${user.name}`,
+        motive: motive,
+        authorPenName: user.penName,
+        authorImg: user.profileImg,
+        genre: genreValue,
+        userTitle: title,
+        storyTitle: extractedTitle,
+        storyImage: storyImage,
+        coverImage: coverImage,
+        storyDesc: desc,
+        storyLangauage: language.toLowerCase(),
+        endingStyle: ending,
+      });
+
+      await newStory.save();
+
+      user.totalCreditUsed += inkNeeded;
+      user.totalCreditBalance -= inkNeeded;
+      await user.save();
+
+      res.status(201).json({ success: true, data: genertedStory, user: { success: true, data: user } });
+    };
+
+    if (language === 'English') {
+      await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
+    } else if (language === 'French') {
+      await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
+    } else if (language === 'Spanish') {
+      await commonLogic(language, /Título: (.+?)\n/, /Capítulo (\w+): ([^\n]+)\n([\s\S]*?)(?=(Capítulo (\w+):|$))/g, 'Capítulo');
+    } //else if (language === 'Chinese') {
+      //await commonLogic(language, /爱在这个温馨的故事中没有界限。跟随两个人的旅程，他们携手应对恋爱中的波折，从初吻的蝶变到真正的热情。当他们的爱情故事展开时，秘密、挑战和意外的转折考验着他们的感情。\n([\s\S]+?)((第一章)|(第二章)|(第三章))：/, /(第一章|第二章|第三章)：[\s\S]+?(\n\n|$)/g, '第一章');
+    //} 
+    else if (language === 'Swahili') {
+      await commonLogic(language, /Title: (.+?)\n/, /Sura ya (\w+): ([^\n]+)\n([\s\S]*?)(?=(Sura ya (\w+):|$))/g, 'Sura ya');
+    }
+    else {
+      await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
+    }
+  } catch (error) {
+    console.log('ERROR CREATING STORY', error);
+    res.status(500).json({ success: false, data: 'Failed to Create Story' });
+  }
+}
+
+const processGeneratedStory = (generatedStory, storyImage, numberOfSeries, chapterRegex, heading) => {
+  const storyMatches = [...generatedStory.matchAll(chapterRegex)];
+
+  const storyArray = storyMatches.map((match, index) => ({
+    chapterTitle: match[2].trim(),
+    chapterContent: match[3].trim(),
+    chapterNumber: `${heading} ${index + 1}`,
+    chapterImage: storyImage,
+  }));
+
+  return storyArray;
 }
 
 export async function getUserStories(req, res){
@@ -386,8 +583,13 @@ export async function generateNewStoryDesc(req, res){
     }
 
     const storyDesc = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ id: userId })
     if(!storyDesc){
       return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    if(parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10) > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
     const description = storyDesc.storyDesc
@@ -396,16 +598,19 @@ export async function generateNewStoryDesc(req, res){
       model: 'gpt-3.5-turbo-instruct',
       prompt: `based on this desc ${description} rewrite the description a new and improve way. note it is a description so it should be short and nice. not too short`,
       temperature: 0.9,
-      max_tokens: 200
+      max_tokens: 100
     })
 
     const newDesc = response.choices[0].text.trim()
     storyDesc.storyDesc = newDesc
     await storyDesc.save()
-    console.log('OLD>>>',description)
-    console.log('NEW>>>',newDesc)
 
-    res.status(201).json({ success: true, data: 'Description created'})
+        //debit user
+        user.totalCreditUsed += parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10)
+        user.totalCreditBalance -= parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10);
+        await user.save()
+
+    res.status(201).json({ success: true, data: 'Description created', user: {success: true, data: user}})
   } catch (error) {
     console.log('FAILED TO GENERATE NEW DESCRIPTION>>>', error)
     res.status(500).json({ success: false, data: 'failed to generate story description'})
@@ -431,8 +636,7 @@ export async function saveStoryDesc(req, res){
 
     storyDesc.storyDesc = desc
     await storyDesc.save()
-    console.log('OLD>>>',desc)
-    console.log('NEW>>>',storyDesc.storyDesc)
+
 
     res.status(201).json({ success: true, data: 'Description Saved'})
   } catch (error) {
@@ -450,8 +654,15 @@ export async function recreateStory (req, res){
     }
 
     const oldStory = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+
+    const inkNeeded = oldStory.story.length() * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10)
     if(!oldStory){
       return res.status(404).json({ success: false, data: 'Story not Found'})
+    }
+
+    if(inkNeeded > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
     const response = await openai.completions.create({
@@ -481,7 +692,12 @@ export async function recreateStory (req, res){
       oldStory.save()
       //console.log('NEW STORY', oldStory.story)
 
-    res.status(201).json({ success: true, data: 'New story generated' })
+      //debit user
+      user.totalCreditUsed += inkNeeded
+      user.totalCreditBalance -= inkNeeded
+      await user.save()
+
+    res.status(201).json({ success: true, data: 'New story generated', user: {success: true, data: user} })
   } catch (error) {
     console.log('ERROR RECREATING STORY', error)
     res.status(500).json({ success: false, data: 'Failed to recreate story'})
@@ -497,9 +713,15 @@ export async function rewriteChapter(req, res){
     }
 
     const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
+    
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     } 
+
+    if(parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10) > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
+    }
 
     const chapterIndex  = story.story.findIndex((chapter) => chapter ._id.toString() === chapterId);
     if (chapterIndex  !== -1) {
@@ -508,7 +730,7 @@ export async function rewriteChapter(req, res){
 
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Rewrite this Chapter text in a more better way ${chapter.chapterContent}. it is a part of a story so be careful when rewriting it make the new text better at the same maintain the genre styling and writing style of the former so as to maintain the flow with other chapters. the generated text should be lenghty enough`,
+        prompt: `Rewrite this Chapter text in a more better way: ${chapter.chapterContent}. it is a part of a story so be careful when rewriting it make the new text better at the same maintain the genre styling and writing style of the former so as to maintain the flow with other chapters. the generated text should be lenghty enough. also it must be in this language ${story.storyLangauage}`,
         temperature: 0.9,
         max_tokens: 950
       })
@@ -520,7 +742,12 @@ export async function rewriteChapter(req, res){
       chapter.chapterContent = newGeneratedStory;
       await story.save()
 
-      res.status(201).json({success: true, data:story })
+      //debit user
+      user.totalCreditUsed += parseInt(FONY_INK_COST_PER_CHAPTER, 10);
+      user.totalCreditBalance -= parseInt(FONY_INK_COST_PER_CHAPTER, 10);
+      await user.save()
+
+      res.status(201).json({success: true, data:'Chapter recreated', user: {success: true, data: user} })
     
     } else {
       console.log('Chapter not found');
@@ -543,9 +770,14 @@ export async function generateChapterImage(req, res){
     }
 
     const story = await UserStory.findById({ _id: storyId })
+    const user = await UserModel.findById({ _id: userId })
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     } 
+
+    if(parseInt(process.env.FONY_INK_COST_PER_IMAGE, 10) > user.totalCreditBalance){
+      return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
+    }
 
     const chapterIndex  = story.story.findIndex((chapter) => chapter._id.toString() === chapterId);
     
@@ -557,7 +789,7 @@ export async function generateChapterImage(req, res){
          * 
         const imageRes = await openai.images.generate({
           model: "dall-e-3",
-          prompt: `based on this title: ${chapter.chapterContent}, generate an image. the image should tell the story given to you`,
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the chapter title: ${chapter.chapterTitle}`,
           n: 1,
           size: "1792x1024",
           response_format: 'b64_json',
@@ -583,7 +815,12 @@ export async function generateChapterImage(req, res){
 
           chapter.chapterImage = storyImage
           await story.save()
-          res.status(201).json({success: true, data:story })
+
+          //debit user
+          user.totalCreditUsed += parseInt(process.env.FONY_INK_COST_PER_IMAGE, 10);
+          user.totalCreditBalance -= parseInt(process.env.FONY_INK_COST_PER_IMAGE, 10);
+          await user.save()
+          res.status(201).json({success: true, data:'Image generated', user: {success: true, data: user} })
         }
 
         
@@ -646,7 +883,7 @@ export async function generateCoverStoryImage(req, res){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     }
 
-    if(user.totalCreditBalance < process.env.FONY_INK_COST_PER_IMAGE){
+    if(parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10) > user.totalCreditBalance ){
       return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
@@ -684,11 +921,11 @@ export async function generateCoverStoryImage(req, res){
           await story.save()
 
           //console.log('INK BEFORE,',user.totalCredit)
-          user.totalCreditUsed += process.env.FONY_INK_COST_PER_IMAGE
-          user.totalCreditBalance -= process.env.FONY_INK_COST_PER_IMAGE
+          user.totalCreditUsed += parseInt(process.env.process.env.FONY_INK_COST_PER_IMAGE, 10);
+          user.totalCreditBalance -= parseInt(process.env.process.env.FONY_INK_COST_PER_IMAGE, 10);
           await user.save()
           //console.log('INK AFTER,',user.totalCredit)
-          res.status(201).json({success: true, data:story })
+          res.status(201).json({success: true, data:'Cover image generated', user: {success: true, data: user} })
         }
     }
     
@@ -736,7 +973,7 @@ export async function addNewChapters(req, res){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     }
 
-    const inkNeeded = newChapter * process.env.FONY_INK_COST_PER_CHAPTER
+    const inkNeeded = newChapter * parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10)
 
     if(inkNeeded > user.totalCreditBalance){
       return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
@@ -747,7 +984,7 @@ export async function addNewChapters(req, res){
     if(story){
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Based on this story description ${story.desc}. the last chapter of the story is this: ${lastChapterStory.chapterContent} and it is chapter ${story.story.length}. generate ${newChapter} more chapters to be added to the story it will continue from where the last chapter stops. the new generated chapters must blend with the existng story. also give each chapter a befitting title`,
+        prompt: `Based on this story description ${story.desc}. the last chapter of the story is this: ${lastChapterStory.chapterContent} and it is chapter ${story.story.length}. generate ${newChapter} more chapters to be added to the story it will continue from where the last chapter stops. the new generated chapters must blend with the existng story. also give each chapter a befitting title. also the story must be in ${story.storyLangauage}`,
         temperature: 0.9,
         max_tokens: 950
     })
@@ -778,7 +1015,7 @@ export async function addNewChapters(req, res){
     await user.save()
 
     
-    res.status(201).json({ success: true, data: story })
+    res.status(201).json({ success: true, data: story, user: {success: true, data: user} })
   }
   } catch (error) {
     console.log('ERROR CREATING NEW CHAPTERS', error)
@@ -835,13 +1072,13 @@ export async function generateAiDesc(req, res){
       return res.status(404).json({ success: false, data: 'You can only work on your story'})
     }
 
-    if(process.env.FONY_INK_COST_PER_DESCRIPTION > user.totalCreditBalance){
+    if(parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10) > user.totalCreditBalance){
       return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
     const response = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
-      prompt: `generate a captivating and intreting description for a story centered around ${genreValue}. the description must be complete, and also the decription must be a public safe one`,
+      prompt: `generate a captivating and intresting description for a story centered around ${genreValue}. the description must be complete, and also the decription must be a public safe one`,
       temperature: 0.9,
       max_tokens: 90
     })
@@ -849,10 +1086,11 @@ export async function generateAiDesc(req, res){
     const genertedStory = response.choices[0].text
 
     //debit user
-    user.totalCreditUsed += process.env.FONY_INK_COST_PER_DESCRIPTION
-    user.totalCreditBalance -= process.env.FONY_INK_COST_PER_DESCRIPTION
+    user.totalCreditUsed += parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10);
+    user.totalCreditBalance -= parseInt(process.env.FONY_INK_COST_PER_DESCRIPTION, 10);
+    await user.save()
 
-    res.status(201).json({ success: true, data: genertedStory })
+    res.status(201).json({ success: true, data: genertedStory,  user: {success: true, data: user} })
   } catch (error) {
     console.log('COULD NOT GENERATE AI DESCRIPTION', error)
     res.status(500).json('Could not generate')
