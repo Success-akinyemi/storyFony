@@ -48,20 +48,45 @@ export const UserSchema = new mongoose.Schema({
         type: Number,
         default: 4000
     },
-    totalCreditUsed:{
-        type: Number,
-        default: 0
-    },
     totalCreditBalance: {
         type: Number,
         default: 4000,
+    },
+    totalCreditUsed:{
+        type: Number,
+        default: 0
     },
     totalCreditEverUsed: {
         type: Number,
         default: 0
     },
+    stripeCustomersId: {
+        type: String
+    },
     resetPasswordToken: String,
-    resetPasswordExpire: Date
+    resetPasswordExpire: Date,
+
+    planId: {
+        type: String,
+    },
+    planName: {
+        type: String
+    },
+    planStartDate: {
+        type: Number
+    },
+    planEndDate: {
+        type: Number
+    },
+    planAmount: {
+        type: Number
+    },
+    planCurrency: {
+        type: String
+    },
+    planStatus: {
+        type: String
+    }
 },
 {timestamps: true}
 );

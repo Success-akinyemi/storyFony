@@ -6,9 +6,44 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import BadgeImg from '../../assets/badge.png'
 import { fullyFull, halfFull, quaterFull } from '../../data/pricingData';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import assert from 'assert';
+import { useFetchPrice } from '../../hooks/fetch.hooks';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { subscriptionSession } from '../../helpers/api';
 
 function PricingBanner() {
+    const { apiData, isLoading } = useFetchPrice()
+    const [ loading, setLoading ] = useState(false)
+    const navigate = useNavigate()
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
+    const data = apiData?.data?.data
+
+
+    const handleSession = async (priceId) => {
+        if(!priceId){
+            toast.error('Price Id is needed')
+            return;
+        }
+
+        if(!user){
+            toast.error('Please loging first')
+            navigate('/login')
+        }
+
+        try {
+            setLoading(true)
+            const userId = user._id
+            const res = await subscriptionSession({userId, priceId})
+        } catch (error) {
+            
+        } finally{
+            setLoading(false)
+        }
+    }
   return (
     <div className='pricingBanner'>
         <div className="container">
@@ -22,7 +57,7 @@ function PricingBanner() {
                     <div className="content">
                         <div className="head">
                             <img src={Beaker1} alt='quater ink' />
-
+                            {/** */}
                             <h3>Quarter Full Fony Ink</h3>
 
                             <p>Get <span>4000</span> Fony ink to writer your next story</p>
@@ -51,7 +86,7 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <Link className='link'>Get Fony Ink</Link>
+                            <button disabled={loading} className='link' onClick={() => handleSession(data && data[2] ? data[2].id : '')}>Get Fony Ink $15</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +125,7 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <Link className='link'>Get Fony Ink</Link>
+                            <button disabled={loading} className='link' onClick={() => handleSession(data && data[1] ? data[1].id : '')}>Get Fony Ink $25</button>
                         </div>
 
                     </div>
@@ -129,7 +164,7 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <Link className='link'>Get Fony Ink</Link>
+                            <button disabled={loading} className='link' onClick={() =>handleSession(data && data[0] ? data[0].id : '')}>Get Fony Ink $39</button>
                         </div>
 
                     </div>

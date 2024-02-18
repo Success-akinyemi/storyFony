@@ -159,3 +159,29 @@ export function userLikedStory(query) {
 
     return data;
 }
+
+/**Get Princing Details */
+export function useFetchPrice(query){
+    const [data, setData] = useState({ isLoading: true, apiData: null, status: null, serverError: null})
+
+    useEffect(() => {
+        const fetchData =  async () => {
+            try {
+
+                const { data, status} = await axios.get(`/api/subscription/prices`, { withCredentials: true })
+                //console.log('Price Data from Hooks>>>', data)
+
+                if(status === 200){
+                    setData({ isLoading: false, apiData: data, status: status, serverError: null})
+                } else{
+                    setData({ isLoading: false, apiData: null, status: status, serverError: null})
+                }
+            } catch (error) {
+                setData({ isLoading: false, apiData: null, status: null, serverError: error})
+            }
+        };
+        fetchData()
+    }, [query])
+
+    return data
+}

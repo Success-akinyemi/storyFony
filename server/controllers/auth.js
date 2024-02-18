@@ -5,6 +5,7 @@ import crypto from 'crypto'
 import TokenModel from "../models/Tokens.js";
 import SubscribersModel from "../models/NewsletterSubscribers.js.js";
 import jwt from 'jsonwebtoken'
+import { stripe } from "../utils/stripe.js";
 
 const mailGenerator = new Mailgen({
     theme: 'default',
@@ -104,9 +105,18 @@ export async function verifyNewUser(req, res, next){
         if(!token){
             return res.status(400).json({ success: false, data: 'Invalid Link'})
         }
+        const userEmail = user.email
+        const customer = await stripe.customers.create({
+            email: userEmail
+        }, {
+            apiKey: process.env.STRIPE_SK
+        })
+
+        
 
         //await UserModel.updateOne({ _id: user._id, verified: true})
         user.verified = true;
+        user.stripeCustomersId = customer.id
         await user.save()
         
         await TokenModel.deleteOne({ _id: token._id })
@@ -218,12 +228,18 @@ export async function google(req, res){
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
             //const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            const customer = await stripe.customers.create({
+                email: userEmail
+            }, {
+                apiKey: process.env.STRIPE_SK
+            })
             const newUser = await UserModel.create({
                 name: name,
                 email: email,
                 password: generatedPassword,
                 profileImg: photo,
-                penName: 'Awesome Writter'
+                penName: 'Awesome Writter',
+                stripeCustomersId: customer.id
             })
             
             const authToken = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
