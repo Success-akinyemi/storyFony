@@ -79,7 +79,7 @@ export async function createStory(req, res) {
 
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a title`,
+        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and the word tile only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english`,
         temperature: 0.9,
         max_tokens: 950,
       });
@@ -147,16 +147,18 @@ export async function createStory(req, res) {
 
     if (language === 'English') {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
-    } else if (language === 'French') {
-      await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
-    } else if (language === 'Spanish') {
-      await commonLogic(language, /Título: (.+?)\n/, /Capítulo (\w+): ([^\n]+)\n([\s\S]*?)(?=(Capítulo (\w+):|$))/g, 'Capítulo');
-    } //else if (language === 'Chinese') {
+    } 
+    //else if (language === 'French') {
+    //  await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
+    //} 
+    //else if (language === 'Spanish') {
+    //  await commonLogic(language, /Título: (.+?)\n/, /Capítulo (\w+): ([^\n]+)\n([\s\S]*?)(?=(Capítulo (\w+):|$))/g, 'Capítulo');
+    //} //else if (language === 'Chinese') {
       //await commonLogic(language, /爱在这个温馨的故事中没有界限。跟随两个人的旅程，他们携手应对恋爱中的波折，从初吻的蝶变到真正的热情。当他们的爱情故事展开时，秘密、挑战和意外的转折考验着他们的感情。\n([\s\S]+?)((第一章)|(第二章)|(第三章))：/, /(第一章|第二章|第三章)：[\s\S]+?(\n\n|$)/g, '第一章');
     //} 
-    else if (language === 'Swahili') {
-      await commonLogic(language, /Title: (.+?)\n/, /Sura ya (\w+): ([^\n]+)\n([\s\S]*?)(?=(Sura ya (\w+):|$))/g, 'Sura ya');
-    }
+    //else if (language === 'Swahili') {
+    //  await commonLogic(language, /Title: (.+?)\n/, /Sura ya (\w+): ([^\n]+)\n([\s\S]*?)(?=(Sura ya (\w+):|$))/g, 'Sura ya');
+    //}
     else {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
     }
@@ -851,4 +853,9 @@ export async function generateAiDesc(req, res){
     console.log('COULD NOT GENERATE AI DESCRIPTION', error)
     res.status(500).json('Could not generate')
   }
+}
+
+//create pdf
+export async function createPdf(req, res){
+
 }

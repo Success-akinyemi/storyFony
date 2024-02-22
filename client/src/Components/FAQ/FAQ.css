@@ -180,3 +180,45 @@
     color: var(--text-color-2);
     text-align: center;
 }
+
+@media screen and (max-width: 850px) {
+    .faq .top{
+        width: 100%;
+    }
+
+    .faq .middle{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .faq .bottom{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+    }
+
+    .faq .bottom .card{
+        width: 100vw;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .faq .top .content{
+        width: 100vw;
+        padding-left: 5px;
+        padding-right: 5px;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .faq .middle{
+        padding: 0px 18px 0px 18px;
+    }
+
+    .faq .bottom .card .btn{
+        margin-top: 3rem;
+    }
+}

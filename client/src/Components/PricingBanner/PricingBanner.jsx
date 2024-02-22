@@ -86,7 +86,11 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <button disabled={loading} className='link' onClick={() => handleSession(data && data[2] ? data[2].id : '')}>Get Fony Ink $15</button>
+                            {
+                                !isLoading && (
+                                    <button disabled={loading} className='link' onClick={() => handleSession(data && data[2] ? data[2].id : '')}>Get Fony Ink $15</button>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -125,7 +129,11 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <button disabled={loading} className='link' onClick={() => handleSession(data && data[1] ? data[1].id : '')}>Get Fony Ink $25</button>
+                            {
+                                !isLoading && (
+                                    <button disabled={loading} className='link' onClick={() => handleSession(data && data[1] ? data[1].id : '')}>Get Fony Ink $25</button>
+                                )
+                            }
                         </div>
 
                     </div>
@@ -164,7 +172,11 @@ function PricingBanner() {
                         </div>
 
                         <div className="foot">
-                            <button disabled={loading} className='link' onClick={() =>handleSession(data && data[0] ? data[0].id : '')}>Get Fony Ink $39</button>
+                            {
+                                !isLoading && (
+                                    <button disabled={loading} className='link' onClick={() =>handleSession(data && data[0] ? data[0].id : '')}>Get Fony Ink $39</button>
+                                )
+                            }
                         </div>
 
                     </div>

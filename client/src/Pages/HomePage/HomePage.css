@@ -64,6 +64,18 @@
     }
 }
 
+@media screen and (max-width: 600px) {
+    .homePage .layer-1{
+        height: 350px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .homePage .layer-1{
+        height: 300px;
+    }
+}
+
 @media screen and (max-width: 450px) {
     .homePage .layer-1{
         height: 200px;

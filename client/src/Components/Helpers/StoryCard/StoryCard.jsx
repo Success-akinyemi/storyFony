@@ -20,7 +20,7 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
         const isUserLiked = data?.likes?.includes(user._id);
         setIsLiked(isUserLiked);
     }, [data?.likes, user._id]);
-    console.log('LIKE', liked)
+    //console.log('LIKE', liked)
 
 
     const handleTogglePrivateStory = async (id) => {
@@ -42,9 +42,9 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
             setUplaodingLike(true)
             const res = await likeStory({userId, storyId, plan})
             if(res?.data.success){
-                console.log('Previous liked state:', liked);
+                //console.log('Previous liked state:', liked);
                 setIsLiked((prev) => !prev);
-                console.log('New liked state:', liked);
+                //console.log('New liked state:', liked);
             }
         } catch (error) {
             
@@ -106,7 +106,7 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
                         )
                     }
                     <p>{data?.likes?.length}</p>
-                    {console.log('first',data?.likes?.length)}
+                    {/**console.log('first',data?.likes?.length)*/}
 
                     <div className="moreImg">
 

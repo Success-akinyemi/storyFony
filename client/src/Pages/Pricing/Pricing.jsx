@@ -15,7 +15,9 @@ function Pricing() {
                 <p>We take storytelling to the next level with our innovative AI</p>
             </div>
         </div>
-        <PricingBanner />
+        <div className="p-banner">
+          <PricingBanner />
+        </div>
         <FAQ faq={faq} />
         <Footer />
     </div>

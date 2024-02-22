@@ -234,3 +234,30 @@
     gap: 24px;
     width: 199px;
 }
+
+@media screen and (max-width: 1200px) {
+    .pricingBanner .container{
+        width: 95vw;
+        align-items: flex-start;
+    }
+
+    .pricingBanner .container .top{
+        width: 100%;
+    }
+
+    .pricingBanner .container .bottom{
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .pricingBanner{
+        width: 100vw;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .pricingBanner .container .bottom .card{
+        width: 95%;
+    }
+}

@@ -50,3 +50,28 @@
     text-align: center;
     color: var(--text-color-1);
 }
+
+@media screen and (max-width: 1200px) {
+    .p-banner{
+        margin-bottom: 38rem;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .pricing .pricingHero .content{
+        width: 95%;
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 530px) {
+    .pricing .pricingHero .content{
+        gap: 60px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .p-banner{
+        margin-bottom: 88rem;
+    }
+}

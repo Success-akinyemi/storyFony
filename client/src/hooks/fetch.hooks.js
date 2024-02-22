@@ -17,7 +17,7 @@ export function useFetch(query){
                 const { id } = !query ? await getUser() : await getUser();        
 
                 const { data, status} = !query ? await axios.get(`/api/user/${id}`, { withCredentials: true }) : await axios.get(`/api/getUsers/${id}`, { withCredentials: true })
-                console.log('Data from Hooks>>>', data)
+                //console.log('Data from Hooks>>>', data)
 
                 if(status === 200){
                     setData({ isLoading: false, apiData: data, status: status, serverError: null})
@@ -54,9 +54,9 @@ export function userStoryBook(query) {
                     url = `/api/user/story/${userId}/${storyId}`;
                 }
 
-                console.log('ID', id, 'QUERY', query);
+                //console.log('ID', id, 'QUERY', query);
                 const { data, status } = await axios.get(url, { withCredentials: true });
-                console.log('Story Data from Hooks>>>', data);
+                //console.log('Story Data from Hooks>>>', data);
 
                 if (status === 200) {
                     setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null });
@@ -65,7 +65,7 @@ export function userStoryBook(query) {
                 }
             } catch (error) {
                 setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error });
-                console.log(data);
+                //console.log(data);
                 console.log(error);
             }
         };
@@ -96,9 +96,9 @@ export function userStoryBookEditor(query) {
                     url = `/api/user/story/edit/${userId}/${storyId}`;
                 }
 
-                console.log('ID', id, 'QUERY', query);
+                //console.log('ID', id, 'QUERY', query);
                 const { data, status } = await axios.get(url, { withCredentials: true });
-                console.log('Edit Story Data from Hooks>>>', data);
+                //console.log('Edit Story Data from Hooks>>>', data);
 
                 if (status === 200) {
                     setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null });
@@ -107,7 +107,7 @@ export function userStoryBookEditor(query) {
                 }
             } catch (error) {
                 setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error });
-                console.log(data);
+                //console.log(data);
                 console.log(error);
             }
         };
@@ -138,9 +138,9 @@ export function userLikedStory(query) {
                     url = `/api/user/story/${userId}/${storyId}`;
                 }
 
-                console.log('ID', id, 'QUERY', query);
+                //console.log('ID', id, 'QUERY', query);
                 const { data, status } = await axios.get(url, { withCredentials: true });
-                console.log('Story Data from Hooks>>>', data);
+                //console.log('Story Data from Hooks>>>', data);
 
                 if (status === 200) {
                     setData({ isLoadingStory: false, apiUserStoryData: data, storyStatus: status, storyServerError: null });
@@ -149,7 +149,7 @@ export function userLikedStory(query) {
                 }
             } catch (error) {
                 setData({ isLoadingStory: false, apiUserStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error });
-                console.log(data);
+                //console.log(data);
                 console.log(error);
             }
         };

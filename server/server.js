@@ -111,16 +111,16 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
 
       let getInkQuantity;
       if(getPlanName === 'basic'){
-        getInkQuantity === 4000
+        getInkQuantity = 4000
       }
       if(getPlanName === 'standard'){
-        getInkQuantity === 12000
+        getInkQuantity = 12000
       }
       if(getPlanName === 'premium'){
-        getInkQuantity === 20000
+        getInkQuantity = 20000 + 80
       }
       console.log('SUB CREATED DATAS??', currency, startDate, endDate, customer, amount, productId, planStatus)
-      const user = UserModel.findOne({ stripeCustomersId: customer })
+      const user = await UserModel.findOne({ stripeCustomersId: customer })
       console.log('BEFORE', user)
       user.planId = productId
       user.planStartDate = startDate * 1000
