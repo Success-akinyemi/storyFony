@@ -18,7 +18,7 @@ import TextEditor from '../../Components/Helpers/TextEditor/TextEditor';
 import { formatDistanceToNow } from 'date-fns';
 import UploadStoryCover from '../../Components/Helpers/UploadStoryCover/UploadStoryCover';
 import AddNewChapter from '../../Components/Helpers/AddNewChapter/AddNewChapter';
-import { handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
+import { createStorPdf, handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
 import toast from 'react-hot-toast';
 
 function StoryEditor() {
@@ -34,6 +34,7 @@ function StoryEditor() {
   const [currentChapterContent, setCurrentChapterContent] = useState('');
   const [ isLoading, setIsLoading ] = useState(false)
   const [ isLoadingCommunity, setIsLoadingCommunity ] = useState(false)
+  const [ isCreatePdf, setIsCreatingPdf ] = useState(false)
 
   useEffect(() => {
     const userId = loc.pathname.split('/')[2]
@@ -71,8 +72,6 @@ function StoryEditor() {
   }
 
   //Close popup when overlay is clicked
-  /**
-   * 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (event.target.classList.contains('popup-overlay')) {
@@ -86,7 +85,7 @@ function StoryEditor() {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
-   */
+
 
   const closePopup = () => {
     setSelectedCard(null);
@@ -168,6 +167,22 @@ function StoryEditor() {
       setIsLoadingCommunity(false)
     }
   }
+
+  const handleCreatePdf = async (id) => {
+    if(isCreatePdf){
+      toast.error('Creating Pdf, please wait')
+      return;
+    }
+    try {
+      setIsCreatingPdf(true)
+      const userId = user?._id
+      const res = await createStorPdf({id, userId})
+    } catch (error) {
+      console.log('UNABLE TO CREATE PDF',error)
+    } finally {
+      setIsCreatingPdf(false)
+    }
+  }
   
   return (
     <div className='storyEditor'>
@@ -210,10 +225,10 @@ function StoryEditor() {
                   <span className="action">Action <KeyboardArrowDownIcon className='keyIcon' /></span>
 
                   <div className="actionMenu">
-                    <div className='menus' onClick={() => handleToggleToCommunity(data._id)}>{ isLoadingCommunity ? 'Updating...' : `${data?.PublishedToCommunity ? 'Remove from community' : 'Publish to community'}`}</div>
-                    <div className='menus' onClick={() => handleTogglePrivateStory(data._id)}>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private to Public' : 'Public to private'}`}</div>
+                    <div className='menus' onClick={() => handleToggleToCommunity(data?._id)}>{ isLoadingCommunity ? 'Updating...' : `${data?.PublishedToCommunity ? 'Remove from community' : 'Publish to community'}`}</div>
+                    <div className='menus' onClick={() => handleTogglePrivateStory(data?._id)}>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private to Public' : 'Public to private'}`}</div>
                     <div className='menus'>Save to draft</div>
-                    <div className='menus'>Download the PDF</div>
+                    <div className='menus' onClick={() => handleCreatePdf(data?._id)}>Download the PDF</div>
                   </div>
                 </div>
 

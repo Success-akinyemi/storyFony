@@ -123,7 +123,7 @@ function ProfilePage() {
           />
           <img
             className="profileImg"
-            src={formData.profileImg || user.profileImg}
+            src={formData.profileImg || user?.profileImg}
             alt={`profile picture of ${user?.name}`}
           />
           <button onClick={() => fileRef.current.click()}>

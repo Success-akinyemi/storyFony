@@ -157,6 +157,44 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
       const subUproductId = customerSubscriptionUpdated.items.data[0].plan.product;
       const subUplanStatus = customerSubscriptionUpdated.items.data[0].plan.active;
 
+      let subUPlanName;
+
+      if(subUamount / 100 === 15){
+        subUPlanName = 'basic'
+      }  
+      if(subUamount / 100 === 25){
+        subUPlanName = 'standard'
+      } 
+      if(subUamount / 100 === 39){
+        subUPlanName = 'premium'
+      }
+
+      let subUInkQuantity
+      if(subUPlanName === 'basic'){
+        subUInkQuantity = 4000
+      }
+      if(subUPlanName === 'standard'){
+        subUInkQuantity = 12000
+      }
+      if(subUPlanName === 'premium'){
+        subUInkQuantity = 20000 + 80
+      }
+
+      const Updateuser = await UserModel.findOne({ stripeCustomersId: subUcustomer })
+      console.log('UPDATE BEFORE', Updateuser)
+      Updateuser.planId = subUproductId
+      Updateuser.planStartDate = subUstartDate * 1000
+      Updateuser.planEndDate = subUendDate * 1000
+      Updateuser.planAmount = subUamount / 100
+      Updateuser.planCurrency = subUcurrency
+      Updateuser.planStatus = subUplanStatus
+      Updateuser.planName = subUPlanName
+      Updateuser.totalCreditUsed = 0
+      Updateuser.totalCreditBalance += subUInkQuantity
+      await Updateuser.save()
+      Updateuser.totalCredit = Updateuser.totalCreditBalance
+      await Updateuser.save()
+      console.log('UPDATE AFTER', Updateuser)
       console.log('SUB UPDATED DATAS??', subUcurrency, subUstartDate, subUendDate, subUcustomer, subUamount, subUproductId, subUplanStatus)
       break;
     // ... handle other event types

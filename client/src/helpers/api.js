@@ -481,3 +481,30 @@ export async function subscriptionSession({userId, priceId}){
           }
     }
 }
+
+export async function createStorPdf({ id, userId }) {
+    try {
+        const res = await axios.post('/api/user/story/generatePdf', { id, userId }, { withCredentials: true });
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'story.pdf');
+        document.body.appendChild(link);
+        link.click();
+        return null;
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error);
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to generate pdf';
+            console.log('MSG', errorMsg);
+            toast.error(errorMsg);
+            const errorStatus = error.response.status;
+            if (errorStatus === 401 || errorStatus === 403) {
+                window.location.href = '/login';
+            }
+            return errorMsg;
+        } else {
+            return 'An error occurred during the request.';
+        }
+    }
+}

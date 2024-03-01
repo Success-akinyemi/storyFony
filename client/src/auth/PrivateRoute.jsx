@@ -48,7 +48,7 @@ function AuthorizeUser() {
 
       // Check if the token is expired
       if (decodedToken.exp * 1000 < Date.now()) {
-        console.log('EXP', decodedToken.exp)
+        //console.log('EXP', decodedToken.exp)
         toast.error('Session expiried, Please login');
         navigate('/login')
       }
@@ -58,10 +58,6 @@ function AuthorizeUser() {
   return fonyAccessTokenExists ? <Outlet /> : <Navigate to={'/login'} />;
 }
 
-function UserExist () {
-  const  {currentUser}  = useSelector(state => state.user)
-    return currentUser === null ? <Outlet /> : <Navigate to='/dashboard' />
-}
 
 function AdminUser (){
     const  {currentUser}  = useSelector(state => state.user)
@@ -69,4 +65,4 @@ function AdminUser (){
       return adminUser ? <Outlet /> : <Navigate to='/' />
 }
 
-export {AuthorizeUser, AdminUser, UserExist}
+export {AuthorizeUser, AdminUser}

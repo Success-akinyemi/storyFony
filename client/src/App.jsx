@@ -13,7 +13,7 @@ import UseCases from './Pages/UseCases/UseCases'
 import UseCase from './Pages/UseCase/UseCase'
 import Pricing from './Pages/Pricing/Pricing'
 import UserDashboard from './Pages/UserDashboard/UserDashboard'
-import { AuthorizeUser, UserExist } from './auth/PrivateRoute'
+import { AuthorizeUser } from './auth/PrivateRoute'
 import CreateStory from './Pages/CreateStory/CreateStory'
 import StoryBook from './Pages/StoryBook/StoryBook'
 import PublicShelf from './Pages/PublicShelf/PublicShelf'
@@ -29,27 +29,14 @@ function App() {
       <Toaster position='top-center'></Toaster>
       <BrowserRouter>
         <Routes>
-          <Route element={<UserExist />}>
             <Route path='/signup' element={<Signup />} /> 
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/login' element={<Login />} />
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/resetPassword' element={<ResetPassword />} />
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/newPassword/:resetToken' element={<NewPassword />} />
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/VerificationEmailSent' element={<VerificationEmailSent />} /> 
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/:id/verify/:token' element={<VerifyUser />} />
-          </Route>
-          <Route element={<UserExist />}>
             <Route path='/resetEmailSent' element={<ResetEmailSent />} />
-          </Route>
+
 
           <Route path='/' element={<HomePage />} />
           <Route path='/use-cases' element={<UseCases />} />

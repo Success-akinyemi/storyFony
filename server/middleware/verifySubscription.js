@@ -20,12 +20,32 @@ export const expiredSub = () => {
         const currentDate = new Date()
         if(exipryDate > currentDate){
             res.status(420).json({ success: false, data: 'Subscription expired please update your subscription'})
+        } else {
+            next()
         }
     })
 }
 
 export const basicSub = () => {}
 
-export const standardSub = () => {}
+export const standardSub = () => {
+    verifyToken(req, res, () => {
+        const isBasicUser = req.user.planName
+        if(isBasicUser === 'basic'){
+            return res.status(406).json({ success: false, data: 'Upgrade to Standard to Continue.'})
+        } else{
+            next()
+        }
+    })
+}
 
-export const premiumSub = () => {}
+export const premiumSub = () => {
+    verifyToken(req, res, () => {
+        const isPremiun = req.user.planName
+        if(isPremiun === 'premium'){
+            next ()
+        } else {
+            return res.status(406).json({ success: false, data: 'Upgrade to Premium Subscrption to continue'})
+        }
+    })
+}

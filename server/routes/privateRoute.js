@@ -18,6 +18,8 @@ privateRouter.route('/user/story/uploadCoverImg').post(verifyToken, controller.u
 privateRouter.route('/user/story/addNewChapters').post(verifyToken, controller.addNewChapters) //add new chapters to a story
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
 privateRouter.route('/user/story/generateAiDesc').post(verifyToken, controller.generateAiDesc) //generate a story decsription for a user using AI
+privateRouter.route('/user/story/generatePdf').post(verifyToken, controller.generatePdf) //generate a story Pdf for the user
+
 
 
 
