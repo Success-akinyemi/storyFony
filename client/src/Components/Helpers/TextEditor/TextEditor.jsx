@@ -20,8 +20,11 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { generateChapterImage, rewriteChapter } from '../../../helpers/api';
+import { signInSuccess } from '../../../redux/user/userslice';
+import { useDispatch } from 'react-redux';
 
 const MenuBar = ({ editor, content }) => {
+  const dispatch = useDispatch()
   const loc = useLocation()
   const storyId = loc.pathname.split('/')[3]
   const userId = loc.pathname.split('/')[2]
@@ -39,6 +42,10 @@ const MenuBar = ({ editor, content }) => {
     try {
       setNewChapter(true)
       const res = await rewriteChapter({ text, userId, storyId, chapterId })
+      console.log('RES from rewrite chapter', res)
+      if(res?.data.success){
+        dispatch(signInSuccess(res?.data.user))
+      }
     } catch (error) {
       
     } finally {
@@ -53,6 +60,9 @@ const MenuBar = ({ editor, content }) => {
     try {
       setNewImage(true)
       const res = await generateChapterImage({ text, userId, storyId, chapterId })
+      if(res?.data.success){
+        dispatch(signInSuccess(res?.data.user))
+      }
     } catch (error) {
       
     } finally {

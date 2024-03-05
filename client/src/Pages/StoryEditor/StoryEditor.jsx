@@ -18,7 +18,7 @@ import TextEditor from '../../Components/Helpers/TextEditor/TextEditor';
 import { formatDistanceToNow } from 'date-fns';
 import UploadStoryCover from '../../Components/Helpers/UploadStoryCover/UploadStoryCover';
 import AddNewChapter from '../../Components/Helpers/AddNewChapter/AddNewChapter';
-import { createStorPdf, handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
+import { createStoryPdf, handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
 import toast from 'react-hot-toast';
 
 function StoryEditor() {
@@ -43,7 +43,7 @@ function StoryEditor() {
   }, []);
   const { isLoadingStory, apiUserStoryData } = userStoryBookEditor(query)
   const data = apiUserStoryData?.data
-  console.log('Story editor', data)
+  //console.log('Story editor', data)
 
   //Date FNS
   const updatedAt = data?.updatedAt;
@@ -176,7 +176,7 @@ function StoryEditor() {
     try {
       setIsCreatingPdf(true)
       const userId = user?._id
-      const res = await createStorPdf({id, userId})
+      const res = await createStoryPdf({id, userId})
     } catch (error) {
       console.log('UNABLE TO CREATE PDF',error)
     } finally {

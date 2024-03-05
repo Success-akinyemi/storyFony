@@ -210,7 +210,7 @@ export async function login (req, res, next){
         res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData, token: token })
     } catch (error) {
         console.log('ERROR LOGGING USER', error)
-        res.status(500).json({ success: false, data: error.message})
+        res.status(500).json({ success: false, data: 'Server Error'})
     }
 }
 

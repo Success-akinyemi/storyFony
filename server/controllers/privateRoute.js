@@ -155,9 +155,9 @@ export async function createStory(req, res) {
     if (language === 'English') {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
     } 
-    //else if (language === 'French') {
-    //  await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
-    //} 
+    else if (language === 'French') {
+      await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
+    }
     //else if (language === 'Spanish') {
     //  await commonLogic(language, /Título: (.+?)\n/, /Capítulo (\w+): ([^\n]+)\n([\s\S]*?)(?=(Capítulo (\w+):|$))/g, 'Capítulo');
     //} //else if (language === 'Chinese') {
@@ -465,7 +465,7 @@ export async function recreateStory (req, res){
     res.status(201).json({ success: true, data: 'New story generated', user: {success: true, data: user} })
   } catch (error) {
     console.log('ERROR RECREATING STORY', error)
-    res.status(500).json({ success: false, data: 'Failed to recreate story'})
+    res.status(500).json({ success: false, data: 'Failed to recreate story',})
   }
 }
 
@@ -508,8 +508,8 @@ export async function rewriteChapter(req, res){
       await story.save()
 
       //debit user
-      user.totalCreditUsed += parseInt(FONY_INK_COST_PER_CHAPTER, 10);
-      user.totalCreditBalance -= parseInt(FONY_INK_COST_PER_CHAPTER, 10);
+      user.totalCreditUsed += parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
+      user.totalCreditBalance -= parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
       await user.save()
 
       res.status(201).json({success: true, data:'Chapter recreated', user: {success: true, data: user} })
@@ -554,7 +554,7 @@ export async function generateChapterImage(req, res){
          * 
         const imageRes = await openai.images.generate({
           model: "dall-e-3",
-          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the chapter title: ${chapter.chapterTitle}`,
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image must tell the story center around this chapter title: ${chapter.chapterTitle}`,
           n: 1,
           size: "1792x1024",
           response_format: 'b64_json',
@@ -565,7 +565,7 @@ export async function generateChapterImage(req, res){
         //FOR DALL_E-2
         const imageRes = await openai.images.generate({
           model: "dall-e-2",
-          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image should tell the story given to you as it sholud be centered based on the chapter title: ${chapter.chapterTitle}`,
+          prompt: `based on this chapter title: ${story.chapterTitle ? story.chapterTitle : story.userTitle} from a story, the entire story summary is this: ${story.desc} generate an image. the image must tell the story center around this chapter title: ${chapter.chapterTitle}`,
           n: 1,
           size: "1024x1024",
           response_format: 'b64_json',
@@ -862,109 +862,6 @@ export async function generateAiDesc(req, res){
   }
 }
 
-// Create PDF
-/**
-
-export async function generatePdf(req, res) {
-  const { id, userId } = req.body;
-  try {
-    console.log('WORKING');
-    const story = await UserStory.findById(id);
-
-    if (!story) {
-      return res.status(405).json({ success: false, data: 'Story not found' });
-    }
-
-    const doc = new pdfkit();
-    const outputFilePath = `${story.title ? story.title : story.userTitle}-${story.author}.pdf`;
-
-    // Add Cover Image on the first page
-    doc.addPage();
-    await downloadAndEmbedImage(doc, story.coverImage);
-
-    // Add Title and author name on the next page
-    doc.addPage();
-    const titleText = story.title ? story.title : story.userTitle;
-    const authorText = `Author: ${story.author}`;
-    const centerX = doc.page.width / 2;
-    const centerY = doc.page.height / 2;
-    doc.fontSize(24).text(titleText, centerX, centerY - 20, { align: 'center' });
-    doc.fontSize(16).text(authorText, centerX, centerY + 20, { align: 'center' });
-
-    // Track current Y position
-    let currentY = doc.y;
-
-    // Add chapters
-    for (const chapter of story.story) {
-      // Add chapter content
-      doc.addPage();
-      doc.fontSize(20).text(chapter.chapterTitle, { align: 'center' });
-      doc.fontSize(18).text(chapter.chapterNumber, { align: 'center' });
-      doc.fontSize(16).text(chapter.chapterContent);
-
-      // Embed chapter image on the same page
-      await downloadAndEmbedImage(doc, chapter.chapterImage);
-
-      // Track current Y position for the next chapter
-      currentY = doc.y;
-    }
-
-    // Add story image on the last page
-    doc.addPage();
-    await downloadAndEmbedImage(doc, story.storyImage);
-
-    // Add promotion text on a separate page
-    doc.addPage().fontSize(16).text('Made and Produced by Story Generator', { align: 'center' });
-    doc.text(`Visit ${process.env.MAIL_WEBSITE_LINK}`, { align: 'center' });
-
-    // End the document
-    doc.end();
-
-    // Save PDF to server file
-    const stream = fs.createWriteStream(outputFilePath);
-    doc.pipe(stream);
-
-    // Once the stream is closed, send the response
-    stream.on('finish', () => {
-      res.download(outputFilePath, (err) => {
-        if (err) {
-          console.error('Error sending PDF to client:', err);
-          res.status(500).json({ success: false, data: 'Could not send the PDF to the client' });
-        } else {
-          console.log('PDF sent to client successfully');
-          // Optionally, delete the file after sending
-          //fs.unlinkSync(outputFilePath);
-        }
-      });
-    });
-
-  } catch (error) {
-    console.log('COULD NOT GENERATE STORY', error);
-    res.status(500).json({ success: false, data: 'Could not create the PDF' });
-  }
-}
- */
-
-// Function to download and embed image into PDF
-/**
-
-async function downloadAndEmbedImage(doc, imageUrl, yPos = doc.y) {
-  try {
-    console.log('WORK');
-    const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-    const imageBuffer = Buffer.from(imageResponse.data, 'binary');
-
-    // Embed the image into the PDF document at yPos
-    doc.image(imageBuffer, { width: 300, y: yPos });
-
-  } catch (error) {
-    console.error('Error downloading and embedding image:', error);
-    // Handle error accordingly
-    throw error; // Rethrow error to be caught by the caller
-  }
-}
- */
-
 // Helper function to get the directory name from a URL
 function getDirname(url) {
   return path.dirname(url.replace(/^file:[/]+/, ''));
@@ -973,6 +870,7 @@ function getDirname(url) {
 // Create PDF
 export async function generatePdf(req, res) {
   const { id, userId } = req.body;
+
   try {
     console.log('WORKING');
     const story = await UserStory.findById(id);
@@ -983,14 +881,14 @@ export async function generatePdf(req, res) {
 
     const doc = new pdfkit();
     const outputFileName = `${story.title ? story.title : story.userTitle}-${story.author}.pdf`;
-    const outputFilePath = path.join(getDirname(import.meta.url), outputFileName); // Using getDirname
+    const outputFilePath = path.join(getDirname(import.meta.url), outputFileName);
 
     // Add Cover Image on the first page
     await downloadAndEmbedImage(doc, story.coverImage);
 
     // Add Title and author name on the next page
     doc.addPage();
-    const titleText = story.title ? story.title : story.userTitle;
+    const titleText = `Title: ${story.title ? story.title : story.userTitle}`;
     const authorText = `Author: ${story.author}`;
     const centerX = doc.page.width / 2;
     const centerY = doc.page.height / 2;
@@ -1028,25 +926,32 @@ export async function generatePdf(req, res) {
     const stream = fs.createWriteStream(outputFilePath);
     doc.pipe(stream);
 
-    // Once the stream is closed, send the response
-    stream.on('finish', () => {
-      res.sendFile(outputFilePath, (err) => {
-        if (err) {
-          console.error('Error sending PDF to client:', err);
-          res.status(500).json({ success: false, data: 'Could not send the PDF to the client' });
-        } else {
-          console.log('PDF sent to client successfully');
-          // Optionally, delete the file after sending
-          // fs.unlinkSync(outputFilePath);
-        }
-      });
-    });
-
     // End the document
     doc.end();
 
+    // Wait for the stream to finish writing
+    stream.on('finish', () => {
+      try {
+        // Read the file content synchronously
+        const pdfBuffer = fs.readFileSync(outputFilePath);
+    
+        // Set appropriate headers for PDF
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${outputFileName}"`);
+    
+        // Send the PDF content in the response
+        res.send(pdfBuffer);
+    
+        // Optionally, delete the file after sending
+        fs.unlinkSync(outputFilePath);
+        console.log('PDF sent to the client successfully');
+      } catch (readFileError) {
+        console.error('Error reading PDF file:', readFileError);
+        res.status(500).json({ success: false, data: 'Could not read the PDF file' });
+      }
+    });
   } catch (error) {
-    console.log('COULD NOT GENERATE STORY', error);
+    console.error('COULD NOT GENERATE STORY', error);
     res.status(500).json({ success: false, data: 'Could not create the PDF' });
   }
 }
@@ -1060,10 +965,12 @@ async function downloadAndEmbedImage(doc, imageUrl, yPos = doc.y) {
 
     // Embed the image into the PDF document at yPos
     doc.image(imageBuffer, { width: 300, y: yPos });
-
   } catch (error) {
     console.error('Error downloading and embedding image:', error);
     // Handle error accordingly
     throw error; // Rethrow error to be caught by the caller
   }
 }
+
+
+

@@ -482,29 +482,28 @@ export async function subscriptionSession({userId, priceId}){
     }
 }
 
-export async function createStorPdf({ id, userId }) {
+ export async function createStoryPdf({ id, userId }) {
     try {
-        const res = await axios.post('/api/user/story/generatePdf', { id, userId }, { withCredentials: true });
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'story.pdf');
-        document.body.appendChild(link);
-        link.click();
-        return null;
+      const response = await axios.post('/api/user/story/generatePdf', { id, userId }, { responseType: 'blob', withCredentials: true });
+      
+      // Check if the response contains data
+      if (response.data) {
+        // Create a Blob directly from the response data
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+  
+        // Use window.open to open a new window with the PDF content
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } else {
+        console.error('PDF data not received from the server');
+        // Handle the case where the server did not provide the PDF data
+      }
+  
+      return null;
     } catch (error) {
-        console.log('ERROR RECREATING CHAPTER STORY ', error);
-        if (error.response && error.response.data) {
-            const errorMsg = error.response.data.data || 'Failed to generate pdf';
-            console.log('MSG', errorMsg);
-            toast.error(errorMsg);
-            const errorStatus = error.response.status;
-            if (errorStatus === 401 || errorStatus === 403) {
-                window.location.href = '/login';
-            }
-            return errorMsg;
-        } else {
-            return 'An error occurred during the request.';
-        }
+      console.error('Error creating or opening PDF:', error);
+      // Handle errors, for example, show an error message to the user
+      return 'An error occurred during PDF creation or retrieval.';
     }
-}
+  }
+  

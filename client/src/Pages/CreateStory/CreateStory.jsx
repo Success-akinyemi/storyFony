@@ -159,7 +159,7 @@ function CreateStory() {
             const userEmail = user?.email
             //console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
             const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
-            console.log('RES', res)
+            //console.log('RES', res)
             if(res?.data.success){
                 setStory(res?.data.data)
                 dispatch(signInSuccess(res?.data.user))

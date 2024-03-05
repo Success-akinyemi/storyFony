@@ -6,8 +6,11 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { updateStoryChapterContent } from '../../../helpers/api'
 import toast from 'react-hot-toast'
+import { signInSuccess } from '../../../redux/user/userslice'
+import { useDispatch } from 'react-redux'
 
 function TableOfContent({storyChapter, onChapterClick, currentChapterContent, defaultContent, setSelectedCard}) {
+    const dispatch = useDispatch()
     const loc = useLocation()
     const storyId = loc.pathname.split('/')[3]
     const userId = loc.pathname.split('/')[2]
@@ -31,6 +34,9 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
             try {
                 setUpatingChapter(true)
                 const res = await updateStoryChapterContent({userId, storyId, chapterId, currentChapterContent})
+                if(res?.data.success){
+                    dispatch(signInSuccess(res?.data.user))
+                }
             } catch (error) {
                 console.log('ERROR SAVING CHAPTER', error)
             } finally{
