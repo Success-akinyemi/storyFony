@@ -3,8 +3,11 @@ import PenImg from '../../../assets/pen2.png'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { createNewStory, generateNewStoryDesc, saveStoryDesc } from '../../../helpers/api'
+import { signInSuccess } from '../../../redux/user/userslice'
+import { useDispatch } from 'react-redux'
 
 function BookSummary({motive}) {
+  const dispatch = useDispatch()
   const loc = useLocation()
   const storyId = loc.pathname.split('/')[3]
   const userId = loc.pathname.split('/')[2]
@@ -48,6 +51,10 @@ function BookSummary({motive}) {
     try {
       setLoadingState(true)
       const res = await createNewStory({storyId, userId})
+      if(res?.data.success){
+        dispatch(signInSuccess(res?.data.user))
+        window.location.reload()
+      }
     } catch (error) {
       console.log('Error saving new description', error)      
     } finally {

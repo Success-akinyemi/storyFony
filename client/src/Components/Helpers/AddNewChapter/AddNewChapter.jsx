@@ -3,8 +3,11 @@ import './AddNewChapter.css'
 import { useLocation } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { addNewChapters } from '../../../helpers/api'
+import { signInSuccess } from '../../../redux/user/userslice'
+import { useDispatch } from 'react-redux'
 
 function AddNewChapter() {
+    const dispatch = useDispatch()
     const loc = useLocation()
     const storyId = loc.pathname.split('/')[3]
     const userId = loc.pathname.split('/')[2]
@@ -31,6 +34,10 @@ function AddNewChapter() {
         try {
             setIsLoading(true)
             const res = await addNewChapters({storyId, userId, newChapter, chapterImg})
+            if(res?.data.success){
+                dispatch(signInSuccess(res?.data.user))
+                window.location.reload()
+              }
         } catch (error) {
             
         } finally {
@@ -61,7 +68,7 @@ function AddNewChapter() {
             }
 
             <div className="btn">
-                <button className="button">Create New Chapters</button>
+                <button disabled={isLoading} className="button">{ isLoading ? 'Generating Chapters' : 'Create New Chapters' }</button>
             </div>
         </form>
     </div>

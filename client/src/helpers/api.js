@@ -248,7 +248,8 @@ export async function createNewStory({ storyId, userId }){
         const res = await axios.post('/api/user/story/recreateStory', {storyId, userId}, {withCredentials: true})
         if(res?.data.success){
             toast.success(res?.data.data || 'New story created')
-            window.location.reload()
+            //window.location.reload()
+            return res
         }
     }
      catch (error) {
@@ -273,7 +274,9 @@ export async function rewriteChapter({ text, userId, storyId, chapterId }){
         const res =  await axios.post('/api/user/story/rewriteChapter', {text, userId, storyId, chapterId}, {withCredentials: true})
         if(res?.data.success){
             toast.success('Chapter Updated')
-            window.location.reload()
+            return res
+            //window.location.reload()
+            
         }
     } catch (error) {
         console.log('ERROR RECREATING CHAPTER STORY ', error)
@@ -297,7 +300,8 @@ export async function generateChapterImage({ text, userId, storyId, chapterId })
         const res =  await axios.post('/api/user/story/generateChapterImage', {text, userId, storyId, chapterId}, {withCredentials: true})
         if(res?.data.success){
             toast.success('Image Generated')
-            window.location.reload()
+            //window.location.reload()
+            return res
         }
     } catch (error) {
         console.log('ERROR RECREATING CHAPTER STORY ', error)
@@ -390,9 +394,10 @@ export async function uploadCoverImg(formData){
 export async function addNewChapters({storyId, userId, newChapter, chapterImg}){
     try {
         const res = await axios.post('/api/user/story/addNewChapters', {storyId, userId, newChapter, chapterImg}, {withCredentials: true})
-        if(res.data.success){
+        if(res?.data.success){
             toast.success('Chapters added')
-            window.location.reload()
+            //window.location.reload()
+            return res
         }
     } catch (error) {
         console.log('ERROR RECREATING CHAPTER STORY ', error)

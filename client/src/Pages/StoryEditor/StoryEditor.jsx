@@ -43,7 +43,7 @@ function StoryEditor() {
   }, []);
   const { isLoadingStory, apiUserStoryData } = userStoryBookEditor(query)
   const data = apiUserStoryData?.data
-  //console.log('Story editor', data)
+  console.log('Story editor', data)
 
   //Date FNS
   const updatedAt = data?.updatedAt;

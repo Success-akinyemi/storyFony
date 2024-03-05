@@ -45,6 +45,7 @@ const MenuBar = ({ editor, content }) => {
       console.log('RES from rewrite chapter', res)
       if(res?.data.success){
         dispatch(signInSuccess(res?.data.user))
+        window.location.reload()
       }
     } catch (error) {
       
@@ -62,6 +63,7 @@ const MenuBar = ({ editor, content }) => {
       const res = await generateChapterImage({ text, userId, storyId, chapterId })
       if(res?.data.success){
         dispatch(signInSuccess(res?.data.user))
+        window.location.reload()
       }
     } catch (error) {
       

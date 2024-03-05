@@ -754,10 +754,23 @@ export async function addNewChapters(req, res){
         max_tokens: 950
     })
     const genertedStory = response.choices[0].text
-    console.log('GENSTORY', genertedStory)
+    console.log('GENSTORY', response)
     //get each chapters from the generated story
+    //let chapterRegex
     const chapterRegex = /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g;
+    
     //const chapterRegex = /Chapter (\d+)([\s\S]*?)(?=(Chapter \d+|$))/g;
+/**
+
+if (story.storyLangauage === 'english'){
+  chapterRegex = /(?:Title: (.+?)\n)?|Chapter (\d+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\d+):|$))/g;
+} else if (story.storyLangauage === 'french') {
+  chapterRegex = /(?:Titre: (.+?)\n)?|Chapitre (\d+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\d+):|$))/g;
+} else {
+  chapterRegex = /(?:Title: (.+?)\n)?|Chapter (\d+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\d+):|$))/g;
+}
+ */
+    
     const storyMatches = [...genertedStory.matchAll(chapterRegex)];
 
     const startingChapterNumber = parseInt(storyMatches[0][1], 10);
