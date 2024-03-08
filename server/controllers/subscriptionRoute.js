@@ -1,3 +1,4 @@
+import SubscriptionModel from "../models/Subscription.js"
 import UserModel from "../models/User.js"
 import { stripe } from "../utils/stripe.js"
 
@@ -97,4 +98,17 @@ export async function stripeWebhook(req, res){
 
   // Return a 200 res to acknowledge receipt of the event
   res.send();
+}
+
+export async function getHistroy(req, res){
+  const { id } = req.params
+
+  try {
+    const getSubHistroy = await SubscriptionModel.find({ userId: id })
+
+    res.status(200).json({ success: true, data: getSubHistroy })
+  } catch (error) {
+    console.log('COULD NOT GET HISTROY', error)
+    res.status(500).json({ success: false, data: 'Failed to get user histroy'})
+  }
 }

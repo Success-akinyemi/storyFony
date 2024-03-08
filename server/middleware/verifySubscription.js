@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import UserModel from '../models/User.js'
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.fonyAccessToken
@@ -14,12 +15,12 @@ export const verifyToken = (req, res, next) => {
     });
 }
 
-export const expiredSub = () => {
+export const expiredSub = (req, res, next) => {
     verifyToken(req, res, () => {
         const exipryDate = req.user.planEndDate
         const currentDate = new Date()
         if(exipryDate > currentDate){
-            res.status(420).json({ success: false, data: 'Subscription expired please update your subscription'})
+            return res.status(420).json({ success: false, data: 'Subscription expired please update your subscription'})
         } else {
             next()
         }
@@ -28,7 +29,7 @@ export const expiredSub = () => {
 
 export const basicSub = () => {}
 
-export const standardSub = () => {
+export const standardSub = (req, res, next) => {
     verifyToken(req, res, () => {
         const isBasicUser = req.user.planName
         if(isBasicUser === 'basic'){
@@ -39,12 +40,16 @@ export const standardSub = () => {
     })
 }
 
-export const premiumSub = () => {
-    verifyToken(req, res, () => {
-        const isPremiun = req.user.planName
+export const premiumSub = async (req, res, next) => {
+    verifyToken(req, res, async () => {
+        console.log('user', req.user.id)
+        const user = await UserModel.findById({ _id: req.user.id })
+        const isPremiun = user.planName
         if(isPremiun === 'premium'){
+            console.log('GOOD TO GO')
             next ()
         } else {
+            console.log('NOPE UPDATE SUB')
             return res.status(406).json({ success: false, data: 'Upgrade to Premium Subscrption to continue'})
         }
     })

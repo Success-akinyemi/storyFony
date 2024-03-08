@@ -2,6 +2,7 @@ import { Router } from 'express'
 const privateRouter = Router()
 import * as controller from '../controllers/privateRoute.js'
 import { verifyToken } from '../middleware/auth.js';
+import { expiredSub, premiumSub } from '../middleware/verifySubscription.js';
 
 //POST ROUTES
 privateRouter.route('/create-story').post(verifyToken, controller.createStory);
@@ -18,7 +19,7 @@ privateRouter.route('/user/story/uploadCoverImg').post(verifyToken, controller.u
 privateRouter.route('/user/story/addNewChapters').post(verifyToken, controller.addNewChapters) //add new chapters to a story
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
 privateRouter.route('/user/story/generateAiDesc').post(verifyToken, controller.generateAiDesc) //generate a story decsription for a user using AI
-privateRouter.route('/user/story/generatePdf').post(verifyToken, controller.generatePdf) //generate a story Pdf for the user
+privateRouter.route('/user/story/generatePdf').post(verifyToken, expiredSub, premiumSub, controller.generatePdf) //generate a story Pdf for the user
 
 
 

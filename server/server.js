@@ -51,6 +51,7 @@ app.get('/', (req, res) => {
 //Import DB
 import './config/db.js'
 import UserModel from './models/User.js';
+import SubscriptionModel from './models/Subscription.js';
 
 
 app.use('/api', router)
@@ -119,6 +120,18 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
       if(getPlanName === 'premium'){
         getInkQuantity = 20000 + 80
       }
+
+      let getInkPlanType;
+      if(getPlanName === 'basic'){
+        getInkPlanType = 'Quarter Full Fony Ink'
+      }
+      if(getPlanName === 'standard'){
+        getInkPlanType = 'Half Full Fony Ink'
+      }
+      if(getPlanName === 'premium'){
+        getInkPlanType = 'Fully Full Fony Ink'
+      }
+
       console.log('SUB CREATED DATAS??', currency, startDate, endDate, customer, amount, productId, planStatus)
       const user = await UserModel.findOne({ stripeCustomersId: customer })
       console.log('BEFORE', user)
@@ -135,6 +148,17 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
       user.totalCredit = user.totalCreditBalance
       await user.save()
       console.log('AFTER', user)
+
+      const newSubscription = await SubscriptionModel.create({
+         startDate: startDate * 1000,
+          planType: getInkPlanType,
+          plan: getPlanName,
+          endDate: endDate * 1000,
+          action: 'Subscription created',
+          amount: amount / 100,
+          success: true,
+          userId: user._id
+      })
       break;
     case 'customer.subscription.deleted':
       const customerSubscriptionDeleted = event.data.object;
@@ -180,6 +204,17 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
         subUInkQuantity = 20000 + 80
       }
 
+      let getUInkPlanType;
+      if(subUPlanName === 'basic'){
+        getUInkPlanType = 'Quarter Full Fony Ink'
+      }
+      if(subUPlanName === 'standard'){
+        getUInkPlanType = 'Half Full Fony Ink'
+      }
+      if(subUPlanName === 'premium'){
+        getUInkPlanType = 'Fully Full Fony Ink'
+      }
+
       const Updateuser = await UserModel.findOne({ stripeCustomersId: subUcustomer })
       console.log('UPDATE BEFORE', Updateuser)
       Updateuser.planId = subUproductId
@@ -196,6 +231,17 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
       await Updateuser.save()
       console.log('UPDATE AFTER', Updateuser)
       console.log('SUB UPDATED DATAS??', subUcurrency, subUstartDate, subUendDate, subUcustomer, subUamount, subUproductId, subUplanStatus)
+      
+      const newUSubscription = await SubscriptionModel.create({
+        startDate: subUstartDate * 1000,
+         planType: getUInkPlanType,
+         plan: subUPlanName,
+         endDate: subUendDate * 1000,
+         action: 'Subscription updated',
+         amount: subUamount / 100,
+         success: true,
+         userId: Updateuser._id
+     })
       break;
     // ... handle other event types
     default:
@@ -210,7 +256,7 @@ app.post('/api/subscription/webhooks', express.raw({type: 'application/json'}), 
 //Error Handler Last piece of middleware
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 9003
+const PORT = process.env.PORT || 9001
 
 const server =  app.listen(PORT, () => console.log (`server runing on port http://localhost:${PORT}`))
 

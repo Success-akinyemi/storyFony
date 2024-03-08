@@ -20,6 +20,7 @@ import UploadStoryCover from '../../Components/Helpers/UploadStoryCover/UploadSt
 import AddNewChapter from '../../Components/Helpers/AddNewChapter/AddNewChapter';
 import { createStoryPdf, handlePrivateStory, handlePublishedToCommunity } from '../../helpers/api';
 import toast from 'react-hot-toast';
+import ProgressBar from '../../Components/Helpers/ProgressBar/ProgressBar';
 
 function StoryEditor() {
   const loc = useLocation()
@@ -56,6 +57,9 @@ function StoryEditor() {
     return totalWords + chapterWords.length;
   }, 0)
 
+  //calculate credit balance percentage
+  const creditPercentage = (user?.totalCreditUsed * 100) / user?.totalCredit
+  const percentageValue = Math.floor(creditPercentage)
 
   //POPUP
   const renderPopupComponent = () => {
@@ -218,7 +222,9 @@ function StoryEditor() {
                     <img src={Beaker2Img} className='beakerImg' />
                     <span>{user?.totalCreditUsed} / </span>{user?.totalCredit} <small>Fony ink used</small>
                   </div>
-                  <div className="down"></div>
+                  <div className="down">
+                    <ProgressBar percent={percentageValue} />
+                  </div>
                 </div>
 
                 <div className="middle">
@@ -228,7 +234,7 @@ function StoryEditor() {
                     <div className='menus' onClick={() => handleToggleToCommunity(data?._id)}>{ isLoadingCommunity ? 'Updating...' : `${data?.PublishedToCommunity ? 'Remove from community' : 'Publish to community'}`}</div>
                     <div className='menus' onClick={() => handleTogglePrivateStory(data?._id)}>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private to Public' : 'Public to private'}`}</div>
                     <div className='menus'>Save to draft</div>
-                    <div className='menus' onClick={() => handleCreatePdf(data?._id)}>Download the PDF</div>
+                    <div className='menus' onClick={() => handleCreatePdf(data?._id)}>{isCreatePdf ? 'Generating PDF...' : 'Download the PDF'}</div>
                   </div>
                 </div>
 

@@ -1,0 +1,243 @@
+.mySubsciption{
+    position: relative;
+    width: 100%;
+    background: var(--main-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.mySubsciption .container{
+    position: relative;
+    width: 100%;
+    height: 494px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url(../../assets/bg-1.png.png);
+    background-position: center;
+    object-fit: cover;
+    background-size: cover;
+    flex-direction: column;
+}
+
+.mySubsciption .container .content{
+    position: absolute;
+    top: 165px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 500px;
+    margin: auto;
+}
+
+.mySubsciption .container .content h1{
+    height: 46px;
+    font-size: 34px;
+    color: var(--text-color-2);
+    text-align: center;
+    font-weight: 400;
+}
+
+.mySubsciption .container .content p{
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--text-color-2);
+    text-align: center;
+}
+
+.mySubsciption .container .card{
+    position: absolute;
+    width: 751px;
+    height: 816px;
+    border-radius: 4px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-4);
+    top: 350px;
+}
+
+.mySubsciption .card h1{
+    font-size: 18px;
+    line-height: 24px;
+    color: var(--text-color-2);
+    font-weight: 500;
+}
+
+.mySubsciption .card .infoCard{
+    width: 100%;
+    height: 210px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+    background: var(--main-bg);
+}
+
+.mySubsciption .card .infoCard p{
+    line-height: 22px;
+    color: var(--text-color-2);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.mySubsciption .card .infoCard .sub{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mySubsciption .card .infoCard .sub .subName{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mySubsciption .card .infoCard .sub .subName img{
+    height: 40px;
+    width: 40px;
+}
+
+.mySubsciption .card .infoCard .sub .subName h2{
+    line-height: 32px;
+    color: var(--text-color-2);
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.mySubsciption .card .infoCard .sub p{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    color: var(--text-color-3);
+}
+
+.mySubsciption .card .infoCard .actions{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mySubsciption .card .infoCard .actions button{
+    padding: 6px 10px 6px 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 16px;
+    line-height: 22px;
+    cursor: pointer;
+}
+
+.mySubsciption .card .infoCard .actions button.cancel{
+    border: 1px solid var(--text-color-1);
+    color: var(--text-color-2);
+    background: transparent;
+}
+
+.mySubsciption .card .infoCard .actions button.manage{
+    border: 1px solid var(--bg-5);
+    color: var(--main-bg);
+    background: var(--bg-5);
+}
+
+.mySubsciption .card .subHistroy{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    height: 458px;
+    overflow: hidden;
+}
+
+.mySubsciption .card .subHistroy p{
+    line-height: 19px;
+    color: var(--text-color-2);
+    font-size: 14px;
+    height: 100%;
+}
+
+.mySubsciption .card .subHistroy .histroyTable{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    height: 100%;
+}
+
+.mySubsciption .card .subHistroy .histroyTable .histroyHeader{
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+    height: 19px;
+    color: var(--text-color-3);
+    line-height: 19px;
+    font-size: 13px;
+    font-weight: 300;
+    width: 100%;
+}
+
+.mySubsciption .card .subHistroy .histroyTable .histroyInfo{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* overflow scroll */
+.mySubsciption .card .subHistroy .histroyTable .histroyInfo::-webkit-scrollbar{
+    width: 0.4vw;
+}
+
+.mySubsciption .card .subHistroy .histroyTable .histroyInfo::-webkit-scrollbar-thumb{
+    background: var(--text-color-1);
+    border-radius: 20px;
+}
+
+.mySubsciption .card .subHistroy .histroyTable .histroyInfo::-webkit-scrollbar-track{
+    background: transparent;
+    border-radius: 20px;
+}
+
+.mySubsciption .histroyInfo .histroyInfoCard{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0px 12px 0px;
+}
+
+.mySubsciption .histroyInfo .histroyInfoCard p.text{
+    line-height: 22px;
+    color: var(--text-color-2);
+    font-size: 14px;
+}
+
+.mySubsciption .histroyInfo .histroyInfoCard p.btn{
+    padding: 6px 10px 6px 10px;
+    background: var(--bg-5);
+    color: var(--main-bg);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 19px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mySubsciption .foot{
+    margin-top: 60rem;
+}

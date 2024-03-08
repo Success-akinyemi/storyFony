@@ -8,14 +8,14 @@ function InsufficientInk() {
         <div className="top">
             <div className="head">
                 <img className='beaker' src={BeakerImg} alt='beaker' />
-                <h3>Oh sorry, you are out of link</h3>
+                <h3>Oh sorry, you are out of Ink</h3>
             </div>
 
             <p>You need to get more fony ink to continue writing your story</p>
         </div>
 
         <span className="btn">
-            <Link className='link'>Get Fony ink</Link>
+            <Link className='link' to='/pricing'>Get Fony ink</Link>
         </span>
     </div>
   )

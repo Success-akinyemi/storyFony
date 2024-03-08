@@ -21,6 +21,7 @@ import ProfilePage from './Pages/ProfilePage/ProfilePage'
 import StoryEditor from './Pages/StoryEditor/StoryEditor'
 import Support from './Pages/Support/Support'
 import TermOfUse from './Pages/TermOfUse/TermOfUse'
+import MySubsciption from './Pages/MySubsciption/MySubsciption'
 
 function App() {
 
@@ -73,6 +74,9 @@ function App() {
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/support' element={<Support />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/mysubscription' element={<MySubsciption />} />
           </Route>
           <Route path='/term-of-use' element={<TermOfUse />} />
           

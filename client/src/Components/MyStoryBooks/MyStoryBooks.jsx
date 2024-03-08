@@ -11,9 +11,11 @@ import toast from 'react-hot-toast';
 function MyStoryBooks({setSelectedCard, setShareStoryId}) {
     const { apiUserStoryData, isLoadingStory, storyStatus, storyServerError } = userStoryBook();
     const dataa = apiUserStoryData?.data
+    const sortedDataArray = dataa?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     const navigate = useNavigate()
 
-    const data = dataa
+    const data = sortedDataArray
     //console.log('DTAA', storyServerError)
 
     if(storyStatus === 401 || storyStatus === 403){

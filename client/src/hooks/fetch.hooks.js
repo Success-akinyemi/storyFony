@@ -76,7 +76,6 @@ export function userStoryBook(query) {
     return data;
 }
 
-
 export function userStoryBookEditor(query) {
     const [data, setData] = useState({ isLoadingStory: true, apiUserStoryData: null, storyStatus: null, storyServerError: null });
     const { currentUser } = useSelector(state => state.user);
@@ -184,4 +183,46 @@ export function useFetchPrice(query){
     }, [query])
 
     return data
+}
+
+/**Get user subscription histroy */
+export function fetchUserSubscription(query) {
+    const [data, setData] = useState({ isLoadingSub: true, apiSubData: null, subStatus: null, subServerError: null });
+    const { currentUser } = useSelector(state => state.user);
+    const user = currentUser?.data;
+    const id = user?._id;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let url;
+                if (!query) {
+                    // If there is no query, fetch all stories for the user
+                    url = `/api/subscription/subHistroy/${id}`;
+                } else {
+                    // If there is a query, fetch a specific story
+                    const { userId, storyId } = query;
+                    url = `/api/subscription/${id}/${id}`;
+                }
+
+                //console.log('ID', id, 'QUERY', query);
+                const { data, status } = await axios.get(url, { withCredentials: true });
+                //console.log('Story Data from Hooks>>>', data);
+
+                if (status === 200) {
+                    setData({ isLoadingSub: false, apiSubData: data, subStatus: status, subServerError: null });
+                } else {
+                    setData({ isLoadingSub: false, apiSubData: null, subStatus: status, subServerError: null });
+                }
+            } catch (error) {
+                setData({ isLoadingSub: false, apiSubData: null, subStatus: error.response?.status, subServerError: error.response?.data?.data ? error.response?.data?.data : error });
+                //console.log(data);
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, [query]);
+
+    return data;
 }

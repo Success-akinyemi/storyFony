@@ -507,6 +507,13 @@ export async function subscriptionSession({userId, priceId}){
       return null;
     } catch (error) {
       console.error('Error creating or opening PDF:', error);
+      const errorCode = error.response.status
+      console.log('code', errorCode)
+      if(errorCode == 406){
+        return toast.error('Upgrade to Premium Subscrption to continue')
+      } else {
+        return toast.error('Unable not create pdf')
+      }
       // Handle errors, for example, show an error message to the user
       return 'An error occurred during PDF creation or retrieval.';
     }

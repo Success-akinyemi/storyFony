@@ -86,7 +86,7 @@ export async function createStory(req, res) {
 
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and the word tile only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english`,
+        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and the word title only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english. except fot the word 'Chapter' it must be in english for every langauage. NOTE THE WORD 'Chapter' FOR EACH NEW CHAPTER MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE. NOTE THE WORD 'Title' FOR THE ENTIRE STORY TITLE MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE`,
         temperature: 0.9,
         max_tokens: 950,
       });
@@ -749,7 +749,7 @@ export async function addNewChapters(req, res){
     if(story){
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Based on this story description ${story.desc}. the last chapter of the story is this: ${lastChapterStory.chapterContent} and it is chapter ${story.story.length}. generate ${newChapter} more chapters to be added to the story it will continue from where the last chapter stops. the new generated chapters must blend with the existng story. also give each chapter a befitting title. also the story must be in ${story.storyLangauage}`,
+        prompt: `Based on this story description ${story.desc}. the last chapter of the story is this: ${lastChapterStory?.chapterContent ? lastChapterStory?.chapterContent : 'no content yet so start from begining'} and it is chapter ${story?.story?.length ? story?.story?.length : 'the new story start be chapter 1'}. generate ${newChapter} more chapters to be added to the story it will continue from where the last chapter stops. the new generated chapters must blend with the existng story. also give each chapter a befitting title. also the story must be in ${story.storyLangauage} except fot the word 'Chapter' it must be in english for every langauage. NOTE THE WORD 'Chapter' FOR EACH NEW CHAPTER MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE`,
         temperature: 0.9,
         max_tokens: 950
     })
@@ -771,7 +771,7 @@ if (story.storyLangauage === 'english'){
 }
  */
     
-    const storyMatches = [...genertedStory.matchAll(chapterRegex)];
+    const storyMatches = [...genertedStory?.matchAll(chapterRegex)];
 
     const startingChapterNumber = parseInt(storyMatches[0][1], 10);
 
@@ -969,11 +969,16 @@ export async function generatePdf(req, res) {
   }
 }
 
+const axiosConfig = {
+  responseType: 'arraybuffer',
+  baseURL: process.env.SERVER_URL, // Update with your server URL
+};
+
 // Function to download and embed image into PDF
 async function downloadAndEmbedImage(doc, imageUrl, yPos = doc.y) {
   try {
     console.log('WORK');
-    const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const imageResponse = await axios.get(imageUrl, axiosConfig);
     const imageBuffer = Buffer.from(imageResponse.data, 'binary');
 
     // Embed the image into the PDF document at yPos
