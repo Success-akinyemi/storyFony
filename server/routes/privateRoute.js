@@ -20,6 +20,7 @@ privateRouter.route('/user/story/addNewChapters').post(verifyToken, controller.a
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
 privateRouter.route('/user/story/generateAiDesc').post(verifyToken, controller.generateAiDesc) //generate a story decsription for a user using AI
 privateRouter.route('/user/story/generatePdf').post(verifyToken, expiredSub, premiumSub, controller.generatePdf) //generate a story Pdf for the user
+privateRouter.route('/user/story/generateTranscipt').post(verifyToken, controller.generateAudio) //generate audio file for story
 
 
 

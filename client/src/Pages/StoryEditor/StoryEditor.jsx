@@ -173,6 +173,10 @@ function StoryEditor() {
   }
 
   const handleCreatePdf = async (id) => {
+    if(user?.planName !== 'premium'){
+      toast.error('Availble for Premium Plan. Update your Plan')
+      return;      
+    }
     if(isCreatePdf){
       toast.error('Creating Pdf, please wait')
       return;
@@ -234,7 +238,7 @@ function StoryEditor() {
                     <div className='menus' onClick={() => handleToggleToCommunity(data?._id)}>{ isLoadingCommunity ? 'Updating...' : `${data?.PublishedToCommunity ? 'Remove from community' : 'Publish to community'}`}</div>
                     <div className='menus' onClick={() => handleTogglePrivateStory(data?._id)}>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Private to Public' : 'Public to private'}`}</div>
                     <div className='menus'>Save to draft</div>
-                    <div className='menus' onClick={() => handleCreatePdf(data?._id)}>{isCreatePdf ? 'Generating PDF...' : 'Download the PDF'}</div>
+                    <div className='menus' onClick={() => handleCreatePdf(data?._id)}>{isCreatePdf ? 'Generating PDF...' : user?.planName !== 'premium' ?  'Download the PDF (Premium Plan)' : 'Download the PDF'}</div>
                   </div>
                 </div>
 

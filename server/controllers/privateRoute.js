@@ -79,6 +79,15 @@ export async function createStory(req, res) {
       if (!user) {
         return res.status(404).json({ success: false, data: 'Invalid User' });
       }
+      
+      if(user?.planName === 'basic' && numberOfSeries > 15){
+        return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 15 for basic plan' });
+      }
+
+      if(user?.planName === 'standard' && numberOfSeries > 30){
+        return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 30 for standard plan' });
+      }
+
 
       if (inkNeeded > user.totalCreditBalance) {
         return res.status(402).json({ success: false, data: 'Insufficient Ink credit' });
@@ -990,5 +999,66 @@ async function downloadAndEmbedImage(doc, imageUrl, yPos = doc.y) {
   }
 }
 
+//generate audio for story
+export async function generateAudio(req, res){
+  const {userId, storyId, userVoice} = req.body
+  console.log(userId, storyId, userVoice)
+  try {
+    const user = await UserModel.findById({ _id: userId })
+    const story = await UserStory.findById({ _id: storyId })
+    if(!user){
+      return res.status(404).json({ success: false, data: 'Invalid User' })
+    }
 
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Invalid Story' })
+    }
+
+    const storyData = story.story
+ 
+
+    //test for one chapter
+    const testOneChapter = storyData[0]
+    console.log('DATA', testOneChapter)
+
+    let concatenatedText = '';
+    if (testOneChapter) {
+      concatenatedText = `${testOneChapter.chapterNumber}: ${testOneChapter.chapterTitle}\n${testOneChapter.chapterContent}\n`;
+    }
+
+/**
+ * 
+if (testOneChapter.length === 1) {
+  const chapter = testOneChapter[0];
+  concatenatedText = `${chapter.chapterNumber}: ${chapter.chapterTitle}\n${chapter.chapterContent}\n`;
+} else {
+  concatenatedText = testOneChapter
+    .map(
+      (chapter) =>
+        `${chapter.chapterNumber}: ${chapter.chapterTitle}\n${chapter.chapterContent}\n`
+    ).join('\n');
+}
+ */
+
+console.log(concatenatedText);
+
+ 
+    const response = await openai.audio.speech.create({
+      model: 'tts-1',
+      voice: userVoice,
+      input: concatenatedText
+    })
+    console.log('RES', response)
+
+    const contentType = response.headers.get('content-type');
+    res.set('Content-Type', contentType);
+
+    response.body.pipe(res);
+
+    
+  } catch (error) {
+    console.log('ERROR GETTING AUDIO OF STORY', error)
+    res.status(500).json({ success: false, data: 'Failed to generate audio'})
+  }
+}
 

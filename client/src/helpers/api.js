@@ -512,10 +512,44 @@ export async function subscriptionSession({userId, priceId}){
       if(errorCode == 406){
         return toast.error('Upgrade to Premium Subscrption to continue')
       } else {
-        return toast.error('Unable not create pdf')
+         toast.error('Unable not create pdf')
       }
       // Handle errors, for example, show an error message to the user
       return 'An error occurred during PDF creation or retrieval.';
+    }
+  }
+  
+ /**
+  export async function generateTranscipt({userId, storyId, userVoice}){
+    try {
+        const res = await axios.post('/api/user/story/generateTranscipt', {userId, storyId, userVoice}, {withCredentials: true})
+        const audioBlob = res.data;
+        const audioUrl = URL.createObjectURL(audioBlob)
+ 
+        // play audio
+        const audio = new Audio(audioUrl)
+        audio.play()
+    } catch (error) {
+        console.error('Error streaming audio:', error);
+    }
+  }
+ 
+ */ 
+  export async function generateTranscipt({ userId, storyId, userVoice }) {
+    try {
+      const res = await axios.post('/api/user/story/generateTranscipt', { userId, storyId, userVoice }, { responseType: 'blob', withCredentials: true });
+  
+      if (!(res.data instanceof Blob)) {
+        throw new Error('Invalid audio data format');
+      }
+  
+      const audioUrl = URL.createObjectURL(res.data);
+  
+      // play audio
+      const audio = new Audio(audioUrl);
+      audio.play();
+    } catch (error) {
+      console.error('Error streaming audio:', error);
     }
   }
   

@@ -17,6 +17,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { signInSuccess } from '../../redux/user/userslice'
+import toast from 'react-hot-toast'
 
 function CreateStory() {
     const navigate = useNavigate()
@@ -148,6 +149,16 @@ function CreateStory() {
         const costOfSeries = import.meta.env.VITE_COST_PER_SERIES
 
         const totalInkNeeded = numberOfSeries * costOfSeries
+
+        if(user?.planName === 'basic' && numberOfSeries > 15){
+            toast.error('Max number of Chapter for story is 15 for basic plan')
+            return;
+        }
+
+        if(user?.planName === 'standard' && numberOfSeries > 30){
+            toast.error('Max number of Chapter for story is 30 for standard plan')
+            return;
+        }
 
         if(totalInkNeeded > availabeInk){
             setErrorMessage('insufficienBalance')
