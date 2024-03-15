@@ -22,6 +22,10 @@ function AiVoiceReader() {
     
     try {
       setIsloading(true)
+      if(!userVoice){
+        toast.error('Select a user Voice')
+        return;
+      }
       if(isLoading){
         toast.error('Generating Please wait')
         return
@@ -37,7 +41,7 @@ function AiVoiceReader() {
   return (
     <div className='aiVoiceReader' >
       <div className="voice">
-        <p>Modify voice</p>
+        <p>User voice</p>
         <select value={userVoice} onChange={(e) => setUserVoice(e.target.value)}>
           {
            voice.map((item, idx) => (
