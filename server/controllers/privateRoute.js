@@ -70,9 +70,9 @@ export async function createStory(req, res) {
   try {
     const commonLogic = async (language, titleMatchRegex, chapterRegex, heading) => {
 
-      if (!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending) {
-        return res.status(400).json({ success: false, data: 'Please fill all necessary fields' });
-      }
+      //if (!title || !desc || !genreValue || !language || !totalInkNeeded || !numberOfSeries || !userEmail || !ending) {
+      //  return res.status(400).json({ success: false, data: 'Please fill all necessary fields' });
+      //}
 
       const user = await UserModel.findOne({ email: userEmail });
 
