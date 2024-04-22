@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken"
+import OpenAI from 'openai'
+import ApiKeyModel from "../models/ApiKey.js"
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.fonyAccessToken
@@ -12,6 +14,25 @@ export const verifyToken = (req, res, next) => {
         req.user = user;
         next();
     });
+}
+
+export const verifyApiKey = async (req, res, next) => {
+    verifyToken(req, res, async () => {
+        const id = req.user.id
+        const findkey = await ApiKeyModel.findOne({ userId: id })
+        const key = findkey?.key
+        if(!findkey && !key){
+            return res.status(404).json({ success: false, data: 'Please add your openai api key in profile page'})
+        }
+        const openai = new OpenAI({ apiKey: key });
+
+        req.openai = openai
+        if(req.user.id){
+            next()
+        } else {
+            return res.status(403).json({ success: false, data: 'You are Forbidden'})
+        }
+    })
 }
 
 export const verifyAdminToken = (req, res, next) => {

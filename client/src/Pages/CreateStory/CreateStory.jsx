@@ -52,6 +52,7 @@ function CreateStory() {
     const [ isGeneratingDesc, setGeneratingDesc] = useState(false)
     const { placeholder, reason } = createStoryPlaceHolder
 
+    const [ titleError, setTitleError ] = useState(null)
 
     const onBackClick = () => {
         if(card !== 1){
@@ -73,7 +74,13 @@ function CreateStory() {
         }
         try {
             setGeneratingDesc(true)
-            const res = await generateAiDesc({userId, genreValue})
+            if(!title){
+                setTitleError('For better description give a story title');
+                setTimeout(() => {
+                    setTitleError(false)
+                }, 4000)
+            }
+            const res = await generateAiDesc({userId, genreValue, title})
             if(res?.data.success){
                 const trimmedDesc = res?.data.data.trim();
                 setDesc(trimmedDesc);
@@ -150,15 +157,15 @@ function CreateStory() {
 
         const totalInkNeeded = numberOfSeries * costOfSeries
 
-        if(user?.planName === 'basic' && numberOfSeries > 15){
-            toast.error('Max number of Chapter for story is 15 for basic plan')
-            return;
-        }
+        //if(user?.planName === 'basic' && numberOfSeries > 15){
+        //    toast.error('Max number of Chapter for story is 15 for basic plan')
+        //    return;
+        //}
 
-        if(user?.planName === 'standard' && numberOfSeries > 30){
-            toast.error('Max number of Chapter for story is 30 for standard plan')
-            return;
-        }
+        //if(user?.planName === 'standard' && numberOfSeries > 30){
+        //    toast.error('Max number of Chapter for story is 30 for standard plan')
+        //    return;
+        //}
 
         if(totalInkNeeded > availabeInk){
             setErrorMessage('insufficienBalance')
@@ -349,6 +356,13 @@ function CreateStory() {
                                         <small>{numberOfLetters}/{maxLetters}</small>
                                     </span>
                                     <input type="text" onChange={handleLetterInputChange} value={title} placeholder='Eg, Detective Cane on a Secret mission' />
+                                    <p className='titleError'>
+                                        {
+                                            titleError && (
+                                                titleError
+                                            )
+                                        }
+                                    </p>
                                 </div>
 
                                 <div className='inputGroup2'>

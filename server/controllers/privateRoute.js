@@ -1,7 +1,7 @@
-import OpenAI from 'openai'
+//import OpenAI from 'openai'
 import UserStory from '../models/UsersStory.js'
 import UserModel from '../models/User.js'
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+//const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 import pdfkit from 'pdfkit'
 import fs from 'fs';
 import { promises as fsPromises } from 'fs';
@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from 'uuid';
 //import { firebaseConfig } from '../utils/serviceAccountKey.js'
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Readable } from 'stream'
 import path from 'path'
 
 const firebaseConfig = {
@@ -93,9 +92,13 @@ export async function createStory(req, res) {
         return res.status(402).json({ success: false, data: 'Insufficient Ink credit' });
       }
 
+      const openai = req.openai;
+
       const response = await openai.completions.create({
         model: 'gpt-3.5-turbo-instruct',
-        prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each chapter should have a title and the word title only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english. except fot the word 'Chapter' it must be in english for every langauage. NOTE THE WORD 'Chapter' FOR EACH NEW CHAPTER MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE. NOTE THE WORD 'Title' FOR THE ENTIRE STORY TITLE MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE`,
+        //prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each new chapter should have a chapter title and the word title only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english. except fot the word 'Chapter' it must be in english for every langauage. NOTE THE WORD 'Chapter' FOR EACH NEW CHAPTER MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE. NOTE THE WORD 'Title' FOR THE ENTIRE STORY TITLE MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE`,
+        //prompt: `Generate a captivating story based on the title: ${title} and description: ${desc}. The entire story must be in ${language} language and must fall under the genre: ${genreValue}. ${mimicAuthor ? `mimic the writing style of ${mimicAuthor}` : ''}. The story should consist of ${numberOfSeries} chapters, each with a Chapter title. The word 'Chapter' for each new Chapter to signify the start of a new Chapter story must be in English language, regardless of the story language. Additionally, ensure that the entire story has a title, with the word 'Title' in English language. End the story in the style: ${ending}`,
+        prompt: `Craft an engaging story titled '${title}', inspired by the description: '${desc}'. This narrative must unfold in ${language} language, within the ${genreValue} genre. ${mimicAuthor ? `If applicable, mimic the writing style of ${mimicAuthor}` : ''}. The tale should span ${numberOfSeries} chapters, with each chapter beginning with the word 'Chapter' in English to denote its commencement. Additionally, ensure the entire story has an English-language title. Conclude the story in the following style: '${ending}'`,
         temperature: 0.9,
         max_tokens: 950,
       });
@@ -164,13 +167,14 @@ export async function createStory(req, res) {
     if (language === 'English') {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
     } 
-    else if (language === 'French') {
-      await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
-    }
+    //else if (language === 'French') {
+    //  await commonLogic(language, /Titre: (.+?)\n/, /Chapitre (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapitre (\w+):|$))/g, 'Chapitre');
+    //}
     //else if (language === 'Spanish') {
     //  await commonLogic(language, /Título: (.+?)\n/, /Capítulo (\w+): ([^\n]+)\n([\s\S]*?)(?=(Capítulo (\w+):|$))/g, 'Capítulo');
-    //} //else if (language === 'Chinese') {
-      //await commonLogic(language, /爱在这个温馨的故事中没有界限。跟随两个人的旅程，他们携手应对恋爱中的波折，从初吻的蝶变到真正的热情。当他们的爱情故事展开时，秘密、挑战和意外的转折考验着他们的感情。\n([\s\S]+?)((第一章)|(第二章)|(第三章))：/, /(第一章|第二章|第三章)：[\s\S]+?(\n\n|$)/g, '第一章');
+    //} 
+    //else if (language === 'Chinese') {
+    //  await commonLogic(language, /爱在这个温馨的故事中没有界限。跟随两个人的旅程，他们携手应对恋爱中的波折，从初吻的蝶变到真正的热情。当他们的爱情故事展开时，秘密、挑战和意外的转折考验着他们的感情。\n([\s\S]+?)((第一章)|(第二章)|(第三章))：/, /(第一章|第二章|第三章)：[\s\S]+?(\n\n|$)/g, '第一章');
     //} 
     //else if (language === 'Swahili') {
     //  await commonLogic(language, /Title: (.+?)\n/, /Sura ya (\w+): ([^\n]+)\n([\s\S]*?)(?=(Sura ya (\w+):|$))/g, 'Sura ya');
@@ -256,6 +260,25 @@ export async function getUserStory(req, res){
   } catch (error) {
     console.log('ERROR GETTING USER STORY', error)
     res.status(500).json({ success: false, data: 'failed to get stories'})
+  }
+}
+
+export async function deleteStory(req, res){
+  const { storyId, userId } = req.body
+  try {
+    if(req.user.id !== userId){
+      return res.status(403).json({ success: false, data: 'you can only delete your story' })
+    }
+    const story = await UserStory.find({ _id: storyId })
+    if(!story){
+      return res.status(404).json({ success: false, data: 'Story not found'})
+    }
+    const deleteUserStory = await UserStory.findOneAndDelete({ _id: storyId })
+    
+    res.status(200).json({ success: true, data: 'Story deleted successful'})
+  } catch (error) {
+    console.log('UNABLE TO DELETE STORY', error)
+    res.status(500).json({ success: false, data: 'Unable to delete story' })
   }
 }
 
@@ -357,7 +380,7 @@ export async function generateNewStoryDesc(req, res){
     }
 
     const storyDesc = await UserStory.findById({ _id: storyId })
-    const user = await UserModel.findById({ id: userId })
+    const user = await UserModel.findById({ _id: userId })
     if(!storyDesc){
       return res.status(404).json({ success: false, data: 'Story not Found'})
     }
@@ -367,6 +390,8 @@ export async function generateNewStoryDesc(req, res){
     }
 
     const description = storyDesc.storyDesc
+
+    const openai = req.openai;
 
     const response = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
@@ -429,8 +454,10 @@ export async function recreateStory (req, res){
 
     const oldStory = await UserStory.findById({ _id: storyId })
     const user = await UserModel.findById({ _id: userId })
+    
+    const openai = req.openai;
 
-    const inkNeeded = oldStory.story.length() * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10)
+    const inkNeeded = oldStory.story.length * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10)
     if(!oldStory){
       return res.status(404).json({ success: false, data: 'Story not Found'})
     }
@@ -488,6 +515,7 @@ export async function rewriteChapter(req, res){
 
     const story = await UserStory.findById({ _id: storyId })
     const user = await UserModel.findById({ _id: userId })
+    const openai = req.openai
     
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
@@ -554,7 +582,8 @@ export async function generateChapterImage(req, res){
     }
 
     const chapterIndex  = story.story.findIndex((chapter) => chapter._id.toString() === chapterId);
-    
+    const openai = req.openai
+
     if (chapterIndex  !== -1) {
       const chapter = story.story[chapterIndex];
       //console.log("CHAPTER", chapter)
@@ -653,6 +682,7 @@ export async function generateCoverStoryImage(req, res){
 
     const story = await UserStory.findById({ _id: storyId })
     const user = await UserModel.findById({ _id: userId })
+    const openai = req.openai                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     }
@@ -743,6 +773,7 @@ export async function addNewChapters(req, res){
 
     const story = await UserStory.findById({ _id: storyId })
     const user = await UserModel.findById({ _id: userId })
+    const openai = req.openai
     if(!story){
       return res.status(404).json({ success: false, data: 'Story does not exist'})
     }
@@ -849,7 +880,7 @@ export async function likeStory(req, res){
 }
 
 export async function generateAiDesc(req, res){
-  const { userId, genreValue } = req.body
+  const { userId, genreValue, title } = req.body
   try {
     const user = await UserModel.findById({ _id: userId })
     if(!user){
@@ -863,9 +894,11 @@ export async function generateAiDesc(req, res){
       return res.status(402).json({ success: false, data: 'Insufficient Ink credit'})
     }
 
+    const openai = req.openai;
+
     const response = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
-      prompt: `generate a captivating and intresting description for a story centered around ${genreValue}. the description must be complete, and also the decription must be a public safe one`,
+      prompt: `generate a captivating and intresting description for a story centered around ${genreValue} and ${title}. the description must be complete, and also the decription must be a public safe one`,
       temperature: 0.9,
       max_tokens: 90
     })

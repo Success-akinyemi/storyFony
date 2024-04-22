@@ -173,10 +173,10 @@ function StoryEditor() {
   }
 
   const handleCreatePdf = async (id) => {
-    if(user?.planName !== 'premium'){
-      toast.error('Availble for Premium Plan. Update your Plan')
-      return;      
-    }
+    //if(user?.planName !== 'premium'){
+    //  toast.error('Availble for Premium Plan. Update your Plan')
+    //  return;      
+    //}
     if(isCreatePdf){
       toast.error('Creating Pdf, please wait')
       return;

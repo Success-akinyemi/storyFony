@@ -80,7 +80,7 @@ function Login() {
 
 
         } catch (errorMsg) {
-            console.log('ERROR REGISTEREING USER:', errorMsg)
+            console.log('ERROR LOGIN IN USER:', errorMsg)
             const errorM = errorMsg.response?.data?.data || 'An error occurred during the request.';
             console.log('ER', errorM)
             dispatch(signInFailure(errorM))

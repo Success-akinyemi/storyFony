@@ -226,3 +226,29 @@ export function fetchUserSubscription(query) {
 
     return data;
 }
+
+/**Get Key*/
+export function useFetchKey(query){
+    const [data, setData] = useState({ isLoading: true, apiData: null, status: null, serverError: null})
+
+    useEffect(() => {
+        const fetchData =  async () => {
+            try {        
+                
+                const { data, status} = !query ? await axios.get(`/api/apikey/getKey/${query}`, { withCredentials: true }) : await axios.get(`/api/apikey/getKey/${query}`, { withCredentials: true })
+                //console.log('Data from Hooks>>>', data)
+
+                if(status === 200){
+                    setData({ isLoading: false, apiData: data, status: status, serverError: null})
+                } else{
+                    setData({ isLoading: false, apiData: null, status: status, serverError: null})
+                }
+            } catch (error) {
+                setData({ isLoading: false, apiData: null, status: null, serverError: error})
+            }
+        };
+        fetchData()
+    }, [query])
+
+    return data
+}

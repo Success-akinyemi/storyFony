@@ -4,7 +4,7 @@ import MoreImg from '../../../assets/more.png'
 import heartImg from '../../../assets/heart.png'
 import BorderHeartImg from '../../../assets/borderHeart.png'
 import { useEffect, useState } from 'react'
-import { handlePrivateStory, likeStory } from '../../../helpers/api'
+import { deleteStory, handlePrivateStory, likeStory } from '../../../helpers/api'
 import { useSelector } from 'react-redux'
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -62,6 +62,19 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
         if(user?.email === data?.email || data.privateStory === false){
             setSelectedCard('shareStoryToSocialMedia')
             setShareStoryId(data?._id)
+        }
+    }
+
+    const handleDelete = async () => {
+        const confirm = window.confirm(`Hey, Are you sure you want to delete this story: ${data?.storyTitle ? data?.storyTitle : data?.userTitle}`)
+        if(confirm){
+            try {
+                const storyId = data?._id
+                const userId = user?._id
+                const res = await deleteStory({ storyId, userId })
+            } catch (error) {
+                console.log('first')
+            }
         }
     }
 
@@ -128,6 +141,13 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
                             }
                             <span onClick={() => handleTogglePrivateStory(data?._id)} className='link moreCardLink'>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Make Public' : 'Make Private'} `}</span>
                             <Link className='link moreCardLink'>Publish</Link>
+                            {
+                                user?.email === data?.email ? (
+                                    <span className='link moreCardLink delete' onClick={handleDelete}>Delete</span>
+                                ) : (
+                                    ''
+                                )
+                            }
                         </div>
                     </div>
 

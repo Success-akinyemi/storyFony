@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 config();
 import express from 'express'
 import router from './routes/auth.js'
+import apikeyRouter from './routes/apikey.js'
 import privateRouter from './routes/privateRoute.js'
 import subscriptionRouter from './routes/subscriptionRoute.js';
 import errorHandler from './middleware/error.js'
@@ -56,6 +57,7 @@ import SubscriptionModel from './models/Subscription.js';
 
 app.use('/api', router)
 app.use('/api', privateRouter)
+app.use('/api', apikeyRouter)
 app.use('/api/subscription', subscriptionRouter)
 
 //Stripe webhook

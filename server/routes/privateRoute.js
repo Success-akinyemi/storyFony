@@ -1,25 +1,26 @@
 import { Router } from 'express'
 const privateRouter = Router()
 import * as controller from '../controllers/privateRoute.js'
-import { verifyToken } from '../middleware/auth.js';
+import { verifyApiKey, verifyToken } from '../middleware/auth.js';
 import { expiredSub, premiumSub } from '../middleware/verifySubscription.js';
 
 //POST ROUTES
-privateRouter.route('/create-story').post(verifyToken, controller.createStory);
+privateRouter.route('/create-story').post(verifyToken, verifyApiKey, controller.createStory);
 privateRouter.route('/user/story/handlePrivateStory').post(verifyToken, controller.handlePrivateStory) //Toggle wheather story is public or private
 privateRouter.route('/user/story/handlePublishedToCommunity').post(verifyToken, controller.handlePublishedToCommunity) //Toggle wheather story is public or private
-privateRouter.route('/user/story/handleNewStoryDesc').post(verifyToken, controller.generateNewStoryDesc) // generate new description for a user story with ai
+privateRouter.route('/user/story/handleNewStoryDesc').post(verifyToken, verifyApiKey, controller.generateNewStoryDesc) // generate new description for a user story with ai
 privateRouter.route('/user/story/saveDesc').post(verifyToken, controller.saveStoryDesc) //Save story description edited by user 
-privateRouter.route('/user/story/recreateStory').post(verifyToken, controller.recreateStory ) // recreate an aleady existing story for a user
-privateRouter.route('/user/story/rewriteChapter').post(verifyToken, controller.rewriteChapter ) // recreate an aleady existing chapter of a story for a user
-privateRouter.route('/user/story/generateChapterImage').post(verifyToken, controller.generateChapterImage ) // generate chapter image for each chapter of a story
+privateRouter.route('/user/story/delete').post(verifyToken, controller.deleteStory) //delete user story
+privateRouter.route('/user/story/recreateStory').post(verifyToken, verifyApiKey, controller.recreateStory ) // recreate an aleady existing story for a user
+privateRouter.route('/user/story/rewriteChapter').post(verifyToken, verifyApiKey, controller.rewriteChapter ) // recreate an aleady existing chapter of a story for a user
+privateRouter.route('/user/story/generateChapterImage').post(verifyToken, verifyApiKey, controller.generateChapterImage ) // generate chapter image for each chapter of a story
 privateRouter.route('/user/story/updateStoryChapterContent').post(verifyToken, controller.updateStoryChapterContent) //update chapter route
-privateRouter.route('/user/story/generateCoverStoryImage').post(verifyToken, controller.generateCoverStoryImage) //generate new cover image for story with AI
+privateRouter.route('/user/story/generateCoverStoryImage').post(verifyToken, verifyApiKey, controller.generateCoverStoryImage) //generate new cover image for story with AI
 privateRouter.route('/user/story/uploadCoverImg').post(verifyToken, controller.uploadCoverImg) //save new story cover image upoaded by user
-privateRouter.route('/user/story/addNewChapters').post(verifyToken, controller.addNewChapters) //add new chapters to a story
+privateRouter.route('/user/story/addNewChapters').post(verifyToken, verifyApiKey, controller.addNewChapters) //add new chapters to a story
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
-privateRouter.route('/user/story/generateAiDesc').post(verifyToken, controller.generateAiDesc) //generate a story decsription for a user using AI
-privateRouter.route('/user/story/generatePdf').post(verifyToken, expiredSub, premiumSub, controller.generatePdf) //generate a story Pdf for the user
+privateRouter.route('/user/story/generateAiDesc').post(verifyToken, verifyApiKey, controller.generateAiDesc) //generate a story decsription for a user using AI
+privateRouter.route('/user/story/generatePdf').post(verifyToken, controller.generatePdf) //generate a story Pdf for the user
 privateRouter.route('/user/story/generateTranscipt').post(verifyToken, controller.generateAudio) //generate audio file for story
 
 

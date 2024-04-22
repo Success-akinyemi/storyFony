@@ -79,7 +79,7 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
                                     <div className='saveEdit'>
                                         <p>{item?.chapterTitle}</p>
                                         <div className='btnBox'>
-                                            <button disabled={updatingChapter} className='saveBtn' onClick={() => handleUpdateStoryChapter(item?._id, item?.chapterContent)}>Done</button>
+                                            <button disabled={updatingChapter} className='saveBtn' onClick={() => handleUpdateStoryChapter(item?._id, item?.chapterContent)}>{updatingChapter ? 'Saving...' : 'Done'}</button>
                                         </div>
                                     </div>
                                 )}

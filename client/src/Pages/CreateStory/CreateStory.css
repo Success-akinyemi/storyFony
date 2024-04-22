@@ -39,6 +39,15 @@
     cursor: pointer;
 }
 
+.createStory .titleError{
+    display: flex;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-5);
+}
+
 .createStory .conatiner{
     width: 900px;
     min-height: 575px;
@@ -230,6 +239,12 @@
 .slick-slide > div{
     margin: 0 10px;
     height: 223px;
+}
+
+.slick-arrow.slick-prev::before,
+.slick-arrow.slick-next::before{
+    color: var(--bg-5);
+    font-size: 30px;
 }
 
 .createStory .conatiner .content2 .cards .cardContainer .card.selectedCard{
@@ -503,6 +518,7 @@
     color: var(--text-color-2);
     font-size: 18px;   
     background: transparent;
+    resize: none;
 }
 
 .createStory .conatiner .content4 .body textarea::placeholder{

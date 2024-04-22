@@ -8,15 +8,24 @@ import { updateUserFailure, updateUserStart, updateUserSuccess } from "../../red
 import Spinner from "../../Components/Helpers/Spinner/Spinner";
 import { apiUrl } from "../../Utils/api";
 import toast from "react-hot-toast";
+import { useFetchKey } from "../../hooks/fetch.hooks";
+import { newkey } from "../../helpers/api";
 
 function ProfilePage() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const user = currentUser?.data;
+  const userId = user._id
+  const { apiData, isLoading } = useFetchKey(user._id)
   const [image, setImage] = useState(undefined);
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
+
+  const [ key, setKey ] = useState('')
+  const [ isLoadingKey, setIsLoadingKey ] = useState(false)
+  const [ isDeletingKey, setIsDeletingKey ] = useState(false)
+
 
   const fileRef = useRef(null);
   useEffect(() => {
@@ -72,8 +81,8 @@ function ProfilePage() {
             dispatch(updateUserFailure(data?.data))
             return;
         } else {
-            toast.success('User profile updated successful')
-            dispatch(updateUserSuccess(data))
+          dispatch(updateUserSuccess(data))
+          toast.success('User profile updated successful')
         }
         
     } catch (error) {
@@ -82,6 +91,39 @@ function ProfilePage() {
         console.log('ERROR UPDATING USER', error)
     }
 }
+
+  const handleApiKey = async (e) => {
+    e.preventDefault()
+    try {
+      if(!key){
+        return toast.error('Enter Api key')
+      }
+      if(!userId){
+        return toast.error('User Required')
+      }
+      setIsLoadingKey(true)
+      const res = await newkey({userId, key})
+    } catch (error) {
+      console.log('Unable to add api key', error)
+    } finally {
+      setIsLoadingKey(false)
+    }
+  }
+
+  const handleDeleteApiKey = async (e) => {
+    e.preventDefault()
+    try {
+      if(!userId){
+        return toast.error('User Required')
+      }
+      setIsDeletingKey(true)
+      const res = await deletekey({userId})
+    } catch (error) {
+      console.log('Unable to add api key', error)
+    } finally {
+      setIsDeletingKey(false)
+    }
+  }
 
   return (
     <div className="profilePage">
@@ -126,9 +168,9 @@ function ProfilePage() {
             src={formData.profileImg || user?.profileImg}
             alt={`profile picture of ${user?.name}`}
           />
-          <button onClick={() => fileRef.current.click()}>
+          <div className="uploadBtn" onClick={() => fileRef.current.click()}>
             Change profile
-          </button>
+          </div>
         </div>
 
         <div className="formInputs">
@@ -159,6 +201,32 @@ function ProfilePage() {
         </div>
 
         <button>{loading ? (<Spinner />) : ('Update Profile')}</button>
+      </form>
+
+      <form className="card2">
+        <p>Add Your Openai API Key here</p>
+        <small>To get started using the storyFony platform upload your openai api key</small>
+          <div className="formInputs">
+            <div className="formInput">
+              <label>Paste Api key here</label>
+              <input disabled={isLoadingKey || isDeletingKey} value={key} onChange={(e) => setKey(e.target.value)} id="key" type="password" placeholder="Api Key" />
+            </div>
+
+            {
+              apiData?.data && (
+                <div className="formInput">
+                  <input disabled value={apiData?.data}  id="key" defaultValue={apiData?.data} type="password" placeholder="Api Key" />
+                </div>
+              )
+            }
+          </div>
+
+          <button onClick={handleApiKey} disabled={isLoadingKey} >{isLoadingKey ? 'Uploading' : 'Upload'}</button>
+          {
+            apiData?.data && (
+              <button disabled={isDeletingKey} onClick={handleDeleteApiKey} className="delete">Delete</button>
+            )
+          }
       </form>
     </div>
   );

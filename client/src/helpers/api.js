@@ -441,9 +441,33 @@ export async function likeStory({userId, storyId, plan}){
     }
 }
 
-export async function generateAiDesc({userId, genreValue}){
+export async function deleteStory({ storyId, userId }){
     try {
-        const res = await axios.post('/api/user/story/generateAiDesc', {userId, genreValue}, {withCredentials: true})
+        const res = await axios.post('/api/user/story/delete', {storyId, userId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success(res?.data.data)
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to generate description';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function generateAiDesc({userId, genreValue, title}){
+    try {
+        const res = await axios.post('/api/user/story/generateAiDesc', {userId, genreValue, title}, {withCredentials: true})
         if(res?.data.success){
             return res
         }
@@ -552,4 +576,50 @@ export async function subscriptionSession({userId, priceId}){
       console.error('Error streaming audio:', error);
     }
   }
-  
+
+  export async function newkey({userId, key}){
+    try {
+        const res =  await axios.post('/api/apikey/newKey', {userId, key}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success(res?.data?.data)
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to like chapter';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+  }
+
+  export async function deletekey({userId}){
+    try {
+        const res =  await axios.post('/api/apikey/deleteKey', {userId}, {withCredentials: true})
+        if(res?.data.success){
+            toast.success(res?.data?.data)
+            window.location.reload()
+        }
+    } catch (error) {
+        console.log('ERROR RECREATING CHAPTER STORY ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to like chapter';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+  }
