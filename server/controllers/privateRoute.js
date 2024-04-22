@@ -725,8 +725,8 @@ export async function generateCoverStoryImage(req, res){
           await story.save()
 
           //console.log('INK BEFORE,',user.totalCredit)
-          user.totalCreditUsed += parseInt(process.env.process.env.FONY_INK_COST_PER_IMAGE, 10);
-          user.totalCreditBalance -= parseInt(process.env.process.env.FONY_INK_COST_PER_IMAGE, 10);
+          user.totalCreditUsed += parseInt(process.env.FONY_INK_COST_PER_IMAGE, 10);
+          user.totalCreditBalance -= parseInt(process.env.FONY_INK_COST_PER_IMAGE, 10);
           await user.save()
           //console.log('INK AFTER,',user.totalCredit)
           res.status(201).json({success: true, data:'Cover image generated', user: {success: true, data: user} })

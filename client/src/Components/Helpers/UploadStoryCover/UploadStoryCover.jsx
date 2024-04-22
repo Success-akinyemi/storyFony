@@ -21,6 +21,10 @@ function UploadStoryCover() {
   const [formData, setFormData] = useState({});
   const [uploadingImg, setUploadingImg] = useState(false)
 
+  useEffect(() => {
+    setFormData({...formData, storyId, userId})
+  }, [storyId, userId])
+
 
   const onDrop = useCallback( async (acceptedFiles, rejectedFiles) => {
     if(rejectedFiles.length > 0){
@@ -87,7 +91,6 @@ function UploadStoryCover() {
 
     try {
       setUploadingImg(true)
-      setFormData({...formData, storyId, userId})
       const res = await uploadCoverImg(formData)
     } catch (error) {
       
