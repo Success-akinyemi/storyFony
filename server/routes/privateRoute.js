@@ -22,7 +22,7 @@ privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeSt
 privateRouter.route('/user/story/generateAiDesc').post(verifyToken, verifyApiKey, controller.generateAiDesc) //generate a story decsription for a user using AI
 privateRouter.route('/user/story/generatePdf').post(verifyToken, controller.generatePdf) //generate a story Pdf for the user
 privateRouter.route('/user/story/generateTranscipt').post(verifyToken, controller.generateAudio) //generate audio file for story
-
+privateRouter.route('/user/story/synonymWord').post(verifyToken, verifyApiKey, controller.synonymWord) //find a synonym Word
 
 
 

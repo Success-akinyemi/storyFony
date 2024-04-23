@@ -1095,3 +1095,29 @@ console.log(concatenatedText);
   }
 }
 
+//get synonym Word
+export async function synonymWord(req, res){
+  const { word } = req.body
+  try {
+    if(!word){
+      return res.status(404).json({ success: false, data: 'Please highight a word'})
+    }
+    console.log(word)
+    const openai = req.openai;
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `based on this word: ${word} give the most compactable synonym word `,
+      temperature: 0.9,
+      max_tokens: 100
+    })
+
+    console.log(response.choices[0].text.trim())
+    const newWord = response.choices[0].text.trim()
+
+    res.status(201).json({ success: true, data: newWord})
+  } catch (error) {
+    console.log('UNABLE TO GET SYNONYM WORD', error)
+    res.status(500).json({ success: false, data: 'Unable to get synonmy word'})
+  }
+}

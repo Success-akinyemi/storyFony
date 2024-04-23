@@ -16,21 +16,23 @@ import ItalicImg from '../../../assets/italic.png'
 import UnderlineImg from '../../../assets/underline.png'
 import UnorderlistImg from '../../../assets/unorderlist.png'
 import OrderlistImg from '../../../assets/orderlist.png'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
-import { generateChapterImage, rewriteChapter } from '../../../helpers/api';
+import { generateChapterImage, rewriteChapter, synonymWord } from '../../../helpers/api';
 import { signInSuccess } from '../../../redux/user/userslice';
 import { useDispatch } from 'react-redux';
 
-const MenuBar = ({ editor, content }) => {
+const MenuBar = ({ editor, content, choosenWord, setChoosenWord }) => {
   const dispatch = useDispatch()
   const loc = useLocation()
   const storyId = loc.pathname.split('/')[3]
   const userId = loc.pathname.split('/')[2]
   const [ newChapter, setNewChapter ] = useState(false)
   const [ newImage, setNewImage ] = useState(false)
+  const [ repharsingWord, setRepharsingWord ] = useState(false)
 
+ 
   if (!editor) {
     return null;
   }
@@ -72,6 +74,31 @@ const MenuBar = ({ editor, content }) => {
     }
   }
 
+const handleSynonymWord = async () => {
+  const word = choosenWord
+  if(!word){
+    toast.error('Please highlight a word')
+    return
+  }
+  try {
+    setRepharsingWord(true)
+    const res = await synonymWord({ word })
+    if(res?.success){
+      toast.success(res.data);
+      const newWord = res.data;
+      const currentContent = editor.getHTML();
+      const updatedContent = currentContent.replace(new RegExp(word, 'g'), newWord);
+      editor.commands.setContent(updatedContent);
+      setChoosenWord(newWord);
+    }
+  } catch (error) {
+    console.log('ERROR REPHARSING WORD', error)
+  } finally {
+    setRepharsingWord(false)
+  }
+}
+
+
     return (
       <div className='menuBar'>
         <button disabled={newChapter} className="options" onClick={() => handleNewChapter(content?.chapterContent, content._id)}>
@@ -82,13 +109,13 @@ const MenuBar = ({ editor, content }) => {
             <img src={ImageImg} alt="ai image" />
             <p>{newImage ? 'Generating...' : 'AI image'}</p>
         </button>
-        <button className="options">
+        <button className="options" >
             <img src={RephraseWordImg} alt="repharse word"/>
             <p>Rephrase words</p>
         </button>
-        <button className="options">
+        <button className="options" onClick={() => handleSynonymWord()}>
             <img src={ExpandWordImg} alt="expand word" />
-            <p>Expand word</p>
+            <p>{repharsingWord ? 'Checking...' : 'Synonym word'}</p>
         </button>
         <button
           onClick={() => editor.chain().focus().undo().run()}
@@ -159,6 +186,7 @@ const MenuBar = ({ editor, content }) => {
         >
           <img src={OrderlistImg} alt="bold" className="tapIcon" />
         </button>
+        <p>{choosenWord}</p>
       </div>
     )
   }
@@ -183,16 +211,27 @@ const MenuBar = ({ editor, content }) => {
     return editor
   }
 
+  
 function TextEditor({ content, onEditorChange, defaultContent, image }) {
   const editor = useTiptapEditor(content?.chapterContent || defaultContent, onEditorChange);
-  
+  const selectedWordRef = useRef(null);
+  const [ choosenWord, setChoosenWord ] = useState('')
+
+
+  const handleSelectedWord = () => {
+    const selectedWord = window.getSelection().toString().trim();
+    if (selectedWord) {
+      selectedWordRef.current = selectedWord;
+      setChoosenWord(selectedWord);
+    }
+  };
 
   //console.log('CONTENT', content);
   return (
     <div className="textEditor">
-      <MenuBar editor={editor} content={content} />
+      <MenuBar editor={editor} content={content} choosenWord={choosenWord} setChoosenWord={setChoosenWord} />
       <div className="editorContentArea">
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} onDoubleClick={handleSelectedWord} />
         <img src={content?.chapterImage ? content?.chapterImage : image} className='editorImg' />
       </div>
     </div>
