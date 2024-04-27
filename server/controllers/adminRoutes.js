@@ -2,7 +2,7 @@ import UserModel from "../models/User.js";
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import SubscriptionModel from "../models/Subscription.js";
-
+import moment from 'moment';
 
 export async function makeAdmin (req, res, next){
     const { userId } = req.body
@@ -99,28 +99,113 @@ export async function login (req, res, next){
 
 export async function getAllsubscriptions(req, res){
     try {
-        const allSubs = await SubscriptionModel.find()
-        console.log('firstLLL')
+        const allSubs = await SubscriptionModel.find();
+        
+        // Fetch user details for each subscription and create new objects
+        const subsWithUserDetails = await Promise.all(allSubs.map(async (sub) => {
+            const userId = sub.userId;
+            const user = await UserModel.findById(userId);
+            
+            // Create a new object with the user details added
+            return {
+                ...sub.toObject(), // Convert to plain JavaScript object
+                name: user.name,
+                profileImg: user.profileImg
+            };
+        }));
 
-        res.status(200).json({ success: true, data: allSubs})
+        // Calculate total subscription amount and count for this month
+        const thisMonthStartDate = moment().startOf('month').toDate();
+        const thisMonthEndDate = moment().endOf('month').toDate();
+        const subsThisMonth = subsWithUserDetails.filter(sub => 
+            moment(sub.createdAt).isBetween(thisMonthStartDate, thisMonthEndDate)
+        );
+        const thisMonthAmount = subsThisMonth.reduce((total, sub) => total + sub.amount, 0);
+        const thisMonthTotal = subsThisMonth.length;
+
+        // Calculate total subscription amount and count for last month
+        const lastMonthStartDate = moment().subtract(1, 'month').startOf('month').toDate();
+        const lastMonthEndDate = moment().subtract(1, 'month').endOf('month').toDate();
+        const subsLastMonth = subsWithUserDetails.filter(sub => 
+            moment(sub.createdAt).isBetween(lastMonthStartDate, lastMonthEndDate)
+        );
+        const lastMonthAmount = subsLastMonth.reduce((total, sub) => total + sub.amount, 0);
+        const lastMonthTotal = subsLastMonth.length;
+
+        // Calculate percentage increase or decrease for amount and total
+        let percentageAmount;
+        if (lastMonthAmount === 0) {
+            percentageAmount = 100; // Set to 100% if there are no subscriptions last month
+        } else {
+            percentageAmount = ((thisMonthAmount - lastMonthAmount) / lastMonthAmount) * 100;
+        }
+        const percentageTotal = lastMonthTotal === 0 ? 100 : ((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100;
+
+        console.log('firstLLL', subsWithUserDetails);
+        res.status(200).json({ 
+            success: true, 
+            data: subsWithUserDetails, 
+            thisMonthAmount, 
+            percentageAmount, 
+            thisMonthTotal, 
+            percentageTotal 
+        });
     } catch (error) {
-        console.log('ERROR GET ALL SUBSCRIPTIONS', error)
-        res.status(500).json({ success: false, data: 'Failed to get all subcriptions'})
+        console.log('ERROR GET ALL SUBSCRIPTIONS', error);
+        res.status(500).json({ success: false, data: 'Failed to get all subscriptions' });
     }
 }
 
 export async function getUsers(req, res){
     try {
-        
+        const userData = await UserModel.find();
+
+        const thisMonthStartDate = moment().startOf('month').toDate();
+        const thisMonthEndDate = moment().endOf('month').toDate();
+        const lastMonthStartDate = moment().subtract(1, 'month').startOf('month').toDate();
+        const lastMonthEndDate = moment().subtract(1, 'month').endOf('month').toDate();
+
+        // Get users for this month
+        const usersThisMonth = userData.filter(user => 
+            moment(user.createdAt).isBetween(thisMonthStartDate, thisMonthEndDate)
+        );
+
+        // Get users for last month
+        const usersLastMonth = userData.filter(user => 
+            moment(user.createdAt).isBetween(lastMonthStartDate, lastMonthEndDate)
+        );
+
+        // Calculate percentage increase or decrease
+        let percentageChange;
+        if (usersLastMonth.length > 0) {
+            percentageChange = ((usersThisMonth.length - usersLastMonth.length) / usersLastMonth.length) * 100;
+        } else {
+            percentageChange = 100; // If there are no users last month, consider the change as 100%
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            data: userData, 
+            thisMonth: usersThisMonth.length, 
+            percentage: percentageChange 
+        });
     } catch (error) {
-        
+        console.log('Unable to get Users', error);
+        res.status(500).json({ success: false, data: 'Unable to get users'});
     }
 }
-
 export async function getUser(req, res){
+    const { id } = req.params
     try {
-        
+        const userData = await UserModel.findById({ _id: id})
+
+        if(!userData){
+            return res.status(404).json({ success: false, data: 'No user found'})
+        }
+
+        res.status(200).json({ success: true, data: userData})
     } catch (error) {
-        
+        console.log('Unable to get User', error)
+        res.status(500).json({ success: false, data: 'Unable to get user'})
     }
 }

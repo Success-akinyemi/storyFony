@@ -11,9 +11,31 @@ import ArrowImg from '../../assets/adminSidebar/arrow.png'
 import LogoutImg from '../../assets/adminSidebar/logout.png'
 
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { apiUrl } from '../../Utils/api'
+import { useDispatch } from 'react-redux'
+import Cookies from 'universal-cookie';
+import { signOut } from '../../redux/user/userslice'
+
+const cookies = new Cookies();
+
 
 function AdminSidebar() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+
+    const handleLogout = async () => {
+        try {
+            cookies.remove('fonyAccessToken', {path: '/'})
+            cookies.remove('adminfonyAccessToken', {path: '/'})
+            await fetch(apiUrl('/api/auth/signout'))
+            dispatch(signOut())
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
   return (
     <div className='adminSidebar'>
         <div className="content">
@@ -39,7 +61,7 @@ function AdminSidebar() {
                             <img src={FolderImg} alt="icon" />
                             Stories
                         </Link>
-                        <Link className='link sideLink'>
+                        <Link className='link sideLink' to='/admin-subscriptions'>
                             <img src={UsersImg} alt="icon" />
                             Subscriptions
                         </Link>
@@ -76,7 +98,7 @@ function AdminSidebar() {
             </div>
 
             <div className="bottom">
-                <Link className='link sideLink'>
+                <Link onClick={handleLogout} className='link sideLink'>
                     <img src={LogoutImg} alt="icon" />
                     Logout
                 </Link>

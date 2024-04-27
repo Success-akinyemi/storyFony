@@ -30,6 +30,7 @@ function Login() {
     const [ passwordError, setPasswordError ] = useState('')
     const [ errorMs, setError ] = useState('')
     const [ isLoadingData, setIsLoadingData ] = useState(false)
+    const [ OAuthLoading, setOAuthLoading ] = useState(false)
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -109,7 +110,7 @@ function Login() {
             <p>Log into your account</p>
 
             <div className="oauthGroup">
-                <OAuth />
+                <OAuth setOAuthLoading={setOAuthLoading} />
             </div>
 
             <div className="inputGroup">
@@ -131,7 +132,7 @@ function Login() {
 
 
             <div className="button">
-                <button className='loginBtn'>{ isLoadingData ? <Spinner /> : 'Login' }</button>
+                <button disabled={isLoadingData || OAuthLoading} className='loginBtn'>{ isLoadingData  || OAuthLoading ? <Spinner /> : 'Login' }</button>
             </div>
         
             <span className="footNote">

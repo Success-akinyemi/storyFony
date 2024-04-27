@@ -229,7 +229,7 @@ export async function google(req, res){
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
             //const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
             const customer = await stripe.customers.create({
-                email: userEmail
+                email: email
             }, {
                 apiKey: process.env.STRIPE_SK
             })
@@ -243,7 +243,7 @@ export async function google(req, res){
             })
             
             const authToken = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
-            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
             const { password: hashedPassword2, adminPassword, ...userData } = newUser._doc
             const expiryDate = new Date(Date.now() + 3600000)
             res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData, token: token })

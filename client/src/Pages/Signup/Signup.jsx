@@ -27,6 +27,7 @@ function Signup() {
     const [ passwordError, setPasswordError ] = useState('')
     const [confirmPasswordError, setConfirmPasswordError ] = useState('')
     const [ isLoadingData, setIsLoadingData ] = useState(false)
+    const [ OAuthLoading, setOAuthLoading ] = useState(false)
 
     const handleRegister = async (e) => {
         e.preventDefault()
@@ -143,7 +144,7 @@ function Signup() {
             <p>Create an account</p>
 
             <div className="oauthGroup">
-                <OAuth />
+                <OAuth setOAuthLoading={setOAuthLoading} />
             </div>
 
             <div className="inputGroup">
@@ -185,7 +186,7 @@ function Signup() {
             </div>
 
             <div className="button">
-                <button className='signinBtn' onClick={handleRegister}>{ isLoadingData ? <Spinner /> : 'Create Account' }</button>
+                <button className='signinBtn' disabled={ isLoadingData || OAuthLoading } onClick={handleRegister}>{ isLoadingData || OAuthLoading ? <Spinner /> : 'Create Account' }</button>
             </div>
         
             <span className="footNote">

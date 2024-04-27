@@ -139,8 +139,21 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
                                     ''
                                 )
                             }
-                            <span onClick={() => handleTogglePrivateStory(data?._id)} className='link moreCardLink'>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Make Public' : 'Make Private'} `}</span>
-                            <Link className='link moreCardLink'>Publish</Link>
+
+                            {
+                                user?.email === data?.email ? (
+                                    <span onClick={() => handleTogglePrivateStory(data?._id)} className='link moreCardLink'>{ isLoading ? 'Updating...' : `${data?.privateStory ? 'Make Public' : 'Make Private'} `}</span>
+                                ) : (
+                                    <span className='link moreCardLink'>Public Domain</span>
+                                )
+                            }
+                            {
+                                user?.email === data?.email ? (
+                                    <Link className='link moreCardLink'>Publish</Link>
+                                ) : (
+                                    ''
+                                )
+                            }
                             {
                                 user?.email === data?.email ? (
                                     <span className='link moreCardLink delete' onClick={handleDelete}>Delete</span>

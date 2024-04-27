@@ -14,6 +14,7 @@ function AuthorizeUser() {
   const fonyAccessTokenExists = !!fonyAccessToken;
   const navigate = useNavigate()
 
+
   useEffect(() => {
     if (!fonyAccessTokenExists) {
       console.log('NO USER');
@@ -25,6 +26,11 @@ function AuthorizeUser() {
       if (decodedToken.exp * 1000 < Date.now()) {
         //console.log('EXP', decodedToken.exp)
         toast.error('Session expiried, Please login');
+        navigate('/login')
+      }
+
+      if(!currentUser){
+        toast.error('PLEASE LOGIN');
         navigate('/login')
       }
     }
@@ -55,6 +61,11 @@ function AdminUser() {
     if (decodedAuthToken.exp * 1000 < Date.now()) {
      //console.log('EXP', decodedToken.exp)
       toast.error('Session expiried, Please login');
+      navigate('/login')
+    }
+
+    if(!currentUser){
+      toast.error('PLEASE LOGIN');
       navigate('/login')
     }
 

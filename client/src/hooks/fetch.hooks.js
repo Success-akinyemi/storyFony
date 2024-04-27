@@ -14,9 +14,8 @@ export function useFetch(query){
     useEffect(() => {
         const fetchData =  async () => {
             try {
-                const { id } = !query ? await getUser() : await getUser();        
 
-                const { data, status} = !query ? await axios.get(`/api/admin/getUsers`, { withCredentials: true }) : await axios.get(`/api/admin/getUser/${id}`, { withCredentials: true })
+                const { data, status} = !query ? await axios.get(`/api/admin/getUsers`, { withCredentials: true }) : await axios.get(`/api/admin/getUser/${query}`, { withCredentials: true })
                 //console.log('Data from Hooks>>>', data)
 
                 if(status === 200){

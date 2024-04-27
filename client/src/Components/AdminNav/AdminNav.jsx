@@ -11,7 +11,7 @@ function AdminNav({title}) {
 
         <div className="profile">
             <img src={user?.profileImg} alt='profile' />
-            <p>{user.penName}</p>
+            <p>{user?.penName}</p>
         </div>
     </div>
   )

@@ -165,3 +165,56 @@
     color: var(--bg-5);
     text-decoration: underline;
 }
+
+.adminDashboard .subs .box:nth-child(2) .down{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 0px 0px 1px 0px solid var(--bg-4);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    font-size: 16.8;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:first-child{
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:first-child img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:last-child{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-red);
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:last-child span{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-red);
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:last-child.success span{
+    background: var(--green);
+}
+
+.adminDashboard .subs .box:nth-child(2) .down .card > div:last-child.success p{
+    color: var(--green);
+}

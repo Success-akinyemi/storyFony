@@ -6,11 +6,15 @@ import WalletImg from '../../assets/wallet.png'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useFetchSubscriptionData } from '../../hooks/fetch.hooks'
+import Spinner from '../../Components/Helpers/Spinner/Spinner'
 
 function AdminDashboard() {
     const [ timeRange, setTimeRange ] = useState('wk')
     const { apiUserSubsData, isLoadingSubs } = useFetchSubscriptionData()
-    console.log(apiUserSubsData?.data)
+    const data = apiUserSubsData?.data
+    const totalSum = data?.reduce((sum, item) => sum + item.amount, 0);
+    const sortedDataArray = data?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const spliceData = sortedDataArray?.slice(0, 5);
 
   return (
     <div className='adminCss adminDashboard'>
@@ -31,18 +35,18 @@ function AdminDashboard() {
                             <img src={WalletImg} alt='wallet' />
                             <div className="info">
                                 <p>Current profit</p>
-                                <h1>$17,000.00</h1>
-                                <span>8% more than last month</span>
+                                <h1>${apiUserSubsData?.thisMonthAmount / 2}</h1>
+                                <span>{apiUserSubsData?.percentageAmount}% more than last month</span>
                             </div>
                         </div>
                         <div className="card">
                             <p>New subscription</p>
-                            <h1>78</h1>
-                            <span>8% more than last month</span>
+                            <h1>{apiUserSubsData?.thisMonthTotal / 2}</h1>
+                            <span>{apiUserSubsData?.percentageTotal}% more than last month</span>
                         </div>
                         <div className="card">
                             <p>Total subscription</p>
-                            <h1>$780,000.00</h1>
+                            <h1>${totalSum/2}</h1>
                         </div>
                     </div>
 
@@ -68,6 +72,29 @@ function AdminDashboard() {
                             <div className="up">
                                 <h3>Recent subscription</h3>
                                 <Link className="link">View all</Link>
+                            </div>
+
+                            <div className="down">
+                                {
+                                    isLoadingSubs ? (
+                                        <Spinner />
+                                    ) : (
+                                        spliceData?.map((item) => (
+                                            <div className='card'>
+                                                <div>
+                                                    <img src={item?.profileImg} alt='profile' />
+                                                    <p>{item?.name}</p>
+                                                </div>
+                                                <div>${item?.amount}</div>
+                                                <div>{new Date(item?.endDate).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false })}</div>
+                                                <div className={item?.success ? 'success' : 'fail'}>
+                                                    <span></span>
+                                                    <p>{item?.success ? 'Successful' : 'Failed'}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )
+                                }
                             </div>
                         </div>
 

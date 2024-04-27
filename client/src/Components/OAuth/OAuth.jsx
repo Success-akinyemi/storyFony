@@ -8,12 +8,13 @@ import toast from 'react-hot-toast'
 import { signInSuccess } from '../../redux/user/userslice.js'
 import GoogleIcon from '../../assets/googleIcon.png'
 
-function OAuth() {
+function OAuth({setOAuthLoading}) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
     const handleOAuth = async () => {
         try {
+            setOAuthLoading(true)
             const provider = new GoogleAuthProvider()
             const auth = getAuth(app)
 
@@ -41,6 +42,8 @@ function OAuth() {
         } catch (error) {
             toast.error('could not login with google')
             console.log('could not login with google', error)
+        } finally {
+          setOAuthLoading(false)
         }
     }
   return (

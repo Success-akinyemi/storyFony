@@ -25,6 +25,7 @@ import MySubsciption from './Pages/MySubsciption/MySubsciption'
 import AdminLogin from './Pages/AdminLogin/AdminLogin'
 import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import AdminUsers from './Pages/AdminUsers/AdminUsers'
+import AdminSubscriptions from './Pages/AdminSubscriptions/AdminSubscriptions'
 
 function App() {
 
@@ -92,6 +93,9 @@ function App() {
           </Route>
           <Route element={<AdminUser />}>
             <Route path='/admin-users' element={<AdminUsers />} />
+          </Route>
+          <Route element={<AdminUser />}>
+            <Route path='/admin-subscriptions' element={<AdminSubscriptions />} />
           </Route>
           
           
