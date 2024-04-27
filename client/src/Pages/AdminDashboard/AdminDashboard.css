@@ -1,0 +1,167 @@
+
+.adminDashboard .cards{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 30px 20px 30px 20px;
+    height: 208px;
+}
+
+.adminDashboard .cards .card{
+    width: 322px;
+    height: 148px;
+    border-radius: 4px;
+    border: 1px solid var(--text-color-3);
+    color: var(--text-color-2);
+    padding: 10px;
+}
+
+.adminDashboard .cards .card:first-child{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.adminDashboard .cards .card:nth-child(2){
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    color: var(--text-color-2);
+}
+
+.adminDashboard .cards .card:last-child{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    color: var(--text-color-2);
+}
+
+.adminDashboard .cards .card .info{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .cards .card p{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16.8px;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .cards .card h1{
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 40.5px;
+    color: var(--text-color-2);
+}
+
+.adminDashboard .cards .card span{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .subs{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+.adminDashboard .subs .box{
+    height: 395px;
+    width: 100%;
+}
+
+.adminDashboard .subs .box:first-child{
+    display: flex;
+    border-radius: 4px;
+    border: 1px solid var(--bg-4);
+    gap: 50px;
+    padding: 20px;
+    flex-direction: column;
+    width: 100%;
+}
+
+.adminDashboard .subs .box:first-child .headInfo{
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.adminDashboard .subs .box:first-child .headInfo .left{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adminDashboard .subs .box:first-child .headInfo .left h1{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    color: var(--text-color-2);
+}
+
+.adminDashboard .subs .box:first-child .headInfo .left span{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .subs .box:first-child .headInfo .right{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adminDashboard .subs .box:first-child .headInfo .right .btn{
+    width: 29px;
+    height: 22px;
+    border-radius: 4px;
+    padding: 4px 8px 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--text-color-3);
+    color: var(--text-color-2);
+    background: transparent;
+    cursor: pointer;
+}
+
+.adminDashboard .subs .box:first-child .headInfo .right .btn.active{
+    background: var(--bg-5);
+    border: 1px solid var(--bg-5);
+}
+
+.adminDashboard .subs .box:nth-child(2){
+    border: 1px solid var(--bg-4);
+    background: var(--bg-4);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.adminDashboard .subs .box:nth-child(2) .up{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.adminDashboard .subs .box:nth-child(2) .up h3{
+    font-size: 18px;
+    line-height: 24.3px;
+    color: var(--text-color-3);
+}
+
+.adminDashboard .subs .box:nth-child(2) .up .link{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bg-5);
+    text-decoration: underline;
+}

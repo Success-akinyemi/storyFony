@@ -31,6 +31,7 @@ privateRouter.route('/user/stories/:id').get(verifyToken, controller.getUserStor
 privateRouter.route('/user/likedStories/:id').get(verifyToken, controller.getLikedUserStories) //get all stories liked by a user
 privateRouter.route('/user/story/:id/:storyId').get(verifyToken, controller.getUserStory) //get particular story of a user
 privateRouter.route('/user/story/edit/:id/:storyId').get(verifyToken, controller.getUserStoryEdit) //get particular story of a user to edit
+privateRouter.route('/user/story/public').get(verifyToken, controller.getPublicStories) //get all public stories 
 
 
 

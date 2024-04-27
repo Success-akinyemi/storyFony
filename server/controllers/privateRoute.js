@@ -1121,3 +1121,16 @@ export async function synonymWord(req, res){
     res.status(500).json({ success: false, data: 'Unable to get synonmy word'})
   }
 }
+
+export async function getPublicStories(req, res){
+  try {
+    const publicStories = await UserStory.find({ privateStory: false })
+    console.log(publicStories.length)
+
+    res.status(200).json({ success: true, data: publicStories})
+    
+  } catch (error) {
+    console.log('UNABLE TO GET PUBLIC STORIES', error)
+    res.status(500).json({ success: false, data: 'Unable to get public domain stories'})
+  }
+}

@@ -1,0 +1,105 @@
+.adminLogin{
+    width: 100%;
+    min-height: 100vh;
+    background: var(--main-bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.adminLogin .nav{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 70px 20px 70px;
+}
+
+.adminLogin .nav .logoCard{
+    width: 162px;
+}
+
+.adminLogin .card{
+    width: 634px;
+    margin-top:60px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    gap: 32px;
+    background: var(--bg-4);
+}
+
+.adminLogin .card p{
+    width: 100%;
+    display: flex;
+    line-height: 32px;
+    color: var(--text-color-2);
+    font-size: 24px;
+}
+
+.adminLogin .card .inputArea{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.adminLogin .card .inputGroup{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 24px;
+}
+
+.adminLogin .card .inputGroup label{
+    color: var(--text-color-2);
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.adminLogin .card .inputGroup input{
+    width: 100%;
+    height: 52px;
+    border: 1px solid var(--text-color-3);
+    display: flex;
+    gap: 10px;
+    color: var(--text-color-2);
+    padding: var(--padding);
+    font-weight: 400;
+    line-height: 21.6px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+}
+
+.adminLogin .card .inputGroup input:focus{
+    border: 1px solid var(--border-1);
+}
+
+.adminLogin .card .btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.adminLogin .card .btn button{
+    width: 100%;
+    height: 52px;
+    padding: var(--padding-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color-2);
+    border-radius: 22px;
+    background: var(--bg-5);
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    line-height: 24.3px;
+    cursor: pointer;
+}

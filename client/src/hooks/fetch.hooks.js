@@ -16,7 +16,7 @@ export function useFetch(query){
             try {
                 const { id } = !query ? await getUser() : await getUser();        
 
-                const { data, status} = !query ? await axios.get(`/api/user/${id}`, { withCredentials: true }) : await axios.get(`/api/getUsers/${id}`, { withCredentials: true })
+                const { data, status} = !query ? await axios.get(`/api/admin/getUsers`, { withCredentials: true }) : await axios.get(`/api/admin/getUser/${id}`, { withCredentials: true })
                 //console.log('Data from Hooks>>>', data)
 
                 if(status === 200){
@@ -251,4 +251,88 @@ export function useFetchKey(query){
     }, [query])
 
     return data
+}
+
+/**Get all public story */
+export function publicStoryBook(query) {
+    const [data, setData] = useState({ isLoadingStory: true, apiPublicStoryData: null, storyStatus: null, storyServerError: null });
+    const { currentUser } = useSelector(state => state.user);
+    const user = currentUser?.data;
+    const id = user?._id;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let url;
+                if (!query) {
+                    // If there is no query, fetch all stories for the user
+                    url = `/api/user/story/public`;
+                } else {
+                    // If there is a query, fetch a specific story
+                    const { userId, storyId } = query;
+                    url = `/api/user/story/${userId}/${storyId}`;
+                }
+
+                //console.log('ID', id, 'QUERY', query);
+                const { data, status } = await axios.get(url, { withCredentials: true });
+                //console.log('Story Data from Hooks>>>', data);
+
+                if (status === 200) {
+                    setData({ isLoadingStory: false, apiPublicStoryData: data, storyStatus: status, storyServerError: null });
+                } else {
+                    setData({ isLoadingStory: false, apiPublicStoryData: null, storyStatus: status, storyServerError: null });
+                }
+            } catch (error) {
+                setData({ isLoadingStory: false, apiPublicStoryData: null, storyStatus: error.response?.status, storyServerError: error.response?.data?.data ? error.response?.data?.data : error });
+                //console.log(data);
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, [query]);
+
+    return data;
+}
+
+/**Get All Subscriptions */
+export function useFetchSubscriptionData(query) {
+    const [data, setData] = useState({ isLoadingSubs: true, apiUserSubsData: null, subsStatus: null, subServerError: null });
+    const { currentUser } = useSelector(state => state.user);
+    const user = currentUser?.data;
+    const id = user?._id;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let url;
+                if (!query) {
+                    // If there is no query, fetch all stories for the user
+                    url = `/api/admin/getAllSubscriptions`;
+                } else {
+                    // If there is a query, fetch a specific story
+                    const { userId, storyId } = query;
+                    url = `/api/user/story/${userId}/${storyId}`;
+                }
+
+                //console.log('ID', id, 'QUERY', query);
+                const { data, status } = await axios.get(url, { withCredentials: true });
+                //console.log('Story Data from Hooks>>>', data);
+
+                if (status === 200) {
+                    setData({ isLoadingSubs: false, apiUserSubsData: data, subsStatus: status, subServerError: null });
+                } else {
+                    setData({ isLoadingSubs: false, apiUserSubsData: null, subsStatus: status, subServerError: null });
+                }
+            } catch (error) {
+                setData({ isLoadingSubs: false, apiUserSubsData: null, subsStatus: error.response?.status, subServerError: error.response?.data?.data ? error.response?.data?.data : error });
+                //console.log(data);
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, [query]);
+
+    return data;
 }

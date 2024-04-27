@@ -116,6 +116,11 @@ function AuthUserNavbar({ enableScrollEffect, miniNav, onBackClick }) {
             <div className="profileCard">
                 <Link to='/profile-page' className='link'>My profile</Link>
                 <span onClick={handleLogout} className='link'>Logout</span>
+                {
+                    user.isAdmin && (
+                        <Link to='/admin-login' className='link adminLink'>Admin</Link>
+                    )
+                }
             </div>
         </div>
         </div>

@@ -206,7 +206,7 @@ export async function login (req, res, next){
         const authToken = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
         const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '12h' })
         const expiryDate = new Date(Date.now() + 43200000)
-        const { password: userPassword, adminPassword, ...userData} = user._doc
+        const { password: userPassword, adminPassword, grandAdmin, ...userData} = user._doc
         res.cookie('fonyAccessToken', authToken, { httpOnly: true, expires: expiryDate, sameSite: 'None', secure: true}).status(201).json({ success: true, data: userData, token: token })
     } catch (error) {
         console.log('ERROR LOGGING USER', error)

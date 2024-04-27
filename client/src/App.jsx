@@ -13,7 +13,7 @@ import UseCases from './Pages/UseCases/UseCases'
 import UseCase from './Pages/UseCase/UseCase'
 import Pricing from './Pages/Pricing/Pricing'
 import UserDashboard from './Pages/UserDashboard/UserDashboard'
-import { AuthorizeUser } from './auth/PrivateRoute'
+import { AdminUser, AuthorizeUser } from './auth/PrivateRoute'
 import CreateStory from './Pages/CreateStory/CreateStory'
 import StoryBook from './Pages/StoryBook/StoryBook'
 import PublicShelf from './Pages/PublicShelf/PublicShelf'
@@ -22,6 +22,9 @@ import StoryEditor from './Pages/StoryEditor/StoryEditor'
 import Support from './Pages/Support/Support'
 import TermOfUse from './Pages/TermOfUse/TermOfUse'
 import MySubsciption from './Pages/MySubsciption/MySubsciption'
+import AdminLogin from './Pages/AdminLogin/AdminLogin'
+import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
+import AdminUsers from './Pages/AdminUsers/AdminUsers'
 
 function App() {
 
@@ -79,6 +82,18 @@ function App() {
             <Route path='/mysubscription' element={<MySubsciption />} />
           </Route>
           <Route path='/term-of-use' element={<TermOfUse />} />
+          
+
+          <Route element={<AuthorizeUser />}>
+            <Route path='/admin-login' element={<AdminLogin />} />
+          </Route>
+          <Route element={<AdminUser />}>
+            <Route path='/admin-dashboard' element={<AdminDashboard />} />
+          </Route>
+          <Route element={<AdminUser />}>
+            <Route path='/admin-users' element={<AdminUsers />} />
+          </Route>
+          
           
         </Routes>
       </BrowserRouter>

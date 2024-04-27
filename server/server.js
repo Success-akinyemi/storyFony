@@ -5,6 +5,7 @@ import router from './routes/auth.js'
 import apikeyRouter from './routes/apikey.js'
 import privateRouter from './routes/privateRoute.js'
 import subscriptionRouter from './routes/subscriptionRoute.js';
+import adminRouter from './routes/adminRoutes.js'
 import errorHandler from './middleware/error.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -57,6 +58,7 @@ import SubscriptionModel from './models/Subscription.js';
 
 app.use('/api', router)
 app.use('/api', privateRouter)
+app.use('/api', adminRouter)
 app.use('/api', apikeyRouter)
 app.use('/api/subscription', subscriptionRouter)
 

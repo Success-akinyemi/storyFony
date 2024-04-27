@@ -646,3 +646,29 @@ export async function subscriptionSession({userId, priceId}){
           }
     }
   }
+
+
+ //admin
+ export async function adminLogin(formData){
+    try {
+        const res = await axios.post('/api/admin/login', formData, {withCredentials: true})
+        if(res?.data.success){
+            return res?.data
+        }
+    } catch (error) {
+        console.log('ERROR LOGING ADMIN ', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data || 'Failed to login';
+            console.log('MSG', errorMsg)
+            toast.error(errorMsg)
+            const errorStatus = error.response.status;
+            if(errorStatus === 401 || errorStatus === 403){
+                toast.error(errorMsg)
+                window.location.href = '/login'
+            }
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+ } 

@@ -1,0 +1,82 @@
+.adminSidebar{
+    width: 242px;
+    height: 100vh;
+    padding: 30px 20px 30px 20px;
+    background: var(--bg-5);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.adminSidebar .content{
+    width: 224px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.adminSidebar .content .top{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.adminSidebar .content .top img{
+    width: 162px;
+}
+
+.adminSidebar .content .top .addUser{
+    width: 95%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--bg-4);
+    color: var(--text-color-2);
+    gap: 10px;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.adminSidebar .content .sideLink{
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: var(--bg-4);
+    line-height: 21.6px;
+    gap: 5px;
+}
+
+.adminSidebar .content .sideLink img{
+    width: 13.5px;
+    height: 13.5px;
+}
+
+.adminSidebar .content .top .linkCard{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.adminSidebar .content .top .linkCard p{
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16.2px;
+    color: var(--bg-4);
+}
+
+.adminSidebar .content .top .linkCard .links{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.adminSidebar .content .bottom{
+    margin-top: auto;
+}

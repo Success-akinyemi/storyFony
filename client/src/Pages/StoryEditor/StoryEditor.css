@@ -130,11 +130,13 @@
     border-radius: 4px;
     position: absolute;
     z-index: 10;
-    top: -500%;
+    top: -800%;
+    transition: all 300ms ease-in;
 }
 
 .storyEditor .nav .right .middle:hover .actionMenu{
     top: 40px;
+    transition: all 300ms ease-in;
 }
 
 .storyEditor .nav .right .middle .actionMenu .menus{
@@ -158,6 +160,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.storyEditor .nav .right .bottom .link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 .storyEditor .nav .right .bottom img{

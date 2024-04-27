@@ -243,7 +243,9 @@ function StoryEditor() {
                 </div>
 
                 <div className="bottom">
-                  <img src={user?.profileImg} />
+                  <Link className='link' to='/profile-page'>
+                    <img src={user?.profileImg} />
+                  </Link>
                 </div>
               </div>
             </div>

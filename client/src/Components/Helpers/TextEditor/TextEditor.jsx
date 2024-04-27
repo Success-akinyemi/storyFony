@@ -40,6 +40,7 @@ const MenuBar = ({ editor, content, choosenWord, setChoosenWord }) => {
   const handleNewChapter = async (text, chapterId) => {
     if(text === undefined){
       toast.error('Select chapter in table of content')
+      return
     }
     try {
       setNewChapter(true)
@@ -59,6 +60,7 @@ const MenuBar = ({ editor, content, choosenWord, setChoosenWord }) => {
   const handleChapterImage = async (text, chapterId) => {
     if(text === undefined){
       toast.error('Select chapter in table of content')
+      return
     }
     try {
       setNewImage(true)
@@ -74,10 +76,14 @@ const MenuBar = ({ editor, content, choosenWord, setChoosenWord }) => {
     }
   }
 
-const handleSynonymWord = async () => {
+const handleSynonymWord = async (text) => {
   const word = choosenWord
   if(!word){
     toast.error('Please highlight a word')
+    return
+  }
+  if(text === undefined){
+    toast.error('Select chapter in table of content')
     return
   }
   try {
@@ -113,7 +119,7 @@ const handleSynonymWord = async () => {
             <img src={RephraseWordImg} alt="repharse word"/>
             <p>Rephrase words</p>
         </button>
-        <button className="options" onClick={() => handleSynonymWord()}>
+        <button className="options" onClick={() => handleSynonymWord(content?.chapterContent)}>
             <img src={ExpandWordImg} alt="expand word" />
             <p>{repharsingWord ? 'Checking...' : 'Synonym word'}</p>
         </button>

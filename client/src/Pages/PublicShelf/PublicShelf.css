@@ -102,3 +102,108 @@
     background: transparent;
     font-size: 16px;
 }
+
+.publicShelf .container2{
+    width: 100%;
+    display: flex;
+    margin-right: 20px;
+    margin-left: 20px;
+    gap: 32px;
+    margin-top: 10px;
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.publicShelf .container2 h1{
+    color: var(--text-color-2);
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.publicShelf .container2 .content{
+    display: flex;
+    flex-direction: column;
+}
+
+.publicShelf .container2 .content .errorText{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--bg-5);
+    text-align: center;
+}
+
+.publicShelf .container2 .content .cards{
+    display: flex;
+    gap: 32px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.publicShelf .container2 .card-2{
+    height: 393px;
+    min-width: 297.25px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.publicShelf .container2 .card-2 .overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(179.49deg, rgba(0, 0, 0, 0) -7.39%, rgba(0, 0, 0, 0.882) 66.97%),
+    linear-gradient(0deg, #FFFFFF, #FFFFFF);
+    border-radius: 10px;
+}
+
+.publicShelf .container2 .content .paginationBtn{
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.publicShelf .container2 .content .paginationBtn span{
+    height: 24px;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-color-3);
+}
+
+.publicShelf .container2 .content .paginationBtn .btn{
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    height: 56px;
+}
+
+.publicShelf .container2 .content .paginationBtn .btn .btn1,
+.publicShelf .container2 .content .paginationBtn .btn .btn2{
+    height: 100%;
+    width: 197px;
+    border-radius: 22px;
+    padding: var(--padding-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.publicShelf .container2 .content .paginationBtn .btn .btn1{
+    background: transparent;
+    border: 1px solid var(--text-color-3);
+    color: var(--text-color-3);
+    outline: none;
+}
+
+.publicShelf .container2 .content .paginationBtn .btn .btn2{
+    color: var(--text-color-2);
+    background: var(--bg-5);
+    border: none;
+    outline: none;
+}

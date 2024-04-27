@@ -29,7 +29,7 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
         if(story === currentChapterContent.chapterContent){
             toast.error('Now changes made')
             return;
-        } else{
+        } 
 
             try {
                 setUpatingChapter(true)
@@ -42,7 +42,6 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
             } finally{
                 setUpatingChapter(false)
             }
-        }
     }
     /** 
     useEffect(() => {

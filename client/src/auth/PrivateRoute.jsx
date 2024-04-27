@@ -7,31 +7,6 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies()
 
-/**
- *
-function AuthorizeUser() {
-  const { currentUser } = useSelector((state) => state.user);
-  const [fonyAccessTokenExists, setFonyAccessTokenExists] = useState(false);
-
-  const checkAccessToken = () => {
-    const accessTokenExists = cookies.get('fonyAccessToken') !== undefined;
-    console.log('ACCESS TOKEN', accessTokenExists)
-    setFonyAccessTokenExists(accessTokenExists);
-
-    if (!accessTokenExists) {
-      console.log('NO USER');
-      toast.error('PLEASE LOGIN');
-    }
-  };
-
-  useEffect(() => {
-    checkAccessToken();
-  }, []); // Run only once after mount
-
-  return fonyAccessTokenExists ? <Outlet /> : <Navigate to={'/login'} />;
-}
- * 
-*/
 
 function AuthorizeUser() {
   const { currentUser } = useSelector((state) => state.user);
@@ -59,10 +34,45 @@ function AuthorizeUser() {
 }
 
 
-function AdminUser (){
-    const  {currentUser}  = useSelector(state => state.user)
-    const adminUser = currentUser?.data.isAdmin
-      return adminUser ? <Outlet /> : <Navigate to='/' />
+function AdminUser() {
+  const { currentUser } = useSelector((state) => state.user);
+  const fonyAccessToken = localStorage.getItem('fonyAdminToken');
+  const accessToken = localStorage.getItem('authToken');
+  const fonyAccessTokenExists = !!fonyAccessToken;
+  const accessTokenExists = !!accessToken;
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!fonyAccessTokenExists) {
+      console.log('NO USER');
+      toast.error('PLEASE LOGIN');
+    } else {
+      const decodedToken = jwtDecode(fonyAccessToken);
+      const decodedAuthToken = jwtDecode(accessToken);
+
+    // Check if the token is expired
+    if (decodedAuthToken.exp * 1000 < Date.now()) {
+     //console.log('EXP', decodedToken.exp)
+      toast.error('Session expiried, Please login');
+      navigate('/login')
+    }
+
+      // Check if the token is expired
+      if (decodedToken.exp * 1000 < Date.now()) {
+        //console.log('EXP', decodedToken.exp)
+        toast.error('Session expiried, Please login');
+        navigate('/login')
+      }
+
+      if(!decodedToken.isAdmin){
+        toast.error('Not Allowed')
+        navigate('/dashboard')
+      }
+    }
+  }, [currentUser, fonyAccessTokenExists]); 
+
+  return fonyAccessTokenExists ? <Outlet /> : <Navigate to={'/login'} />;
 }
 
 export {AuthorizeUser, AdminUser}

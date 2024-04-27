@@ -56,37 +56,37 @@ function MyStoryBooks({setSelectedCard, setShareStoryId}) {
                         ))
                     }
                 </div>
-            <div className="paginationBtn">
-                {
-                    data?.length > 0 ? (
-                        <span>page {currentPage} of {totalNumberOfPages} </span>
-                    ) : ('')
-                }
-                <div className="btn">
+                <div className="paginationBtn">
                     {
-                        currentPage > 1 && (
-                            <button 
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className='btn1'
-                            >
-                                Back
-                            </button>
-                        )
-                    }
-                    {
-                        totalNumberOfPages > 1 && currentPage < totalNumberOfPages ? (
-                            <button 
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={indexOfLastItem >= data?.length}
-                                className='btn2'
-                            >
-                                Next
-                            </button>
+                        data?.length > 0 ? (
+                            <span>page {currentPage} of {totalNumberOfPages} </span>
                         ) : ('')
                     }
+                    <div className="btn">
+                        {
+                            currentPage > 1 && (
+                                <button 
+                                    onClick={() => setCurrentPage(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className='btn1'
+                                >
+                                    Back
+                                </button>
+                            )
+                        }
+                        {
+                            totalNumberOfPages > 1 && currentPage < totalNumberOfPages ? (
+                                <button 
+                                    onClick={() => setCurrentPage(currentPage + 1)}
+                                    disabled={indexOfLastItem >= data?.length}
+                                    className='btn2'
+                                >
+                                    Next
+                                </button>
+                            ) : ('')
+                        }
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
