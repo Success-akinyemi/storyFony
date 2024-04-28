@@ -26,6 +26,7 @@ import AdminLogin from './Pages/AdminLogin/AdminLogin'
 import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import AdminUsers from './Pages/AdminUsers/AdminUsers'
 import AdminSubscriptions from './Pages/AdminSubscriptions/AdminSubscriptions'
+import AdminStories from './Pages/AdminStories/AdminStories'
 
 function App() {
 
@@ -96,6 +97,9 @@ function App() {
           </Route>
           <Route element={<AdminUser />}>
             <Route path='/admin-subscriptions' element={<AdminSubscriptions />} />
+          </Route>
+          <Route element={<AdminUser />}>
+            <Route path='/admin-stories' element={<AdminStories />} />
           </Route>
           
           

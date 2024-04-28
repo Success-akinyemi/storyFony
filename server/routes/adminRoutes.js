@@ -14,6 +14,8 @@ adminRouter.route('/admin/removeAdmin').post(verifyToken, verifyAdminToken, veri
 adminRouter.route('/admin/getAllSubscriptions').get(verifyToken, verifyAdminToken, controller.getAllsubscriptions)
 adminRouter.route('/admin/getUsers').get(verifyToken, verifyAdminToken, controller.getUsers)
 adminRouter.route('/admin/getUser/:id').get(verifyToken, verifyAdminToken, controller.getUser)
+adminRouter.route('/admin/getStories').get(verifyToken, verifyAdminToken, controller.getStories)
+
 
 
 

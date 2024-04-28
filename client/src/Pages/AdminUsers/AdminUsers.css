@@ -169,9 +169,11 @@
 .adminUsers .users .pagination .btns .btn:first-child{
     border: 1px solid var(--text-color-3);
     color: var(--text-color-2);
+    background: transparent;
 }
 
 .adminUsers .users .pagination .btns .btn:last-child{
     background: var(--bg-5);
     color: var(--text-color-2);
+    border: none;
 }

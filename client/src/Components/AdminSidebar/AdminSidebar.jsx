@@ -57,7 +57,7 @@ function AdminSidebar() {
                             <img src={UserImg} alt="icon" />
                             Users
                         </Link>
-                        <Link className='link sideLink'>
+                        <Link className='link sideLink' to='/admin-stories'>
                             <img src={FolderImg} alt="icon" />
                             Stories
                         </Link>

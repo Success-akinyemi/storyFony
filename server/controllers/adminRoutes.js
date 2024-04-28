@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import SubscriptionModel from "../models/Subscription.js";
 import moment from 'moment';
+import UserStory from "../models/UsersStory.js";
 
 export async function makeAdmin (req, res, next){
     const { userId } = req.body
@@ -194,6 +195,7 @@ export async function getUsers(req, res){
         res.status(500).json({ success: false, data: 'Unable to get users'});
     }
 }
+
 export async function getUser(req, res){
     const { id } = req.params
     try {
@@ -207,5 +209,38 @@ export async function getUser(req, res){
     } catch (error) {
         console.log('Unable to get User', error)
         res.status(500).json({ success: false, data: 'Unable to get user'})
+    }
+}
+
+export async function getStories(req, res){
+    try {
+        const storyData = await UserStory.find();
+
+        // Get the start and end dates for this month
+        const thisMonthStartDate = moment().startOf('month');
+        const thisMonthEndDate = moment().endOf('month');
+
+        // Filter stories created within this month
+        const storiesThisMonth = storyData.filter(story =>
+            moment(story.createdAt).isBetween(thisMonthStartDate, thisMonthEndDate)
+        );
+
+        // Get the total number of stories for this month
+        const totalStoriesThisMonth = storiesThisMonth.length;
+
+
+        const totalStoriesLastMonth = storyData.filter(story =>
+            moment(story.createdAt).isBetween(moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month'))
+        ).length;
+        
+        // Calculate the percentage change
+        const percentageChange = totalStoriesLastMonth !== 0 ?
+            ((totalStoriesThisMonth - totalStoriesLastMonth) / totalStoriesLastMonth) * 100 :
+            100; // If there were no stories last month, consider it 100% increase
+
+        res.status(200).json({ success: true, data: storyData, thisMonth: totalStoriesThisMonth, percentage: percentageChange });
+    } catch (error) {
+        console.log('Unable to get User', error);
+        res.status(500).json({ success: false, data: 'Unable to get user' });
     }
 }
