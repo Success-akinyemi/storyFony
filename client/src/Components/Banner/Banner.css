@@ -106,6 +106,7 @@
     line-height: 24.3px;
     color: var(--text-color-3);
 }
+
 .banner .top .right,
 .banner .bottom .right{
    width: 632px;
@@ -180,6 +181,7 @@
         flex-direction: column;
         height: auto;
         justify-content: center;
+        margin-top: -19rem;
     }
 
     .banner .top,
@@ -191,6 +193,22 @@
         height: 1000px;
         gap: 24px;
         margin-bottom: 30px;
+    }
+
+    .banner .top .left .hTitle,
+    .banner .bottom .left .hTitle{
+        line-height: 50px;
+        width: 100%;
+    }
+
+    .banner .top .left .card .text{
+        width: 98%;
+    }
+
+    .banner .top .left .info,
+    .banner .bottom .left .info{
+        width: 95%;
+        margin-bottom: 1rem;
     }
 
     .banner .top .right, .banner .bottom .right{
@@ -215,13 +233,28 @@
     }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 550px) {
     .banner{
-        height: 3000px;
+        margin-top: -13rem;
     }
+
+    .banner .bottom{
+        height: 1300px;
+    }
+
+    .banner .bottom .right{
+        width: 70%;
+    }
+
+
+}
+
+@media screen and (max-width: 450px) {
+
     .banner .top{
-        height: 800px;
+        height: 1350px;
     }
+
     .banner .top .left,
     .banner .bottom .left{
         width: 100%;
@@ -234,7 +267,13 @@
     .banner .top .left .hTitle,
     .banner .bottom .left .hTitle{
         font-size: 30px;
+        line-height: 40px;
+        margin-bottom: -3rem;
     }   
+
+    .banner .bottom .left .hTitle{
+        margin-bottom: -1rem;
+    }
 
     .banner .top .left .card,
     .banner .bottom .left .card{
@@ -248,7 +287,7 @@
     }
 
     .banner .top .right{
-        height: 800px;
+        background: linear-gradient(180deg, var(--bg-5) 0%, rgba(253, 44, 232, 0) 100%);
     }
 
     .banner .top .right .content{
@@ -264,16 +303,11 @@
     }
 
     .banner .bottom{
-        margin-top: 500px;
-    }
-
-    .banner .bottom .right{
-        width: 70%;
-        height: 1000px;
+        margin-top: 5px;
     }
 
     .banner .bottom .right .content{
-        width: 90%;
+        width: 100%;
         gap: 15px;
         flex-direction: column;
         height: 750px;

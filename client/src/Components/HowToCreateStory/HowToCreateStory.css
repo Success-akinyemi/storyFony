@@ -1,6 +1,5 @@
 .howToCreateStory{
     width: 100%;
-    height: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,17 +37,17 @@
 
 .howToCreateStory .cards{
     width: 100%;
-    height: 470px;
     padding: 0px 70px 0px 70px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 32px;
 }
 
 .howToCreateStory .cards .card{
     width: 412px;
-    height: 100%;
+    height: 470px;
     border-radius: 10px;
     padding: 20px;
     display: flex;
@@ -98,4 +97,34 @@
 .howToCreateStory .cards .card .bottom img{
     width: 100%;
     height: 100%;
+}
+
+@media screen and (max-width: 1100px) {
+
+}
+
+@media screen and (max-width: 768px) {
+    .howToCreateStory .header{
+        width: 85%;
+    }
+
+    .howToCreateStory .header h2{
+        font-size: 35px;
+        line-height: 50px;
+    }
+
+    .howToCreateStory .header p{
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .howToCreateStory .header{
+        width: 90%;
+    }
+
+    .howToCreateStory .header h2{
+        font-size: 30px;
+        line-height: 47px;
+    }
 }

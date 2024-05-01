@@ -153,3 +153,127 @@
     margin-top: 500px;
     margin-bottom: 100px;
 }
+
+.useCase .useCaseReview{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+}
+
+@media screen and (max-width: 1439px) {
+    .useCase .useCaseReview{
+        margin-top: 16rem;
+    }
+}
+
+@media screen and (max-width: 1017px) {
+    .useCase .useCaseReview{
+        display: none;
+    }
+
+    .useCase .useCaseStoriesCard{
+        margin-top: -3rem;
+    }
+}
+
+@media screen and (max-width: 1439px) {
+    .useCase .useCaseReview{
+        background: yellow;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .useCase .videoFrame{
+        width: 96%;
+    }
+
+    .useCase .actionCard{
+        width: 95%;
+    }
+
+    .useCase .actionCard h2{
+        width: 100%;
+    }
+
+    .useCase .actionCard p{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .useCase .videoFrame{
+        width: 96%;
+        height: 500px;
+    } 
+
+    .useCase .useCaseHero .content{
+        width: 94%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .useCase .videoFrame{
+        width: 96%;
+        height: 450px;
+    } 
+
+    .useCase .actionCard h2{
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .useCase .videoFrame{
+        height: 400px;
+    } 
+
+    .useCase .useCaseHero .content h1{
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    .useCase .actionCard h2{
+        font-size: 24px;
+    }
+
+    .useCase .actionCard p{
+        font-size: 14px;
+    }
+
+    .useCase .actionCard .btn{
+        width: 100%;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .useCase .videoFrame{
+        height: 300px;
+    } 
+
+    .useCase .useCaseHero .content p{
+        font-size: 14px;
+        margin-top: -20rem;
+    }
+
+}
+
+@media screen and (max-width: 450px) {
+    .useCase .videoFrame{
+        height: 250px;
+    } 
+
+    .useCase .actionCard h2{
+        font-size: 20px;
+        line-height: 21px;
+    }
+}
+
+@media screen and (max-width: 370px) {
+    .useCase .videoFrame{
+        height: 200px;
+    } 
+}

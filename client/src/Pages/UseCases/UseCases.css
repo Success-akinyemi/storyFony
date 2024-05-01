@@ -50,3 +50,9 @@
     text-align: center;
     color: var(--text-color-1);
 }
+
+@media screen and (max-width: 550px) {
+    .useCases .useCasesHero .content{
+        width: 96%;
+    }
+}

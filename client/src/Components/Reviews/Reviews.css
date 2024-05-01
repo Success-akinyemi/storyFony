@@ -200,7 +200,7 @@
 @media screen and (max-width: 768px) {
     .reviews{
         display: block;
-        margin-bottom: 20rem;
+        margin-bottom: 36rem;
     }
 
     .reviews .reviewCard{
@@ -211,6 +211,7 @@
         flex-direction: column;
         height: auto;
         gap: 30px;
+        margin-top: -6rem;
     }
 
     .reviews .useCaseReview{
@@ -221,5 +222,28 @@
 
     .reviews .reviewBody{
         gap: 15px;
+        width: 100%;
+    }
+
+    .reviews .reviewBody .reviewText{
+        width: 100%;
+    }
+
+    .reviews .reviewBody .sliders .bar{
+        width: 95vw;
+    }
+
+    .reviews .reviewBody .sliders{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .reviews{
+        /*background: yellow;*/
+    }
+
+    .reviews .reviewCard{
+        margin-top: -15rem;
     }
 }

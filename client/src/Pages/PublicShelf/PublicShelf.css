@@ -207,3 +207,26 @@
     border: none;
     outline: none;
 }
+
+@media screen and (max-width: 700px) {
+    .publicShelf .publicShelfHero .container{
+        width: 96%;
+        height: auto;
+    }
+
+    .publicShelfHero .top h2{
+        font-size: 28px;
+        line-height: 30px;
+    }
+
+    .publicShelfHero .top p{
+        width: 96%;
+        margin-top: 1rem;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .publicShelfHero .top p{
+        font-size: 14px;
+    }
+}

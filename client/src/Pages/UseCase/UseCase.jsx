@@ -42,7 +42,9 @@ function UseCase() {
         </div>
 
         <HowToCreateStory />
-        <Reviews name='useCaseReview' />
+        <div className='useCaseReview'>
+            <Reviews name='useCaseReview' />
+        </div>
         <div className="useCaseStoriesCard">
             <Stories data={homePageStoriesData} />
         </div>

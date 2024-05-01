@@ -50,13 +50,13 @@ function Footer() {
                             <p className="head">Use cases</p>
 
                             <div className="body">
-                                <Link className="link bodyItem">Ai short story generator</Link>
-                                <Link className="link bodyItem">Ai adventure story generator</Link>
-                                <Link className="link bodyItem">Ai erotic story generator</Link>
-                                <Link className="link bodyItem">Ai horror story generator</Link>
-                                <Link className="link bodyItem">Ai fantasy story generator</Link>
-                                <Link className="link bodyItem">Ai bedtime story generator</Link>
-                                <Link className="link bodyItem">View more use case</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai short story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai adventure story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai erotic story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai horror story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai fantasy story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">Ai bedtime story generator</Link>
+                                <Link to='/use-cases' className="link bodyItem">View more use case</Link>
                             </div>
                         </div>
 
@@ -64,12 +64,12 @@ function Footer() {
                             <p className="title">Our Company</p>
 
                             <div className="body">
-                                <Link className="link bodyItem">Public Libary</Link>
+                                <Link to='/public-shelf' className="link bodyItem">Public Libary</Link>
                                 <Link className="link bodyItem">Facebook community</Link>
-                                <Link className="link bodyItem">Learn centre</Link>
-                                <Link className="link bodyItem">Support</Link>
-                                <Link className="link bodyItem">Term of Service</Link>
-                                <Link className="link bodyItem">Privacy policy</Link>
+                                <Link to='/term-of-use' className="link bodyItem">Learn centre</Link>
+                                <Link to='/support' className="link bodyItem">Support</Link>
+                                <Link to='/term-of-use' className="link bodyItem">Term of Service</Link>
+                                <Link to='/term-of-use' className="link bodyItem">Privacy policy</Link>
                             </div>
                         </div>
                     </div>

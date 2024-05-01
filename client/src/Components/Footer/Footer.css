@@ -1,12 +1,12 @@
 .footer{
     width: 100%;
-    height: 680px;
+    min-height: 680px;
     display: flex;
     flex-direction: column;
 }
 
 .footer .top{
-    height: 625px;
+    min-height: 625px;
     padding: 64px 70px 64px 70px;
     display: flex;
     justify-content: space-between;
@@ -15,7 +15,6 @@
 .footer .top .card{
     display: flex;
     grid-area: 112px;
-    height: 497px;
     width: 100%;
     justify-content: space-between;
 }
@@ -398,6 +397,12 @@
     line-height: 21.6px;
 }
 
+@media screen and (max-width: 1280px) {
+    .footer .top .card{
+        flex-direction: column;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .footer{
         height: 1600px;
@@ -407,9 +412,6 @@
         height: 1220px;
     }
 
-    .footer .top .card{
-        flex-direction: column;
-    }
 
     .footer .top .card .left{
         flex-direction: column;
