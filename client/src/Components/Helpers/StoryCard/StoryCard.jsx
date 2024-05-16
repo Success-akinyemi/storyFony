@@ -133,6 +133,13 @@ function StoryCard({ data, setSelectedCard, setShareStoryId }) {
                                 )
                             }
                             {
+                                user?.email === data?.email ? (
+                                    <Link to={`/writer-console/${data?._id}`} className='link moreCardLink'>Story board</Link>
+                                ) : (
+                                    ''
+                                )
+                            }
+                            {
                                 user?.email === data?.email || data.privateStory === false ? (
                                     <Link className='link moreCardLink' onClick={handleShare}>Share story</Link>
                                 ) : (

@@ -67,6 +67,10 @@ export const StorySchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    draftStory: {
+        type: Boolean,
+        default: true
+    },
     PublishedToCommunity: {
         type: Boolean,
         default: false

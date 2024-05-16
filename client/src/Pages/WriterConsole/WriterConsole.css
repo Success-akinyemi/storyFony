@@ -1,0 +1,246 @@
+.writerConsole{
+    position: relative;
+    width: 100vw;
+    overflow-x: hidden;
+    background: var(--main-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.writerConsole .hero{
+    position: relative;
+    width: 100%;
+    height: 248px;
+
+
+    background: url(../../assets/bg-1.png.png);
+    background-position: center;
+    object-fit: cover;
+    background-size: cover;
+    overflow: hidden;
+    flex-direction: column;
+    margin-bottom: 32px;
+}
+
+.writerConsole .hero .nav{
+    padding: 4px 20px 4px 20px;
+    border: 0px 0px 1px 0px;
+    height: 52px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.writerConsole .hero .nav .left{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.writerConsole .hero .nav .left .backIcon{
+    height: 44px;
+    width: 44px;
+    cursor: pointer;
+}
+
+.writerConsole .hero .nav .middle{
+    color: var(--text-color-1);
+    font-size: 16px;
+}
+
+.writerConsole .hero .nav .right{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.writerConsole .nav .right .top{
+    display: flex;
+    flex-direction: column;
+}
+
+.writerConsole .nav .right .top .up{
+    display: flex;
+    gap: 8px;
+}
+
+.writerConsole .nav .right .top .up .beakerImg{
+    height: 20px;
+    width: 20px;
+}
+
+.writerConsole .nav .right .top .up{
+    color: var(--text-color-1);
+}
+
+.writerConsole .nav .right .top .up span{
+    color: var(--bg-5);
+    font-size: 16px;
+}
+
+.writerConsole .nav .right .top .up small{
+    font-size: 14px;
+}
+
+.writerConsole .nav .right .top .down{
+    width: 100%;
+    height: 4px;
+    background: var(--main-bg);
+    margin-top: 5px;
+}
+
+.writerConsole .nav .right .middle{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 300ms ease-in;
+}
+
+.writerConsole .nav .right .middle span{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px 20px 8px 20px;
+    background: var(--bg-5);
+    color: var(--main-bg);
+    border-radius: 22px;
+}
+
+.writerConsole .nav .right .middle span .keyIcon{
+    font-size: 24px;
+}
+
+.writerConsole .nav .right .middle .actionMenu{
+    width: 191px;
+    padding: 20px;
+    background: var(--bg-4);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 10;
+    top: -800%;
+    transition: all 300ms ease-in;
+}
+
+.writerConsole .nav .right .middle:hover .actionMenu{
+    top: 40px;
+    transition: all 300ms ease-in;
+}
+
+.writerConsole .nav .right .middle .actionMenu .menus{
+    line-height: 22px;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-color-3);
+    transition: all 300ms ease;
+}
+
+.writerConsole .nav .right .middle .actionMenu .menus:hover{
+    color: var(--text-color-2);
+}
+
+.writerConsole .nav .right .bottom{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--text-color-2);
+    background: var(--main-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.writerConsole .nav .right .bottom .link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.writerConsole .nav .right .bottom img{
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.writerConsole .body{
+    width: 97vw;
+    top: 107px;
+    position: absolute;
+}
+
+.writerConsole .body .chapterOption{
+    display: flex;
+    align-items: center;
+    color: var(--text-color-2);
+    margin-bottom: 1rem;
+}
+
+.writerConsole .body .bodyContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    align-items: flex-start;
+    height: 84vh;
+}
+
+.writerConsole .body .editor{
+    flex: 7;
+    padding: 20px;
+    background: var(--text-color-2);
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.writerConsole .body .sidebar{
+    flex: 3;
+    padding: 20px;
+    background: var(--text-color-2);
+    height: 100%;
+}
+
+.writerConsole .body .sidebar .menus{
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.writerConsole .body .sidebar .menus .cardMenu{
+    padding: 5px 15px;
+    background: var(--text-color-3);
+    color: var(--main-bg);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 300ms ease-in;
+}
+
+.writerConsole .body .sidebar .menus .cardMenu.active{
+    background: var(--main-bg);
+    color: var(--text-color-2);
+}
+
+.writerConsole .body .sidebar .bodyArea{
+    width: 100%;
+    height: 89%;
+    overflow-y: auto;
+    margin-top: 1rem;
+}

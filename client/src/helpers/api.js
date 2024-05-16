@@ -132,13 +132,59 @@ export async function newPassword({ resetToken, password }){
 export async function createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}){
     try {
         const res = await axios.post('/api/create-story', {title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded}, { withCredentials: true })
-        console.log('CREATE STORY RES', res)
+        //console.log('CREATE STORY RES', res)
         if(res?.data.success){
             toast.success('Story Generated')
             return res
         }
     } catch (error) {
         console.log('ERROR CREATING USER STORY', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            const errorStatus = error.response.status;
+            console.log('MSG', errorMsg)
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function continueWritingStory({userId, storyId, chapterId}){
+    try{
+        const res = await axios.post('/api/continue-writing', {userId, storyId, chapterId}, { withCredentials: true })
+        if(res?.data.success){
+            return res?.data
+        }
+    } catch (error) {
+        console.log('ERROR CONTINUING TO WRITE STORY', error)
+        if (error.response && error.response.data) {
+            const errorMsg = error.response.data.data;
+            const errorStatus = error.response.status;
+            console.log('MSG', errorMsg)
+            if(errorStatus === 401 || errorStatus === 403){
+                window.location.href = '/login'
+            }
+            toast.error(errorMsg)
+            return errorMsg;
+          } else {
+            return 'An error occurred during the request.';
+          }
+    }
+}
+
+export async function repharseWords({words, type}){
+    try{
+        const res = await axios.post('/api/repharseWords', {words, type}, { withCredentials: true })
+        if(res?.data.success){
+            return res?.data
+        }
+    } catch (error) {
+        console.log('ERROR GETTING REPHARSED WORDS', error)
         if (error.response && error.response.data) {
             const errorMsg = error.response.data.data;
             const errorStatus = error.response.status;
@@ -325,6 +371,7 @@ export async function updateStoryChapterContent({userId, storyId, chapterId, cur
         const res = await axios.post('/api/user/story/updateStoryChapterContent', {userId, storyId, chapterId, currentChapterContent}, { withCredentials: true})
         if(res?.data.success){
             toast.success('Changes saved')
+            return res
         }
     } catch (error) {
         console.log('ERROR RECREATING CHAPTER STORY ', error)

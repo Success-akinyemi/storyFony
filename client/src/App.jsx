@@ -27,6 +27,7 @@ import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import AdminUsers from './Pages/AdminUsers/AdminUsers'
 import AdminSubscriptions from './Pages/AdminSubscriptions/AdminSubscriptions'
 import AdminStories from './Pages/AdminStories/AdminStories'
+import WriterConsole from './Pages/WriterConsole/WriterConsole'
 
 function App() {
 
@@ -79,6 +80,9 @@ function App() {
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/support' element={<Support />} />
+          </Route>
+          <Route element={<AuthorizeUser />}>
+            <Route path='/writer-console/:storyId' element={<WriterConsole />} />
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='/mysubscription' element={<MySubsciption />} />

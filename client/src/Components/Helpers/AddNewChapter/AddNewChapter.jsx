@@ -6,11 +6,11 @@ import { addNewChapters } from '../../../helpers/api'
 import { signInSuccess } from '../../../redux/user/userslice'
 import { useDispatch } from 'react-redux'
 
-function AddNewChapter() {
+function AddNewChapter({propsUser, propsStory}) {
     const dispatch = useDispatch()
     const loc = useLocation()
-    const storyId = loc.pathname.split('/')[3]
-    const userId = loc.pathname.split('/')[2]
+    const storyId = propsStory ? propsStory : loc.pathname.split('/')[3]
+    const userId = propsUser ? propsUser : loc.pathname.split('/')[2]
     const [newChapter, setNewChapter] = useState(1)
     const [chapterImg, setChapterImg] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -33,6 +33,7 @@ function AddNewChapter() {
 
         try {
             setIsLoading(true)
+            
             const res = await addNewChapters({storyId, userId, newChapter, chapterImg})
             if(res?.data.success){
                 dispatch(signInSuccess(res?.data.user))

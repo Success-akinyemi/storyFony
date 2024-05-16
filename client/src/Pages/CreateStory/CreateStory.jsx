@@ -5,7 +5,7 @@ import EditPen from '../../assets/editpen.png'
 import PenImg from '../../assets/pen2.png'
 import { useEffect, useState } from 'react'
 import { authors, createStoryPlaceHolder, endingStyle, languages } from '../../data/general'
-import { genreData } from '../../data/genreData'
+import { genreData, storyLength } from '../../data/genreData'
 import CheckImg from '../../assets/checkImg.png'
 import { useFetch } from '../../hooks/fetch.hooks'
 import InsufficientInk from '../../Components/Helpers/InsufficientInk/InsufficientInk'
@@ -26,6 +26,7 @@ function CreateStory() {
     const user = currentUser?.data
     //const { apiData } = useFetch()
     const [ card, setCard ] = useState(1)
+    const [ selectedStoryLength, setSelectedStoryLength ] = useState()
     const [ numberOfWords, setNumberOfWords] = useState(0)
     const [ numberOfLetters, setNumberOfLetters] = useState(0)
     const [ numberOfMotiveWords, setNumberOfMotiveWords] = useState(0)
@@ -58,6 +59,10 @@ function CreateStory() {
         if(card !== 1){
             setCard(card -1)
         }
+    }
+
+    const handleStoryLenght = async (length) => {
+        setSelectedStoryLength(length)
     }
 
     const handleGenerateAiDesc = async () => {
@@ -176,12 +181,13 @@ function CreateStory() {
             setLoadingState(true)
             const userEmail = user?.email
             //console.log(title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded)
-            const res = await createStory({title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
+            const res = await createStory({selectedStoryLength, title, desc, motive, genreValue, ending, mimicAuthor, numberOfSeries, language, userEmail, totalInkNeeded})
             //console.log('RES', res)
             if(res?.data.success){
                 setStory(res?.data.data)
                 dispatch(signInSuccess(res?.data.user))
-                navigate('/dashboard')
+                toast.success(`${user?.penName} Lets add more to your story`)
+                navigate(`/writer-console/${res?.data?.data}`, { state: {storyId: res?.data?.data}})
             }
         } catch (error) {
             console.log('ERROR CREATING STORY', error)
@@ -271,41 +277,21 @@ function CreateStory() {
                                 <p>Select the type of story book you want to write</p>
                                 
                                 <div className="cardContainer">
-                                    <div className="card">
-                                        <span>
-                                            <img src={EditPen} alt='edit pen icon' className='editPen' />
-                                        </span>
-                                        
-                                        <div className="text">
-                                            <h4>Write short story</h4>
+                                    {
+                                        storyLength.map((item, idx) => (
+                                            <div className={`card ${selectedStoryLength === item.storyLength ? 'selectedStorylength' : ''}`} key={idx} onClick={() => handleStoryLenght(item?.storyLength)}>
+                                                <span>
+                                                    <img src={EditPen} alt='edit pen icon' className='editPen' />
+                                                </span>
+                                                
+                                                <div className="text">
+                                                    <h4>{item.title}</h4>
 
-                                            <p>Generate a captivating beautiful short story within 2500 words.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <span>
-                                            <img src={EditPen} alt='edit pen icon' className='editPen' />
-                                        </span>
-                                        
-                                        <div className="text">
-                                            <h4>Write long story</h4>
-
-                                            <p>Develop your very own story with chapter within 8000 words like pro.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card">
-                                        <span>
-                                            <img src={EditPen} alt='edit pen icon' className='editPen' />
-                                        </span>
-                                        
-                                        <div className="text">
-                                            <h4>Write story series</h4>
-
-                                            <p>Imagine been able to create a story series around 20,000 words.</p>
-                                        </div>
-                                    </div>
+                                                    <p>{item.text}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
 
@@ -424,10 +410,13 @@ function CreateStory() {
                                 </div>
 
                                 <div className='inputGroup3'>
+                                    {/**
+                                     * 
                                     <div className="left">
                                         <p>How many series? (40 fony ink per series)</p>
                                         <input type="number" placeholder='Number of series' value={numberOfSeries} onChange={(e) => setNumberOfSeries(e.target.value)}/>
                                     </div>
+                                     */}
 
                                     <div className="right">
                                         <p>Select language</p>
@@ -442,7 +431,7 @@ function CreateStory() {
                                     </div>
                                 </div>
 
-                                <button disabled={!title || !desc || !ending || !numberOfSeries || !language} className="btn" onClick={() => setCard(card + 1)}>Proceed</button>
+                                <button disabled={!title || !desc || !ending || !language || loadingState} className="btn" onClick={handleCreateStory}>{loadingState ? <Spinner /> : 'Proceed'}</button>
                             </div>
                         </div>
                     )

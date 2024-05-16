@@ -294,7 +294,7 @@ function StoryEditor() {
             </div>
 
             <p className="infoText">
-              You can edit the story line to suit your imagnination
+              Edit the story line to suit your imagnination
             </p>
 
             <div className='content'>

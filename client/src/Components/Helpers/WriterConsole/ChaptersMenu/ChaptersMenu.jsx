@@ -1,43 +1,40 @@
-import './TableOfContent.css'
-import PenImg from '../../../assets/pen3.png'
-import DotsImg from '../../../assets/dragDot.png'
-import AddImg from '../../../assets/add.png'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { updateStoryChapterContent } from '../../../helpers/api'
-import toast from 'react-hot-toast'
-import { signInSuccess } from '../../../redux/user/userslice'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react';
+import './ChaptersMenu.css'
+import { useDispatch, useSelector } from 'react-redux';
+import DotsImg from '../../../../assets/dragDot.png'
+import PenImg from '../../../../assets/pen3.png'
+import AddImg from '../../../../assets/add.png'
 
-function TableOfContent({storyChapter, onChapterClick, currentChapterContent, defaultContent, setSelectedCard}) {
+import { useLocation } from 'react-router-dom';
+import { updateStoryChapterContent } from '../../../../helpers/api';
+
+
+function ChaptersMenu({storyChapter, onChapterClick, currentChapterContent, setSelectedCard}) {
     const dispatch = useDispatch()
     const loc = useLocation()
-    const storyId = loc.pathname.split('/')[3]
-    const userId = loc.pathname.split('/')[2]
+    const storyId = loc.pathname.split('/')[2]
+    const  {currentUser}  = useSelector(state => state.user)
+    const user = currentUser?.data
+    const userId = user._id
     const [activeChapter, setActiveChapter] = useState(null)
     const [anyEdit, setAnyEdit] = useState('');
     const [ updatingChapter, setUpatingChapter ] = useState(false)
+
 
     const handleChapterClick = (chapterContent, chapterNumber, id) => {
         onChapterClick(chapterContent);
         setActiveChapter(chapterNumber);
         setAnyEdit(id)
     };
-      
+
     const handleUpdateStoryChapter = async (chapterId, story) => {
-
-
-        if(story === currentChapterContent.chapterContent){
-            toast.error('No changes made')
-            return;
-        } 
-
-
             try {
                 setUpatingChapter(true)
-                const res = await updateStoryChapterContent({userId, storyId, chapterId, currentChapterContent})
+
+                const res = await updateStoryChapterContent({userId, storyId, chapterId, currentChapterContent: currentChapterContent?.chapterContent})
                 if(res?.data.success){
-                    dispatch(signInSuccess(res?.data.user))
+                    //dispatch(signInSuccess(res?.data.user))
+                    window.location.reload()
                 }
             } catch (error) {
                 console.log('ERROR SAVING CHAPTER', error)
@@ -46,12 +43,12 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
             }
     }
 
-    return (
-    <div className='tableOfContent'>
+  return (
+    <div className='chaptersMenu'>
         <div className='t-card'>
             {
                 storyChapter.map((item) => (
-                    <div className={`t-cardList ${activeChapter === item.chapterNumber ? 'active' : ''}`} key={item._id} onClick={() => handleChapterClick(item, item?.chapterNumber, item?._id)}>
+                    <div className={`t-cardList ${activeChapter === item.chapterNumber ? 'active' : ''}`} key={item?._id} onClick={() => handleChapterClick(item, item?.chapterNumber, item?._id)}>
                         <div className="contentLeft">
                             <img src={DotsImg} />
                         </div>
@@ -59,13 +56,13 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
                         <div className="contentRight">
                             <h3>{item?.chapterNumber}</h3>
                             <span>
-                            { anyEdit !== item._id && (
+                            { currentChapterContent?._id !== item._id && (
                                 <>
                                     <p>{item?.chapterTitle}</p>
                                     <img src={PenImg} />
                                 </>
                             )}
-                                { anyEdit === item._id && (
+                                { currentChapterContent?._id === item._id && (
                                     <div className='saveEdit'>
                                         <p>{item?.chapterTitle}</p>
                                         <div className='btnBox'>
@@ -88,4 +85,4 @@ function TableOfContent({storyChapter, onChapterClick, currentChapterContent, de
   )
 }
 
-export default TableOfContent
+export default ChaptersMenu

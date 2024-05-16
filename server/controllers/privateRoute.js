@@ -48,6 +48,7 @@ const createFirebaseStorageUrl = async (imageData, imageName) => {
 
 export async function createStory(req, res) {
   const {
+    selectedStoryLength,
     title,
     desc,
     motive,
@@ -65,7 +66,7 @@ export async function createStory(req, res) {
   let coverImage = '';
   const user = await UserModel.findOne({ email: userEmail });
 
-  const inkNeeded = numberOfSeries * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
+  //const inkNeeded = numberOfSeries * parseInt(process.env.FONY_INK_COST_PER_CHAPTER, 10);
   try {
     const commonLogic = async (language, titleMatchRegex, chapterRegex, heading) => {
 
@@ -79,18 +80,18 @@ export async function createStory(req, res) {
         return res.status(404).json({ success: false, data: 'Invalid User' });
       }
       
-      if(user?.planName === 'basic' && numberOfSeries > 15){
-        return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 15 for basic plan' });
-      }
+      //if(user?.planName === 'basic' && numberOfSeries > 15){
+      //  return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 15 for basic plan' });
+      //}
 
-      if(user?.planName === 'standard' && numberOfSeries > 30){
-        return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 30 for standard plan' });
-      }
+      //if(user?.planName === 'standard' && numberOfSeries > 30){
+      //  return res.status(400).json({ success: false, data: 'Max number of Chapter for story is 30 for standard plan' });
+      //}
 
 
-      if (inkNeeded > user.totalCreditBalance) {
-        return res.status(402).json({ success: false, data: 'Insufficient Ink credit' });
-      }
+      //if (inkNeeded > user.totalCreditBalance) {
+      //  return res.status(402).json({ success: false, data: 'Insufficient Ink credit' });
+      //}
 
       const openai = req.openai;
 
@@ -98,15 +99,27 @@ export async function createStory(req, res) {
         model: 'gpt-3.5-turbo-instruct',
         //prompt: `Write a Story based on this title: ${title} and description; ${desc}. the entire story must be in ${language} language the story should be in this type of genre: ${genreValue} ${mimicAuthor ? `and mimic the writing style of ${mimicAuthor}` : ''} the story should have ${numberOfSeries} number of chapters, each new chapter should have a chapter title and the word title only should be in english, and the entire story should have this ending style ${ending}. Each chapter of the story you generate should be lengthy in terms of the number of words and be creative, spice up the story. Also give the entire story a story title the word title should be in english. except fot the word 'Chapter' it must be in english for every langauage. NOTE THE WORD 'Chapter' FOR EACH NEW CHAPTER MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE. NOTE THE WORD 'Title' FOR THE ENTIRE STORY TITLE MUST BE IN ENGLISH REGARDLESS OF THE STORY LANGUAGE`,
         //prompt: `Generate a captivating story based on the title: ${title} and description: ${desc}. The entire story must be in ${language} language and must fall under the genre: ${genreValue}. ${mimicAuthor ? `mimic the writing style of ${mimicAuthor}` : ''}. The story should consist of ${numberOfSeries} chapters, each with a Chapter title. The word 'Chapter' for each new Chapter to signify the start of a new Chapter story must be in English language, regardless of the story language. Additionally, ensure that the entire story has a title, with the word 'Title' in English language. End the story in the style: ${ending}`,
-        prompt: `Craft an engaging story titled '${title}', inspired by the description: '${desc}'. This narrative must unfold in ${language} language, within the ${genreValue} genre. ${mimicAuthor ? `If applicable, mimic the writing style of ${mimicAuthor}` : ''}. The tale should span ${numberOfSeries} chapters, with each chapter beginning with the word 'Chapter' in English to denote its commencement. Additionally, ensure the entire story has an English-language title. Conclude the story in the following style: '${ending}'`,
+        prompt: `Craft an engaging story titled '${title}', inspired by the description: '${desc}'. This narrative must unfold in ${language} language, within the ${genreValue} genre. ${mimicAuthor ? `If applicable, mimic the writing style of ${mimicAuthor}` : ''}. The tale should span 1 chapters, with each chapter beginning with the word 'Chapter' in English to denote its commencement. Additionally, ensure the entire story has an English-language title. Conclude the story in the following style: '${ending}'. Note the story must be of this length: ${selectedStoryLength}`,
+        //prompt: `Craft an engaging story titled '${title}', inspired by the description: '${desc}'. This narrative must unfold in ${language} language, within the ${genreValue} genre. ${mimicAuthor ? `If applicable, mimic the writing style of ${mimicAuthor}` : ''}. Additionally, ensure the entire story has an English-language title. Conclude the story in the following style: '${ending}'. Note the story must be of around this length: ${selectedStoryLength} and mush have only Chapter one`,
         temperature: 0.9,
-        max_tokens: 950,
+        max_tokens: 3500,
       });
       console.log('RAW RESPONSE', response)
 
       genertedStory = response.choices[0].text;
       const titleMatch = genertedStory.match(titleMatchRegex);
       const extractedTitle = titleMatch ? titleMatch[1] : '';
+
+      /**
+       image generation gpt-2 model
+      const imageRes = await openai.images.generate({
+        model: "dall-e-2",
+        prompt: `based on this title: ${extractedTitle} and description: ${desc} generate an image`,
+        n: 1,
+        size: "1024x1024",
+        response_format: 'b64_json',
+      });
+      */
 
       const imageRes = await openai.images.generate({
         model: "dall-e-2",
@@ -121,6 +134,8 @@ export async function createStory(req, res) {
         const uniqueName = `image-${uuidv4()}.jpg`;
         storyImage = await createFirebaseStorageUrl(imageRes.data[0].b64_json, `${uniqueName}`);
       }
+      /**
+       * 
 
       const coverImageRes = await openai.images.generate({
         model: "dall-e-2",
@@ -135,8 +150,9 @@ export async function createStory(req, res) {
         const uniqueName = `image-${uuidv4()}.jpg`;
         coverImage = await createFirebaseStorageUrl(coverImageRes.data[0].b64_json, `${uniqueName}`);
       }
+       */
 
-      const storyArray = processGeneratedStory(genertedStory, storyImage, numberOfSeries, chapterRegex, heading);
+      const storyArray = processGeneratedStory(genertedStory, storyImage, chapterRegex, heading);
 
       const newStory = new UserStory({
         story: storyArray,
@@ -157,11 +173,11 @@ export async function createStory(req, res) {
 
       await newStory.save();
 
-      user.totalCreditUsed += inkNeeded;
-      user.totalCreditBalance -= inkNeeded;
+      //user.totalCreditUsed += inkNeeded;
+      //user.totalCreditBalance -= inkNeeded;
       await user.save();
 
-      res.status(201).json({ success: true, data: genertedStory, user: { success: true, data: user } });
+      res.status(201).json({ success: true, data: newStory?._id, user: { success: true, data: user } });
     };
 
     if (language === 'English') {
@@ -183,12 +199,12 @@ export async function createStory(req, res) {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
     }
   } catch (error) {
-    console.log('ERROR CREATING STORY', error);
-    res.status(500).json({ success: false, data: 'Failed to Create Story' });
+    console.log('ERROR CREATING STORY', error.error.message);
+    res.status(500).json({ success: false, data: `Failed to Create Story: \n ${error.error.message}` });
   }
 }
 
-const processGeneratedStory = (generatedStory, storyImage, numberOfSeries, chapterRegex, heading) => {
+const processGeneratedStory = (generatedStory, storyImage, chapterRegex, heading) => {
   const storyMatches = [...generatedStory.matchAll(chapterRegex)];
 
   const storyArray = storyMatches.map((match, index) => ({
@@ -199,6 +215,82 @@ const processGeneratedStory = (generatedStory, storyImage, numberOfSeries, chapt
   }));
 
   return storyArray;
+}
+
+export async function continueWriting(req, res){
+  const {userId, storyId, chapterId} = req.body
+  try {
+    const openai = req.openai;
+    console.log(userId, storyId, chapterId)
+
+    const getStoryId = await UserStory.findById({ _id: storyId })
+    
+    if (!getStoryId) {
+      return res.status(404).json({ success: false, data: "Story not found" });
+    }
+
+    // Find the chapter with the matching _id
+    const getStoryChapter = getStoryId.story.find(chapter => chapter._id.toString() === chapterId);
+
+    if (!getStoryChapter) {
+      return res.status(404).json({ success: false, data: "Chapter not found" });
+    }
+
+    const gottenChapter = getStoryChapter.chapterContent
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `from this story: ${gottenChapter} continue writing from where it stops in three completely different ways: must be in this order: 1. 2. 3. , and let it be lenghty`,
+      temperature: 0.9,
+      max_tokens: 1500,
+    });
+    
+    const genertedStory = response.choices[0].text;
+    
+    const stories = genertedStory.split(/\d\.\s/).filter(story => story.trim());
+
+    const storyArray = stories.map((story, index) => ({
+      _id: index + 1,
+      content: story.trim()
+    }));
+
+    res.status(201).json({ success: true, data: storyArray })
+    
+  } catch (error) {
+    console.log('Error Writing Story', error)
+    res.status(500).json({ success: false, data: `Unable to continue writing Story: \n ${error.error.message} `})
+  }
+}
+
+export async function repharseWords(req, res){
+  const {words, type} = req.body
+  try {
+    const openai = req.openai;
+
+    const response = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: `from this sentence: ${words} rewrite it in three completely different ways: must be in this order: 1. 2. 3. , and let it be ${type} than the original`,
+      temperature: 0.9,
+      max_tokens: 1500,
+    });
+    
+    const genertedStory = response.choices[0].text;
+    
+    const stories = genertedStory.split(/\d\.\s/).filter(story => story.trim());
+
+    const storyArray = stories.map((story, index) => ({
+      _id: index + 1,
+      content: story.trim()
+    }));
+
+    console.log('PHARSES', storyArray)
+
+    res.status(201).json({ success: true, data: storyArray })
+    
+  } catch (error) {
+    console.log('Error Generating Pharses', error)
+    res.status(500).json({ success: false, data: `Unable to Generate Pharses: \n ${error.error.message} `})
+  }
 }
 
 export async function getUserStories(req, res){
@@ -1036,6 +1128,8 @@ async function downloadAndEmbedImage(doc, imageUrl, yPos = doc.y) {
 export async function generateAudio(req, res){
   const {userId, storyId, userVoice} = req.body
   console.log(userId, storyId, userVoice)
+  const openai = req.openai;
+
   try {
     const user = await UserModel.findById({ _id: userId })
     const story = await UserStory.findById({ _id: storyId })

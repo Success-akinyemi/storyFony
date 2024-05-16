@@ -160,9 +160,11 @@
     flex-direction: column;
     gap: 24px;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.createStory .conatiner .content1 .cards .cardContainer .card:hover{
+.createStory .conatiner .content1 .cards .cardContainer .card:hover,
+.createStory .conatiner .content1 .cards .cardContainer .card.selectedStorylength{
     background: #FD2CE80D;
     border: 1px solid var(--bg-5);
 }

@@ -6,6 +6,8 @@ import { expiredSub, premiumSub } from '../middleware/verifySubscription.js';
 
 //POST ROUTES
 privateRouter.route('/create-story').post(verifyToken, verifyApiKey, controller.createStory);
+privateRouter.route('/continue-writing').post(verifyToken, verifyApiKey, controller.continueWriting);
+privateRouter.route('/repharseWords').post(verifyToken, verifyApiKey, controller.repharseWords);
 privateRouter.route('/user/story/handlePrivateStory').post(verifyToken, controller.handlePrivateStory) //Toggle wheather story is public or private
 privateRouter.route('/user/story/handlePublishedToCommunity').post(verifyToken, controller.handlePublishedToCommunity) //Toggle wheather story is public or private
 privateRouter.route('/user/story/handleNewStoryDesc').post(verifyToken, verifyApiKey, controller.generateNewStoryDesc) // generate new description for a user story with ai
@@ -21,7 +23,7 @@ privateRouter.route('/user/story/addNewChapters').post(verifyToken, verifyApiKey
 privateRouter.route('/user/story/likeStory').post(verifyToken, controller.likeStory) //Like a story
 privateRouter.route('/user/story/generateAiDesc').post(verifyToken, verifyApiKey, controller.generateAiDesc) //generate a story decsription for a user using AI
 privateRouter.route('/user/story/generatePdf').post(verifyToken, controller.generatePdf) //generate a story Pdf for the user
-privateRouter.route('/user/story/generateTranscipt').post(verifyToken, controller.generateAudio) //generate audio file for story
+privateRouter.route('/user/story/generateTranscipt').post(verifyToken, verifyApiKey, controller.generateAudio) //generate audio file for story
 privateRouter.route('/user/story/synonymWord').post(verifyToken, verifyApiKey, controller.synonymWord) //find a synonym Word
 
 
