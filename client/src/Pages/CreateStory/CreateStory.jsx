@@ -41,7 +41,7 @@ function CreateStory() {
     const [ ending, setEnding ] = useState('')
     const [ mimicAuthor, setMimicAuthor ] = useState('')
     const [ numberOfSeries, setNumberOfSeries ] = useState('')
-    const [ language, setLanguage ] = useState('')
+    const [ language, setLanguage ] = useState('English')
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [showError, setShowError] = useState(false);
@@ -157,6 +157,22 @@ function CreateStory() {
     }, [title, desc, motive, genreValue, ending, numberOfSeries, language])
     
     const handleCreateStory = async () => {
+        if(!title){
+            toast.error('Please Enter a story Title')
+            return
+        }
+        if(!desc){
+            toast.error('Please Enter a story Description')
+            return
+        }
+        if(!genreValue){
+            toast.error('Please Select a genre')
+            return
+        }
+        if(!ending){
+            toast.error('Please Choose a ending style')
+            return
+        }
         const availabeInk = user?.totalCreditBalance
         const costOfSeries = import.meta.env.VITE_COST_PER_SERIES
 
@@ -431,7 +447,7 @@ function CreateStory() {
                                     </div>
                                 </div>
 
-                                <button disabled={!title || !desc || !ending || !language || loadingState} className="btn" onClick={handleCreateStory}>{loadingState ? <Spinner /> : 'Proceed'}</button>
+                                <button disabled={loadingState} className="btn" onClick={handleCreateStory}>{loadingState ? <Spinner /> : 'Proceed'}</button>
                             </div>
                         </div>
                     )
