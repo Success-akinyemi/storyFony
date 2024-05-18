@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import path from 'path'
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
 
 const firebaseConfig = {
   "apiKey": process.env.FIREBASE_API_KEY,
@@ -200,7 +200,7 @@ export async function createStory(req, res) {
       await commonLogic(language, /Title: (.+?)\n/, /Chapter (\w+): ([^\n]+)\n([\s\S]*?)(?=(Chapter (\w+):|$))/g, 'Chapter');
     }
   } catch (error) {
-    console.log('ERROR CREATING STORY', error.error.message);
+    console.log('ERROR CREATING STORY', error);
     res.status(500).json({ success: false, data: `Failed to Create Story: \n ${error.error.message}` });
   }
 }
