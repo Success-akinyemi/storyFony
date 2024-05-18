@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import path from 'path'
+import fetch from 'node-fetch';
 
 const firebaseConfig = {
   "apiKey": process.env.FIREBASE_API_KEY,
