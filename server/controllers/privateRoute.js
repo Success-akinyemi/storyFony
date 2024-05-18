@@ -28,24 +28,42 @@ const firebaseConfig = {
  const app = initializeApp(firebaseConfig);
  const storage = getStorage(app)
 
-
-const createFirebaseStorageUrl = async (imageData, imageName) => {
+/**
+ const createFirebaseStorageUrl = async (imageData, imageName) => {
+   try {
+     const storageRef = ref(storage, imageName);
+     const uniqueName = `${imageName}-${uuidv4()}.jpg`
+     const imageBlob = await fetch(`data:image/jpeg;base64,${imageData}`).then((response) => response.blob());
+ 
+     await uploadBytes(storageRef, imageBlob, { name: uniqueName })
+     const url = await getDownloadURL(storageRef);
+     console.log('URL FOM', url)
+ 
+     return url
+   } catch (error) {
+     console.error('Error uploading to Firebase Storage:', error)
+     throw error
+   }
+ }
+ */
+ const createFirebaseStorageUrl = async (imageData, imageName) => {
   try {
     const storageRef = ref(storage, imageName);
-    const uniqueName = `${imageName}-${uuidv4()}.jpg`
-    const imageBlob = await fetch(`data:image/jpeg;base64,${imageData}`).then((response) => response.blob());
-
-    await uploadBytes(storageRef, imageBlob, { name: uniqueName })
+    const uniqueName = `${imageName}-${uuidv4()}.jpg`;
+    
+    // Use Buffer instead of fetch for base64 to buffer conversion
+    const buffer = Buffer.from(imageData, 'base64');
+    await uploadBytes(storageRef, buffer, { name: uniqueName });
+    
     const url = await getDownloadURL(storageRef);
-    console.log('URL FOM', url)
+    console.log('URL FROM', url);
 
-    return url
+    return url;
   } catch (error) {
-    console.error('Error uploading to Firebase Storage:', error)
-    throw error
+    console.error('Error uploading to Firebase Storage:', error);
+    throw error;
   }
-}
-
+};
 
 export async function createStory(req, res) {
   const {
