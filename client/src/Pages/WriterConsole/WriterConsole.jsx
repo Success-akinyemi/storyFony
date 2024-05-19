@@ -27,6 +27,7 @@ const WriterConsole = () => {
     const [selectedWords, setSelectedWords] = useState([]);
     const [continueWriting, setContinueWriting] = useState([]);
     const [repharsedWords, setRepharsedWords] = useState([]);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
 
     const appendMoreStoryContent = (moreStoryContent) => {
@@ -113,7 +114,47 @@ const WriterConsole = () => {
             ...prevContent,
             chapterContent: content
         }));
+        setHasUnsavedChanges(true);
     };
+
+
+    //Save changes before exist
+    const handleBeforeUnload = (event) => {
+        if (hasUnsavedChanges) {
+            event.preventDefault();
+            event.returnValue = '';
+        }
+    };
+
+    const handleNavigation = (event) => {
+        if (hasUnsavedChanges) {
+            event.preventDefault();
+            const confirmationMessage = 'You have unsaved changes, do you really want to leave?';
+            if (window.confirm(confirmationMessage)) {
+                setHasUnsavedChanges(false);
+                history.push(event.target.href);
+            }
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [hasUnsavedChanges]);
+
+    useEffect(() => {
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', handleNavigation);
+        });
+        return () => {
+            links.forEach(link => {
+                link.removeEventListener('click', handleNavigation);
+            });
+        };
+    }, [hasUnsavedChanges]);
 
     return (
         <div className='writerConsole'>
